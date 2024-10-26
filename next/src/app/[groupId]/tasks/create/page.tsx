@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
+import { FormBase } from "@/components/form/FormBase";
 export default function TaskCreateForm({
   params,
 }: {
@@ -48,14 +49,12 @@ export default function TaskCreateForm({
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Typography component="h1" variant="h5">
-          仕事を新規作成
-        </Typography>
-        <TaskForm data={defaultData} />
-      </Box>
-      <Link href={`/${params.groupId}/tasks`}>一覧へ戻る</Link>
-    </Container>
+    <FormBase
+      title={"仕事を作成"}
+      param={`/${params.groupId}/tasks`}
+      handleSubmit={handleSubmit}
+    >
+      <TaskForm data={defaultData} />
+    </FormBase>
   );
 }

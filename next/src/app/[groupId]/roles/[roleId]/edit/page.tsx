@@ -7,7 +7,7 @@ import axios, { fetcher } from "@/axios";
 import { Permission, RoleResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { RoleForm } from "@/components/form/RoleForm";
-
+import { FormBase } from "@/components/form/FormBase";
 
 export default function RoleEdit({
   params,
@@ -47,20 +47,19 @@ export default function RoleEdit({
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Typography component="h1" variant="h5">
-          ロールを編集
-        </Typography>
-        <RoleForm
-          name={data.name}
-          permissions={permissions}
-          setPermissions={setPermissions}
-        />
-        {permissions.map((permission) => (
-          <li>{permission}</li>
-        ))}
-      </Box>
-    </Container>
+    <FormBase
+      title="ロールを編集"
+      param={`/${params.groupId}/roles`}
+      handleSubmit={handleSubmit}
+    >
+      <RoleForm
+        name={data.name}
+        permissions={permissions}
+        setPermissions={setPermissions}
+      />
+      {permissions.map((permission) => (
+        <li>{permission}</li>
+      ))}
+    </FormBase>
   );
 }

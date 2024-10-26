@@ -1,13 +1,11 @@
 "use client";
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
 import { SlotResponse, TasksResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { SlotForm } from "@/components/form/SlotForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
+import { FormBase } from "@/components/form/FormBase";
 
 export default function SlotCreate({
   params,
@@ -55,20 +53,19 @@ export default function SlotCreate({
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Typography component="h1" variant="h5">
-          仕事を作成
-        </Typography>
-        <SlotForm
-          data={slot_data}
-          tasks={taskData.tasks.map((task) => {
-            return { id: task.id, name: task.name };
-          })}
-          task_id={task_id}
-          setData={setData}
-        />
-      </Box>
-    </Container>
+    <FormBase
+      handleSubmit={handleSubmit}
+      title="募集を新規作成"
+      param={`/${params.groupId}/tasks`}
+    >
+      <SlotForm
+        data={slot_data}
+        tasks={taskData.tasks.map((task) => {
+          return { id: task.id, name: task.name };
+        })}
+        task_id={task_id}
+        setData={setData}
+      />
+    </FormBase>
   );
 }

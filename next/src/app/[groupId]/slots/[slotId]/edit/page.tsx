@@ -8,6 +8,7 @@ import axios, { fetcher } from "@/axios";
 import { SlotResponse, TaskResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { SlotForm } from "@/components/form/SlotForm";
+import { FormBase } from "@/components/form/FormBase";
 
 export default function SlotEdit({
   params,
@@ -54,20 +55,19 @@ export default function SlotEdit({
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Typography component="h1" variant="h5">
-          仕事を編集
-        </Typography>
-        <SlotForm
-          data={data}
-          tasks={taskData.tasks.map((task) => {
-            return { id: task.id, name: task.name };
-          })}
-          task_id={task_id}
-          setData={setData}
-        />
-      </Box>
-    </Container>
+    <FormBase
+      title="募集を編集"
+      param={`/${params.groupId}/slots`}
+      handleSubmit={handleSubmit}
+    >
+      <SlotForm
+        data={data}
+        tasks={taskData.tasks.map((task) => {
+          return { id: task.id, name: task.name };
+        })}
+        task_id={task_id}
+        setData={setData}
+      />
+    </FormBase>
   );
 }

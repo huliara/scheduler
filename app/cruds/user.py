@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.cruds.auth import get_password_hash
 from app.cruds.response import slots_display, tasks_display, user_detail_display
-from app.models.models import Slot, Task, User
+from app.models.models import  Task, User
 from app.schemas.users import AdminUserCreate, UserCreate
 
 

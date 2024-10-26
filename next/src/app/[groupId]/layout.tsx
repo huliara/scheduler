@@ -5,6 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { MyDrawer } from "@/components/list/Drawer";
 import { LogoutButton } from "@/components/button/logoutButton";
+import Link from "next/link";
 export default function TemporaryDrawer({
   children,
   params,
@@ -22,6 +23,7 @@ export default function TemporaryDrawer({
               Scheduler
             </Typography>
             <LogoutButton />
+            <Link href="/mypage">マイページ</Link>
           </Toolbar>
         </AppBar>
       </Box>

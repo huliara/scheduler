@@ -9,12 +9,13 @@ import useSWR from "swr";
 import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
+import { FormBase } from "@/components/form/FormBase";
 
 export default function TaskEdit({
   params,
 }: {
   params: { groupId: string; taskId: string };
-  }) {
+}) {
   const { showSnackbar } = useSnackbarContext();
   const { data, error, isLoading, mutate } = useSWR<TaskResponse>(
     `/${params.groupId}/tasks/${params.taskId}`,
@@ -48,15 +49,12 @@ export default function TaskEdit({
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Typography component="h1" variant="h5">
-          仕事を編集
-        </Typography>
-        <TaskForm data={data} />
-      </Box>
-      <Link href={`/${params.groupId}/tasks`}>一覧へ戻る</Link>
-
-    </Container>
+    <FormBase
+      title="仕事を編集"
+      param={`/${params.groupId}/tasks`}
+      handleSubmit={handleSubmit}
+    >
+      <TaskForm data={data} />
+    </FormBase>
   );
 }

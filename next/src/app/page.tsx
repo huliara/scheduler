@@ -14,6 +14,7 @@ import React from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import NextAuthProvider from "@/components/provider/NextAuth";
+import Link from "next/link";
 
 export default function Top() {
   return (
@@ -36,6 +37,7 @@ const GroupList = () => {
 
   return (
     <>
+      <Link href="/mypage">マイページ</Link>
       <Container>
         <Divider>参加中のグループ</Divider>
         <List>

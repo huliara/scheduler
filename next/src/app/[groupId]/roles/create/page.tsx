@@ -6,6 +6,7 @@ import { RoleForm } from "@/components/form/RoleForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import { useState } from "react";
 import { Permission } from "@/types/ResponseType";
+import { FormBase } from "@/components/form/FormBase";
 export default function RoleCreateForm({
   params,
 }: {
@@ -35,17 +36,16 @@ export default function RoleCreateForm({
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Typography component="h1" variant="h5">
-          ロールを新規作成
-        </Typography>
-        <RoleForm
-          name={defaultData.name}
-          permissions={permissions}
-          setPermissions={setPermissions}
-        />
-      </Box>
-    </Container>
+    <FormBase
+      title={"ロールを作成"}
+      param={`/${params.groupId}/roles`}
+      handleSubmit={handleSubmit}
+    >
+      <RoleForm
+        name={defaultData.name}
+        permissions={permissions}
+        setPermissions={setPermissions}
+      />
+    </FormBase>
   );
 }
