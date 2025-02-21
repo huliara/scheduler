@@ -5,23 +5,20 @@ from sqlalchemy import update
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from app.cruds.response import (
-    slot_display,
-    slots_display,
-)
-from app.models.models import GroupUser, Slot, Task, User
+from app.cruds.response import slot_display, slots_display
+from app.models.models import GroupUser, Task, TaskDetail, User
 from app.schemas.slot import SlotCreate
 
 
 def all(db: Session):
-    items = db.scalars(select(Slot)).all()
+    items = db.scalars(select(Task)).all()
 
     return slots_display(items)
 
 
 def slot_finished(db: Session):
     item = (
-        db.execute(select(Slot).filter(Slot.end_time < datetime.datetime.now()))
+        db.execute(select(Task).filter(Task.end_time < datetime.datetime.now()))
         .scalars()
         .all()
     )
@@ -29,16 +26,16 @@ def slot_finished(db: Session):
 
 
 def get(name: str, db: Session):
-    item = db.scalars(select(Slot).filter_by(name=name).limit(1)).first()
+    item = db.scalars(select(Task).filter_by(name=name).limit(1)).first()
     respone_slot = slot_display(item)
     return respone_slot
 
 
 def post(request: SlotCreate, db: Session, user: User):
-    task = db.get(Task, request.task_id)
+    task = db.get(TaskDetail, request.task_id)
     if not task:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
-    new_slot = Slot(
+    new_slot = Task(
         name=request.name,
         start_time=request.start_time,
         task_id=request.task_id,
@@ -51,20 +48,20 @@ def post(request: SlotCreate, db: Session, user: User):
 
 
 def patch(request: SlotCreate, slot_id: str, db: Session):
-    slot = db.get(Slot, slot_id)
+    slot = db.get(Task, slot_id)
     if not slot:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No note with this id: {slot_id} found",
         )
-    task = db.get(Task, request.task_id)
+    task = db.get(TaskDetail, request.task_id)
     if not task:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
         )
     db.execute(
-        update(Slot)
-        .where(Slot.id == slot_id)
+        update(Task)
+        .where(Task.id == slot_id)
         .values(
             name=request.name if request.name else slot.name,
         )
@@ -79,21 +76,21 @@ def patch(request: SlotCreate, slot_id: str, db: Session):
 
 
 def assign(slot_id: str, user_id: str, db: Session):
-    slot = db.get(Slot, slot_id)
+    slot = db.get(Task, slot_id)
     user = db.get(User, user_id)
     if not slot or not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     if slot.end_time < datetime.datetime.now():
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
-    exp_assignees = list(filter(lambda x: slot.task in x.exp_tasks, slot.assignees))
-    if len(slot.assignees) + 1 > slot.task.max_worker_num:
+    exp_assignees = list(filter(lambda x: slot.task in x.exp_tasks, slot.workers))
+    if len(slot.workers) + 1 > slot.task.max_worker_num:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
     if (slot.task not in user.exp_tasks) and slot.task.max_worker_num - len(
-        slot.assignees
+        slot.workers
     ) + len(exp_assignees) <= slot.task.exp_worker_num:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-    slot.assignees.append(user)
+    slot.workers.append(user)
     db.commit()
     db.refresh(slot)
     return slot
@@ -102,7 +99,7 @@ def assign(slot_id: str, user_id: str, db: Session):
 """未テスト 動くかわからない"""
 
 
-def auto_assign(group_id: str, slots: list[Slot], db: Session):
+def auto_assign(group_id: str, slots: list[Task], db: Session):
     group_user = db.scalars(
         select(GroupUser).filter(GroupUser.group_id == group_id, GroupUser.point < 200)
     ).all()
@@ -126,16 +123,16 @@ def auto_assign(group_id: str, slots: list[Slot], db: Session):
                 )
             )
             if slot.task.exp_worker_num - current_exp_worker > len(exp_worker):
-                slot.assignees += exp_worker
+                slot.workers += exp_worker
                 current_exp_worker += len(exp_worker)
                 target_point += 1
                 group_user_que[target_point] = list(
                     set(group_user_que[target_point]) - set(exp_worker)
                 )
-                group_user_que[target_point + slot.task.point] += exp_worker
+                group_user_que[target_point + slot.task.wage] += exp_worker
                 continue
             else:
-                slot.assignees += exp_worker[
+                slot.workers += exp_worker[
                     : slot.task.exp_worker_num - current_exp_worker
                 ]
                 current_exp_worker += len(
@@ -145,7 +142,7 @@ def auto_assign(group_id: str, slots: list[Slot], db: Session):
                     set(group_user_que[target_point])
                     - set(exp_worker[: slot.task.exp_worker_num - current_exp_worker])
                 )
-                group_user_que[target_point + slot.task.point] += exp_worker[
+                group_user_que[target_point + slot.task.wage] += exp_worker[
                     : slot.task.exp_worker_num - current_exp_worker
                 ]
                 break
@@ -163,16 +160,16 @@ def auto_assign(group_id: str, slots: list[Slot], db: Session):
                 slot.task.max_worker_num - slot.task.exp_worker_num - current_worker
                 > len(group_user_que[target_point])
             ):
-                slot.assignees += group_user_que[target_point]
+                slot.workers += group_user_que[target_point]
                 current_worker += len(group_user_que[target_point])
                 target_point += 1
                 group_user_que[target_point] = []
-                group_user_que[target_point + slot.task.point] += group_user_que[
+                group_user_que[target_point + slot.task.wage] += group_user_que[
                     target_point
                 ]
                 continue
             else:
-                slot.assignees += group_user_que[target_point][
+                slot.workers += group_user_que[target_point][
                     : slot.task.exp_worker_num - current_exp_worker
                 ]
                 current_worker += len(
@@ -187,7 +184,7 @@ def auto_assign(group_id: str, slots: list[Slot], db: Session):
                     - slot.task.exp_worker_num
                     - current_worker :
                 ]
-                group_user_que[target_point + slot.task.point] += group_user_que[
+                group_user_que[target_point + slot.task.wage] += group_user_que[
                     target_point
                 ][
                     : slot.task.max_worker_num
@@ -200,10 +197,10 @@ def auto_assign(group_id: str, slots: list[Slot], db: Session):
 
 
 def complete(group_id, slot_id: str, done: bool, user: User, db: Session):
-    slot = db.get(Slot, slot_id)
+    slot = db.get(Task, slot_id)
     if slot.start_time > datetime.datetime.now():
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE)
-    slots = user.slots
+    slots = user.tasks
     if slot not in slots:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
     group_user = db.scalars(
@@ -214,9 +211,9 @@ def complete(group_id, slot_id: str, done: bool, user: User, db: Session):
     if not group_user:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
-    slot.assignees.remove(user)
+    slot.workers.remove(user)
     if done:
-        group_user.point += slot.task.point
+        group_user.point += slot.task.wage
         if slot.task not in user.exp_tasks:
             user.exp_tasks.append(slot.task)
     db.commit()
@@ -227,7 +224,7 @@ def complete(group_id, slot_id: str, done: bool, user: User, db: Session):
 def bulk_delete(group_id: str, slots_id: list[str], db: Session):
     delete_slot = []
     for slot_id in slots_id:
-        slot = db.get(Slot, slot_id)
+        slot = db.get(Task, slot_id)
         if not slot:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -246,11 +243,11 @@ def bulk_delete(group_id: str, slots_id: list[str], db: Session):
 
 def delete_expired_slots(group_id: str, db: Session):
     slots = db.scalars(
-        select(Slot).join(Slot.task).filter(Task.group_id == group_id)
+        select(Task).join(Task.task).filter(TaskDetail.group_id == group_id)
     ).all()
     expired_slots = []
     for slot in slots:
-        if slot.end_time < datetime.datetime.now() and slot.assignees == []:
+        if slot.end_time < datetime.datetime.now() and slot.workers == []:
             expired_slots.append({"id": slot.id, "name": slot.name})
             db.delete(slot)
     db.commit()

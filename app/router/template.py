@@ -8,15 +8,10 @@ from app.cruds import template as crud
 from app.cruds.auth import check_privilege, get_current_active_user
 from app.cruds.response import tasktemplate_display, template_display
 from app.database import get_db
-from app.models.models import Task, TaskTemplate, Template, User
-from app.schemas.template import (
-    SlotByTemplate,
-    TemplateCreate,
-    TemplateCreateBase,
-    TemplateDisplay,
-    TemplateList,
-    TemplateTaskBase,
-)
+from app.models.models import TaskDetail, TaskTemplate, Template, User
+from app.schemas.template import (SlotByTemplate, TemplateCreate,
+                                  TemplateCreateBase, TemplateDisplay,
+                                  TemplateList, TemplateTaskBase)
 
 router = APIRouter()
 
@@ -112,7 +107,7 @@ async def tasktemplate_add(
     template = db.get(Template, template_id)
     if not template:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    task = db.get(Task, request.id)
+    task = db.get(TaskDetail, request.id)
     if not task:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     tasktemplate = TaskTemplate(
@@ -163,7 +158,7 @@ async def tasktemplate_edit(
     tasktemplate = db.get(TaskTemplate, tasktemplate_id)
     if not tasktemplate:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    task = db.get(Task, request.id)
+    task = db.get(TaskDetail, request.id)
     tasktemplate.task_id = request.id if task else tasktemplate.task_id
     tasktemplate.date_from_start = request.date_from_start
     tasktemplate.start_time = datetime.time(

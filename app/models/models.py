@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 from app.ddd.domain.permission.permission import Permission
-from app.ddd.domain.task_state.task_state import TaskState
+from app.ddd.domain.task.task_state import TaskState
 
 experience_table = Table(
     "experience_table",
@@ -42,13 +42,13 @@ class Task(Base):
     name: Mapped[str] = mapped_column(String(20))
     start_time: Mapped[datetime.datetime]
     status:Mapped[TaskState]=mapped_column(Enum(TaskState),default=TaskState.before_hiring)
-    workers: Mapped[None | list[User]] = relationship(
+    workers: Mapped[list[User]] = relationship(
         secondary=tasks_table, back_populates="tasks"
     )
     creater_id: Mapped[None | uuid.UUID] = mapped_column(
         ForeignKey("user.id", ondelete="SET NULL")
     )
-    creater: Mapped[User | None] = relationship(back_populates="create_tasks")
+    creater: Mapped[User| None] = relationship(back_populates="create_tasks")
     taskdetail_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("taskdetail.id", ondelete="CASCADE")
     )
@@ -63,28 +63,32 @@ class TaskDetail(Base):
     __tablename__ = "taskdetail"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(String(20))
-    subtask: Mapped[list[SubTask] | None] = relationship(
+    group_id:Mapped[uuid.UUID]=mapped_column(
+        ForeignKey("group_id",ondelete="CASCADE")
+    )
+    group:Mapped[Group]=relationship(back_populates="taskdetail")
+    subtask: Mapped[list[SubTask]] = relationship(
         back_populates="taskdetail", cascade="all,delete"
     )
-    max_worker_num: Mapped[int] = mapped_column(default=1)  # 最大人数
-    min_worker_num: Mapped[int] = mapped_column(default=1)  # 最少人数
-    exp_worker_num: Mapped[int] = mapped_column(default=0)  # 必要な経験者の人数
-    wage: Mapped[float] = mapped_column(default=0)
+    max_worker: Mapped[int] = mapped_column(default=1)  # 最大人数
+    min_worker: Mapped[int] = mapped_column(default=1)  # 最少人数
+    exp_worker: Mapped[int] = mapped_column(default=0)  # 必要な経験者の人数
+    wage: Mapped[int] = mapped_column(default=0)
     duration: Mapped[datetime.timedelta] = mapped_column(
         default=datetime.timedelta(hours=1)
     )
-    permission:Mapped[list[Permission]|None] =mapped_column(ARRAY(Enum(Permission))) 
-    tasks: Mapped[list[Task] | None] = relationship(
+    permissions:Mapped[list[Permission]] =mapped_column(ARRAY(Enum(Permission))) 
+    tasks: Mapped[list[Task] ] = relationship(
         back_populates="taskdetail", cascade="all,delete"
     )
-    experts: Mapped[None | list[User]] = relationship(
+    experts: Mapped[list[User]] = relationship(
         secondary=experience_table, back_populates="exp_tasks"
     )
     creater_id: Mapped[None | uuid.UUID] = mapped_column(
         ForeignKey("user.id", ondelete="SET NULL")
     )
     creater: Mapped[None | User] = relationship(back_populates="create_taskdetail")
-    tasktemplates: Mapped[None | list[TaskTemplate]] = relationship(
+    tasktemplates: Mapped[list[TaskTemplate]] = relationship(
         back_populates="taskdetail", cascade="all,delete"
     )
 
@@ -131,17 +135,21 @@ class Template(Base):
     __tablename__ = "template"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(String(20))
-    tasktemplates: Mapped[list[TaskTemplate] | None] = relationship(
+    tasktemplates: Mapped[list[TaskTemplate]] = relationship(
         back_populates="template", cascade="all,delete"
     )
+    group_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("group.id", ondelete="CASCADE")
+    )
+    group: Mapped[Group] = relationship(back_populates="templates")
     
 class Group(Base):
     __tablename__ = "group"
     id:Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     name:Mapped[str] = mapped_column(String(20))
-    users:Mapped[None|list[GroupUser]] = relationship(back_populates="group",cascade="all,delete")
-    tasks:Mapped[None|list[Task]] = relationship(back_populates="group",cascade="all,delete")
-    templates:Mapped[None|list[Template]] = relationship(back_populates="group",cascade="all,delete")
+    users:Mapped[list[GroupUser]] = relationship(back_populates="group",cascade="all,delete")
+    taskdetail:Mapped[list[TaskDetail]]=relationship(back_populates='group',cascade='all,delete')
+    templates:Mapped[list[Template]] = relationship(back_populates="group",cascade="all,delete")
     
 class GroupUser(Base):
     __tablename__ = "group_user"
@@ -163,14 +171,14 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(400))
     room_number: Mapped[str] = mapped_column(String(10))
     point:Mapped[float] = mapped_column(default=0)
-    exp_tasks: Mapped[None | list[TaskDetail]] = relationship(
+    exp_tasks: Mapped[list[TaskDetail]] = relationship(
         secondary=experience_table, back_populates="experts"
     )
-    tasks: Mapped[None | list[Task]] = relationship(
+    tasks: Mapped[list[Task]] = relationship(
         secondary=tasks_table, back_populates="workers"
     )
-    create_tasks: Mapped[None | list[Task]] = relationship(back_populates="creater")
-    create_taskdetail: Mapped[None | list[TaskDetail]] = relationship(back_populates="creater")
+    create_tasks: Mapped[list[Task]] = relationship(back_populates="creater")
+    create_taskdetail: Mapped[list[TaskDetail]] = relationship(back_populates="creater")
     is_active: Mapped[bool] = mapped_column(default=True)
     is_admin: Mapped[bool] = mapped_column(default=False)
 

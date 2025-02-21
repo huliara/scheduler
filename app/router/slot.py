@@ -8,8 +8,9 @@ import app.cruds.slot as crud
 from app.cruds.auth import check_privilege, get_current_active_user
 from app.cruds.response import slot_display
 from app.database import get_db
-from app.models.models import Slot, Task, User
-from app.schemas.slot import SlotComplete, SlotCreate, SlotDelete, SlotDisplay, SlotList
+from app.models.models import Task, TaskDetail, User
+from app.schemas.slot import (SlotComplete, SlotCreate, SlotDelete,
+                              SlotDisplay, SlotList)
 
 router = APIRouter()
 
@@ -24,14 +25,14 @@ async def slot_list(
     check_privilege(group_id, user.id, "normal", db)
     if end:
         slots = db.scalars(
-            select(Slot)
-            .filter(Slot.end_time < datetime.datetime.now())
-            .join(Slot.task)
-            .filter(Task.group_id == group_id)
+            select(Task)
+            .filter(Task.end_time < datetime.datetime.now())
+            .join(Task.task)
+            .filter(TaskDetail.group_id == group_id)
         ).all()
         return {"slots": [slot_display(slot) for slot in slots]}
     slots = db.scalars(
-        select(Slot).join(Slot.task).filter(Task.group_id == group_id)
+        select(Task).join(Task.task).filter(TaskDetail.group_id == group_id)
     ).all()
     return {"slots": [slot_display(slot) for slot in slots]}
 
@@ -72,7 +73,7 @@ async def slot_get(
     db: Session = Depends(get_db),
 ):
     check_privilege(group_id, user.id, "normal", db)
-    slot = db.get(Slot, slot_id)
+    slot = db.get(Task, slot_id)
     if not slot:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return slot_display(slot)
@@ -99,7 +100,7 @@ async def slot_delete(
     db: Session = Depends(get_db),
 ):
     check_privilege(group_id, user.id, "edit_slot", db)
-    slot = db.get(Slot, slot_id)
+    slot = db.get(Task, slot_id)
     if not slot:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     db.delete(slot)
@@ -114,14 +115,14 @@ async def slot_cancel(
     user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db),
 ):
-    slot = db.get(Slot, slot_id)
+    slot = db.get(Task, slot_id)
     if not slot:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     if slot.end_time < datetime.datetime.now():
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="すでに終了した仕事です。"
         )
-    slot.assignees.remove(user)
+    slot.workers.remove(user)
     db.commit()
     db.refresh(slot)
     return slot_display(slot)

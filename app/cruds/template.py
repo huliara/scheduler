@@ -1,8 +1,9 @@
-from sqlalchemy.orm import Session
-from app.schemas.template import TemplateCreate
-from app.models.models import Slot, Template, User, TaskTemplate
+from datetime import date, datetime, time, timedelta
 
-from datetime import date, datetime, timedelta, time
+from sqlalchemy.orm import Session
+
+from app.models.models import Task, TaskTemplate, Template, User
+from app.schemas.template import TemplateCreate
 
 
 def post(group_id:str,template: TemplateCreate, db: Session):
@@ -42,7 +43,7 @@ def generate_slots(
             + "分から"
             + str(task.task.name)
         )
-        slot = Slot(
+        slot = Task(
             creater_id=user.id,
             name=name,
             task_id=task.task_id,

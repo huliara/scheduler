@@ -1,4 +1,6 @@
-from app.models.models import GroupUser,Group, Role, Slot, Task, TaskTemplate, Template, User
+from app.models.models import (Group, GroupUser, Role, Task, TaskDetail,
+                               TaskTemplate, Template, User)
+
 
 def response_base(model):
     return {
@@ -22,14 +24,14 @@ def user_detail_display(user: User):
             {"id": group.group_id, "name": group.group.name} for group in user.groups
         ],
         "exp_tasks": [response_base(task) for task in user.exp_tasks],
-        "slots": [response_base(slot) for slot in user.slots],
-        "create_slot": [response_base(slot) for slot in user.create_slot],
-        "create_task": [response_base(task) for task in user.create_task],
+        "slots": [response_base(slot) for slot in user.tasks],
+        "create_slot": [response_base(slot) for slot in user.create_task],
+        "create_task": [response_base(task) for task in user.create_taskdetail],
         "is_admin": user.is_admin,
     }
 
 
-def slot_display(slot: Slot):
+def slot_display(slot: Task):
     return {
         "id": slot.id,
         "name": slot.name,
@@ -37,25 +39,25 @@ def slot_display(slot: Slot):
         "end_time": slot.end_time,
         "creater_id": slot.creater_id,
         "creater_name": slot.creater.name,
-        "assignees": [response_base(user) for user in slot.assignees],
+        "assignees": [response_base(user) for user in slot.workers],
         "task_id": slot.task_id,
         "task_name": slot.task.name,
     }
 
 
-def slots_display(slots: Slot):
+def slots_display(slots: Task):
     return [slot_display(slot) for slot in slots]
 
 
-def task_display(task: Task):
+def task_display(task: TaskDetail):
     return {
         "id": task.id,
         "name": task.name,
         "detail": task.detail,
-        "max_worker_num": task.max_worker_num,
-        "min_worker_num": task.min_worker_num,
-        "exp_worker_num": task.exp_worker_num,
-        "point": task.point,
+        "max_worker_num": task.max_worker,
+        "min_worker_num": task.min_worker,
+        "exp_worker_num": task.exp_worker,
+        "point": task.wage,
         "duration": int(task.duration.total_seconds()),
         "creater_id": task.creater_id,
         "creater_name": task.creater.name,
@@ -63,7 +65,7 @@ def task_display(task: Task):
     }
 
 
-def tasks_display(tasks: Task):
+def tasks_display(tasks: TaskDetail):
     return [task_display(task) for task in tasks]
 
 

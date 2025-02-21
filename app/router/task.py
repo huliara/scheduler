@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
+
 from app.cruds import auth
 from app.cruds import task as crud
 from app.cruds.response import task_display
 from app.database import get_db
-from app.models.models import Task, User
+from app.models.models import TaskDetail, User
 from app.schemas.task import TaskCreate, TaskDisplay, TaskList
 
 router = APIRouter()
@@ -16,7 +17,7 @@ async def task_get(group_id: str, db: Session = Depends(get_db)):
     return {
         "tasks": [
             task_display(task)
-            for task in db.scalars(select(Task).filter(Task.group_id == group_id)).all()
+            for task in db.scalars(select(TaskDetail).filter(TaskDetail.group_id == group_id)).all()
         ],
     }
 
@@ -29,7 +30,7 @@ async def task_post(
     current_user: User = Depends(auth.get_current_active_user),
 ):
     auth.check_privilege(group_id, current_user.id, "edit_task", db)
-    task = Task(
+    task = TaskDetail(
         name=task.name,
         detail=task.detail,
         max_worker_num=task.max_worker_num,
@@ -54,7 +55,7 @@ async def task_get_id(
     db: Session = Depends(get_db),
 ):
     auth.check_privilege(group_id, user.id, "normal", db)
-    task = db.get(Task, task_id)
+    task = db.get(TaskDetail, task_id)
     return task_display(task)
 
 
@@ -79,7 +80,7 @@ async def task_delete(
     db: Session = Depends(get_db),
 ):
     auth.check_privilege(group_id, user.id, "edit_task", db)
-    task = db.get(Task, task_id)
+    task = db.get(TaskDetail, task_id)
     db.delete(task)
     db.commit()
     return task_display(task)

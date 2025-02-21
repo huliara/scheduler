@@ -1,7 +1,9 @@
-from app.cruds.template import generate_slots, post
-from sqlalchemy.orm import Session
-from app.models.models import Task, User, Group
 from datetime import date, datetime
+
+from sqlalchemy.orm import Session
+
+from app.cruds.template import generate_slots, post
+from app.models.models import Group, TaskDetail, User
 from app.schemas.template import TemplateCreate, TemplateTaskBase, TemplateTime
 
 user = {
@@ -56,7 +58,7 @@ def test_create_template(test_db: Session):
     test_db.refresh(db_user)
     db_group = Group(name=test_group["name"])
     test_db.add(db_group)
-    testtask = Task(
+    testtask = TaskDetail(
         name=task_test_data[0]["name"],
         detail=task_test_data[0]["detail"],
         max_worker_num=task_test_data[0]["max_woker_num"],
