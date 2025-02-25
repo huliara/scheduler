@@ -3,8 +3,12 @@ import datetime
 from sqlalchemy.orm import Session
 
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.task import ITaskRepository, TaskEntity
-from app.ddd.domain.template import ITemplateRepository, TemplateId
+from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskState
+from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
+                                     TemplateId)
+from app.ddd.domain.user import UserId
+
+from .schema import TaskFromTemplateParams
 
 
 class TaskFromTemplateUseCase(TransactionUseCaseBase):
@@ -15,8 +19,36 @@ class TaskFromTemplateUseCase(TransactionUseCaseBase):
         self.template_repository=template_repository
         self.task_repository=task_repository
         
-    def execute(self, template_id:TemplateId,start_date:datetime.date)->list[TaskEntity]:
-        return self._transaction(template_id,start_date)
-    def _transaction(self,tempalte_id:TemplateId,start_date:datetime.date)->list[TaskEntity]:
-        
-        return 
+    def execute(self,data:TaskFromTemplateParams)->list[TaskEntity]:
+        return self._transaction(data.creater_id,data.template_id,data.start_date)
+    
+    def _transaction(self,creater_id,tempalte_id:TemplateId,start_date:datetime.date)->list[TaskEntity]:
+        template:TemplateEntity=self.template_repository.find_by_id(tempalte_id)
+        tasks=self.generate_tasks(creater_id,template,start_date)
+        result=self.task_repository.bulk_add(tasks)
+        return result
+    
+    def generate_tasks(self,
+                       creater_id:UserId,
+                       template:TemplateEntity,
+                       start_date:datetime.date)->list[TaskEntity]:
+        tasks = []
+        for slot in template.slots:
+            date = start_date+datetime.timedelta(days=slot.date_from_start)
+            start = datetime.datetime.combine(date, slot.start_time)
+            name = (
+                str(start.hour)
+                + "時"
+                + str(start.minute)
+                + "分から"
+                + str(slot.taskdetail.name)
+            )
+            task = TaskEntity(
+                name=name,
+                start_time=start,
+                status=TaskState.before_hiring,
+                taskdetail=slot.taskdetail,
+                creater_id=creater_id,
+            )
+            tasks.append(task)
+        return tasks

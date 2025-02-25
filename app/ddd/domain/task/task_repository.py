@@ -12,3 +12,7 @@ class ITaskRepository(IRepository[TaskEntity,TaskId]):
     @abstractmethod
     def refresh_to_entity(self, model: Task) -> TaskEntity:
         pass
+    
+    @abstractmethod
+    def bulk_add(self,tasks:list[TaskEntity])->list[TaskEntity]:
+        pass

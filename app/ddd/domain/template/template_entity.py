@@ -1,3 +1,4 @@
+import datetime
 
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.group.group_value_object import GroupId
@@ -39,10 +40,11 @@ class TemplateEntity(IEntity):
             'id': self.id,
             'name': self.name,
             'slots': 
-                [{'taskdetail_id':slot.taskdetail_id,
+                [{'taskdetail_id':slot.taskdetail,
                   'date_from_start':slot.date_from_start,
                   'start_time':slot.start_time} 
                  for slot in self.slots]
         }
     def add(self,slot:TemplateSlot):
-        self.slots.append(slot)
+        self.slots.add(slot)
+        

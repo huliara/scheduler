@@ -1,0 +1,19 @@
+from app.ddd.core.exception import UseCaseException
+from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from app.ddd.domain.group import GroupEntity, IGroupRepository
+
+
+class GroupPostUseCase(TransactionUseCaseBase):
+    def __init__(self, db,group_repository:IGroupRepository):
+        super().__init__(db)
+        self.group_repository=group_repository
+        
+    def execute(self,group:GroupEntity):
+        return self._transaction(group)
+    
+    def _transaction(self,group:GroupEntity)->GroupEntity:
+        try:
+            group=self.group_repository.add(group)
+        except:
+            raise UseCaseException('Invalid Group Entity')
+        return group

@@ -1,36 +1,33 @@
-import pandas as pd
-from mip import BINARY, Model, maximize, minimize, xsum
+from mip import BINARY, Model, minimize, xsum
 from sqlalchemy.orm import Session
 
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId
-from app.ddd.domain.user import IUserRepository, UserEntity, UserId
+from app.ddd.domain.task import ITaskRepository, TaskEntity
+from app.ddd.domain.user import IUserRepository, UserEntity
 
 
 class TasksAllocationWorkerUseCase(TransactionUseCaseBase):
-    def __init__(self, db:Session,
-                 user_repository:IUserRepository,
-                 task_repository:ITaskRepository):
+    def __init__(self, db:Session):
         super().__init__(db)
-        self.user_repository=user_repository
-        self.task_repository=task_repository
-    def execute(self, task_ids:list[TaskId],user_ids:list[UserId])->list[TaskEntity]:
-        if len(task_ids)==0:
+        
+    async def execute(self, tasks:list[TaskEntity],users:list[UserEntity])->list[TaskEntity]:
+        if len(tasks)==0:
             return []
-        if len(user_ids)==0:
+        if len(users)==0:
             return []
-        if len(task_ids)>40:
+        if len(tasks)>40:
             raise ValueError("task_ids must be less than 40")
-        if len(user_ids)>500:
+        if len(users)>500:
             raise ValueError("user_ids must be less than 500")
         
+        result=await self.shift_calculate(users,tasks)
         
-        return 
-    def _transaction(self, task_ids:list[TaskId],user_ids:list[UserId])->list[TaskEntity]:
-        return
+        return result
+    def _transaction(self, task_ids:list[TaskEntity],user_ids:list[UserEntity])->list[TaskEntity]:
+        pass
     
     #experimental
-    def shift_calculate(users:list[UserEntity],tasks:list[TaskEntity])->list[TaskEntity]:
+    async def shift_calculate(users:list[UserEntity],tasks:list[TaskEntity])->list[TaskEntity]:
         m=Model()
         Var=m.add_var_tensor((len(tasks),len(users)),var_type=BINARY)
         tasks=[task for task in tasks if len(task.workers)>0]

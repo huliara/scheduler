@@ -31,7 +31,7 @@ class TemplateRepository(ITemplateRepository):
             raise DomainException('Template not found',404)
         model.name=entity.name
         model.tasktemplates=[
-            TaskTemplate(taskdetail_id=slot.taskdetail_id,
+            TaskTemplate(taskdetail_id=slot.taskdetail,
                         date_from_start=slot.date_from_start,
                         start_time=slot.start_time) for slot in entity.slots]
         self.db.commit()
