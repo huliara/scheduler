@@ -6,10 +6,9 @@ from app.ddd.domain.task import ITaskRepository, TaskEntity
 from app.ddd.domain.user import IUserRepository, UserEntity
 
 
-class TasksAllocationWorkerUseCase(TransactionUseCaseBase):
-    def __init__(self, db:Session):
-        super().__init__(db)
-        
+class TaskAllocationWorkerUseCase(TransactionUseCaseBase):
+    def __init__(self):
+        pass
     async def execute(self, tasks:list[TaskEntity],users:list[UserEntity])->list[TaskEntity]:
         if len(tasks)==0:
             return []

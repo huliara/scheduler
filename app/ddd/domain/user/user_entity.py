@@ -12,6 +12,7 @@ from app.models.models import User
 class UserEntity(IEntity):
     id:UserId|None
     name:str
+    room_number:str
     tasks:list[TaskId]
     exp_tasks:list[TaskDetailEntity]
     point:int=0

@@ -4,3 +4,5 @@ from .template_post_usecase import TemplatePostUseCase
 from .template_remove_usecase import TemplateRemoveUseCase
 from .template_update_name_usecase import TemplateUpdateNameUseCase
 from .template_update_slots_usecase import TemplateUpdateSlotsUseCase
+from .schema import TaskFromTemplateParams
+from .task_from_template import TaskFromTemplateUseCase

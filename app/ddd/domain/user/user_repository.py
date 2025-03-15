@@ -9,11 +9,11 @@ from app.models.models import User
 
 
 class IUserRepository(IRepository[UserEntity,UserId]):
+    @abstractmethod
+    def add(self,password:str, entity: UserEntity) -> UserEntity:
+        pass
     
     @abstractmethod
     def refresh_to_entity(self, model: User) -> UserEntity:
         pass
     
-    @abstractmethod
-    def find_by_group_id(self,group_id:GroupId)->UserEntity:
-        pass

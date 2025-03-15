@@ -1,4 +1,5 @@
-from .allocator.tasks_allocate_worker import TasksAllocationWorkerUseCase
+from .allocator.tasks_allocate_by_group import TaskAllocationByGroup
+from .allocator.tasks_allocate_worker import TaskAllocationWorkerUseCase
 from .task_get_usecase import TaskGetUseCase
 from .task_post_usecase import TaskPostUseCase
 from .task_remove_usecase import TaskRemoveUseCase

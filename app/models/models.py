@@ -167,7 +167,7 @@ class GroupUser(Base):
 class User(Base):
     __tablename__ = "user"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20))
+    name: Mapped[str] = mapped_column(String(20),unique=True)
     password: Mapped[str] = mapped_column(String(400))
     room_number: Mapped[str] = mapped_column(String(10))
     point:Mapped[float] = mapped_column(default=0)

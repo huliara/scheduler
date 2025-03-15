@@ -1,3 +1,4 @@
+from .group_repository import GroupRepository
 from .task_detail_repository import TaskDetailRepository
 from .task_repository import TaskRepository
 from .template_repository import TemplateRepository

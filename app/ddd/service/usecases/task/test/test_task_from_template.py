@@ -10,7 +10,7 @@ from app.ddd.infra.repository import (TaskDetailRepository, TaskRepository,
                                       TemplateRepository)
 from app.mock_database import get_mock_db
 
-from ..task_from_template import TaskFromTemplateUseCase
+from ...template.task_from_template import TaskFromTemplateUseCase
 
 
 @pytest.fixture

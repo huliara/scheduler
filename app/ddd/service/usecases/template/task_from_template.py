@@ -34,7 +34,8 @@ class TaskFromTemplateUseCase(TransactionUseCaseBase):
     def generate_tasks(self,
                        creater_id:UserId,
                        template:TemplateEntity,
-                       start_date:datetime.date)->list[TaskEntity]:
+                       start_date:datetime.date,
+                       )->list[TaskEntity]:
         tasks = []
         for slot in template.slots:
             taskdetail=self.taskdetail_repository.find_by_id(slot.taskdetail_id)
@@ -54,5 +55,5 @@ class TaskFromTemplateUseCase(TransactionUseCaseBase):
                 taskdetail=taskdetail.id,
                 creater_id=creater_id,
             )
-            tasks.append(task)
+            tasks.append(task)            
         return tasks

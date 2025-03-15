@@ -56,8 +56,9 @@ class TemplateCreate(TemplateCreateBase):
     class Config:
         from_attributes = True
 
-class SlotByTemplate(BaseModel):
+class TaskFromTemplate(BaseModel):
     start_day: datetime.date
+    add_default_worker:bool=False
 
     class Config:
         from_attributes = True
