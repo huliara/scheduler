@@ -1,7 +1,7 @@
+import datetime
 from uuid import UUID
 
 from pydantic import BaseModel, Field
-import datetime
 
 
 class TemplateSlot(BaseModel):
@@ -51,7 +51,7 @@ class TemplateCreateBase(BaseModel):
     name:str = Field(max_length=20)
 
 class TemplateCreate(TemplateCreateBase):
-    tasks: set[TemplateTaskBase] = set()
+    slots: set[TemplateTaskBase] = set()
 
     class Config:
         from_attributes = True

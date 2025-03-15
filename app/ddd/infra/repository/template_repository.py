@@ -19,7 +19,11 @@ class TemplateRepository(ITemplateRepository):
     def add(self, entity):
         model=Template(
             name=entity.name,
-            group_id=entity.group_id
+            group_id=entity.group_id,
+            tasktemplates=[
+            TaskTemplate(taskdetail_id=slot.taskdetail_id.id,
+                        date_from_start=slot.date_from_start,
+                        start_time=slot.start_time) for slot in entity.slots]
         )
         self.db.add(model)
         self.db.commit()
@@ -29,11 +33,18 @@ class TemplateRepository(ITemplateRepository):
         model=self.db.get(Template,entity.id)
         if model is None:
             raise DomainException('Template not found',404)
-        model.name=entity.name
         model.tasktemplates=[
-            TaskTemplate(taskdetail_id=slot.taskdetail,
+            TaskTemplate(taskdetail_id=slot.taskdetail_id,
                         date_from_start=slot.date_from_start,
                         start_time=slot.start_time) for slot in entity.slots]
+        self.db.commit()
+        return self._refresh_to_entity(model)
+    
+    def update_name(self, id, name):
+        model=self.db.get(Template,id)
+        if model is None:
+            raise DomainException('Template not found',404)
+        model.name=name
         self.db.commit()
         return self._refresh_to_entity(model)
     

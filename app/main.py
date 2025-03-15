@@ -9,12 +9,12 @@ from app.router import (
     message,
     slot,
     task,
-    template,
     user,
     groups,
     role,
 )
 from app.database import DATABASE
+from app.router.template import template
 app = FastAPI()
 
 

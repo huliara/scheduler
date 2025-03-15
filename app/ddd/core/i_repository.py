@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.ddd.core.i_entity import IEntity
 
+    
 
 class IRepository[T:IEntity,ID](ABC):
     
@@ -17,7 +18,7 @@ class IRepository[T:IEntity,ID](ABC):
         pass
     
     @abstractmethod
-    def find_all(self) -> list[T]:
+    def find_all(self,group_id) -> list[T]:
         pass
     
     @abstractmethod

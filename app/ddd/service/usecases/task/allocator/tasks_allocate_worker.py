@@ -23,7 +23,7 @@ class TasksAllocationWorkerUseCase(TransactionUseCaseBase):
         result=await self.shift_calculate(users,tasks)
         
         return result
-    def _transaction(self, task_ids:list[TaskEntity],user_ids:list[UserEntity])->list[TaskEntity]:
+    def _transaction(self)->list[TaskEntity]:
         pass
     
     #experimental

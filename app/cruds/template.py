@@ -11,7 +11,7 @@ def post(group_id:str,template: TemplateCreate, db: Session):
         name=template.name,
         group_id=group_id,
     )
-    for req_task in template.tasks:
+    for req_task in template.slots:
         db_task = TaskTemplate(
             task_id=req_task.id,
             date_from_start=req_task.date_from_start,

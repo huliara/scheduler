@@ -40,7 +40,7 @@ class TemplateEntity(IEntity):
             'id': self.id,
             'name': self.name,
             'slots': 
-                [{'taskdetail_id':slot.taskdetail,
+                [{'taskdetail_id':slot.taskdetail_id,
                   'date_from_start':slot.date_from_start,
                   'start_time':slot.start_time} 
                  for slot in self.slots]

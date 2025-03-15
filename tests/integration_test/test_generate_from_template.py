@@ -93,7 +93,7 @@ def test_create_template(test_db: Session):
         end_time=endtime,
     )
     post_data = TemplateCreate(
-        name="testTemplate", tasks=[templetask1, templetask2, templetask3]
+        name="testTemplate", slots=[templetask1, templetask2, templetask3]
     )
     template = post(post_data, test_db)
     assert template.name == "testTemplate"
