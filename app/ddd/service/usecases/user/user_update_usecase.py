@@ -20,7 +20,7 @@ class UserUpdateUseCase(TransactionUseCaseBase):
             raise UseCaseException('Invalid exp_task found')
         
         try:
-            user=self.user_repository.update(user_entity)
+            user=self.user_repository.save(user_entity)
         except:
             raise UseCaseException(f'user_id:{user_entity.id} not found')
         return user

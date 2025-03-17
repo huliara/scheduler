@@ -13,7 +13,7 @@ class TemplateUpdateSlotsUseCase(TransactionUseCaseBase):
         return self._transaction(tempalte)
     def _transaction(self, template:TemplateEntity)->TemplateEntity:
         try:
-            new_template=self.template_repository.update(template)
+            new_template=self.template_repository.save(template)
         except:
             raise UseCaseException('Invalid Template Entity')
         return new_template

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from app.ddd.core.i_entity import IEntity
-from app.ddd.domain.group.member_entity import MemberEntity
+from app.ddd.domain.member.member_entity import MemberEntity
 from app.ddd.domain.task_detail.task_detail_entity import TaskDetailId
 from app.ddd.domain.template.template_entity import TemplateId
 from app.models.models import Group

@@ -7,12 +7,13 @@ from app.cruds import task as crud
 from app.cruds.response import task_display
 from app.database import get_db
 from app.models.models import TaskDetail, User
-from app.schemas.task import TaskCreate, TaskDisplay, TaskList
+from app.schemas.taskdetail import (TaskDetailCreate, TaskDetailDisplay,
+                                    TaskDetailList)
 
 router = APIRouter()
 
 
-@router.get("/", response_model=TaskList)
+@router.get("/", response_model=TaskDetailList)
 async def task_get(group_id: str, db: Session = Depends(get_db)):
     return {
         "tasks": [
@@ -22,10 +23,10 @@ async def task_get(group_id: str, db: Session = Depends(get_db)):
     }
 
 
-@router.post("/", response_model=TaskDisplay)
+@router.post("/", response_model=TaskDetailDisplay)
 async def task_post(
     group_id: str,
-    task: TaskCreate,
+    task: TaskDetailCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(auth.get_current_active_user),
 ):
@@ -47,7 +48,7 @@ async def task_post(
     return task_display(task)
 
 
-@router.get("/{task_id}", response_model=TaskDisplay)
+@router.get("/{task_id}", response_model=TaskDetailDisplay)
 async def task_get_id(
     group_id: str,
     task_id: str,
@@ -59,11 +60,11 @@ async def task_get_id(
     return task_display(task)
 
 
-@router.patch("/{task_id}", response_model=TaskDisplay)
+@router.patch("/{task_id}", response_model=TaskDetailDisplay)
 async def task_patch(
     group_id: str,
     task_id: str,
-    task: TaskCreate,
+    task: TaskDetailCreate,
     user: User = Depends(auth.get_current_active_user),
     db: Session = Depends(get_db),
 ):
@@ -72,7 +73,7 @@ async def task_patch(
     return task_display(task)
 
 
-@router.delete("/{task_id}", response_model=TaskDisplay)
+@router.delete("/{task_id}", response_model=TaskDetailDisplay)
 async def task_delete(
     group_id: str,
     task_id: str,

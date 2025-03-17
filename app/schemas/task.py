@@ -1,42 +1,53 @@
-from datetime import timedelta
+import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field
 
 
-class TaskBase(BaseModel):
+class TaskCreate(BaseModel):
     name: str = Field(max_length=20)
-    detail: str = Field(max_length=400)
-    max_worker_num: int = Field(default=1, gte=1)
-    min_worker_num: int = Field(default=1, gte=0)
-    exp_worker_num: int = Field(default=0, gte=0)
-    point: int = Field(0, gt=0)
-    @root_validator(pre=True)
-    def validate_worker_num(cls, values):
-        if int(values["max_worker_num"]) < int(values["min_worker_num"]):
-            raise ValueError("Be sure that the max worker is greater than min worker.")
-        if int(values["exp_worker_num"]) > int(values["min_worker_num"]):
-            raise ValueError("Be sure that the exp worker is less than min worker.")
-        return values
+    start_time: datetime.datetime
+    taskdetail_id: UUID
 
-class TaskCreate(TaskBase):
-    duration: timedelta
+    class Config:
+        from_attributes = True
 
 
+class TaskDeleteRequest(BaseModel):
+    slots_id: list[UUID]
 
-class TaskDisplay(TaskBase):
+
+class Worker(BaseModel):
     id: UUID
+    name: str
+
+
+class TaskDisplay(TaskCreate):
+    id: UUID
+    end_time: datetime.datetime
     creater_id: UUID
     creater_name: str
-    group_id: UUID
-    duration: int
+    assignees: list[Worker] = []
+    task_name: str
 
     class Config:
         from_attributes = True
 
 
 class TaskList(BaseModel):
-    tasks: list[TaskDisplay]
+    slots: list[TaskDisplay]
 
+    class Config:
+        from_attributes = True
+
+
+class TaskDelete(BaseModel):
+    tasks: list[UUID]
+
+    class Config:
+        from_attributes = True
+
+class TaskComplete(BaseModel):
+    done: bool
     class Config:
         from_attributes = True

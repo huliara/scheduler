@@ -26,7 +26,7 @@ class GroupRepository(IGroupRepository):
         self.db.commit()
         return self._refresh_to_entity(model)
     
-    def update(self, entity:GroupEntity):
+    def save(self, entity:GroupEntity):
         model=self.db.get(Group,entity.id)
         if model is None:
             raise DomainException('Group not found',404)

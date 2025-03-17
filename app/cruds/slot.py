@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.cruds.response import slot_display, slots_display
 from app.models.models import GroupUser, Task, TaskDetail, User
-from app.schemas.slot import SlotCreate
+from app.schemas.task import TaskCreate
 
 
 def all(db: Session):
@@ -31,14 +31,14 @@ def get(name: str, db: Session):
     return respone_slot
 
 
-def post(request: SlotCreate, db: Session, user: User):
-    task = db.get(TaskDetail, request.task_id)
+def post(request: TaskCreate, db: Session, user: User):
+    task = db.get(TaskDetail, request.taskdetail_id)
     if not task:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
     new_slot = Task(
         name=request.name,
         start_time=request.start_time,
-        task_id=request.task_id,
+        task_id=request.taskdetail_id,
         creater_id=user.id,
     )
     db.add(new_slot)
@@ -47,14 +47,14 @@ def post(request: SlotCreate, db: Session, user: User):
     return new_slot
 
 
-def patch(request: SlotCreate, slot_id: str, db: Session):
+def patch(request: TaskCreate, slot_id: str, db: Session):
     slot = db.get(Task, slot_id)
     if not slot:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No note with this id: {slot_id} found",
         )
-    task = db.get(TaskDetail, request.task_id)
+    task = db.get(TaskDetail, request.taskdetail_id)
     if not task:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

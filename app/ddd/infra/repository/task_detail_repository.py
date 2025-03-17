@@ -31,7 +31,7 @@ class TaskDetailRepository(ITaskDetailRepository):
         self.db.add(model)
         self.db.commit()
         return self._refresh_to_entity(model)
-    def update(self, entity: TaskDetailEntity):
+    def save(self, entity: TaskDetailEntity):
         model=self.db.get(TaskDetail,entity.id)
         if model is None:
             raise DomainException('TaskDetail not found',404)

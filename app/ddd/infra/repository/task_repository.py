@@ -29,7 +29,7 @@ class TaskRepository(ITaskRepository):
         self.db.commit()
         return self._refresh_to_entity(model)
     
-    def update(self, entity: TaskEntity):
+    def save(self, entity: TaskEntity):
         model=self.db.get(Task,entity.id)
         if model is None:
             raise DomainException('Task not found',404)

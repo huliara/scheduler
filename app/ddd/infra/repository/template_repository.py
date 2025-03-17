@@ -29,7 +29,7 @@ class TemplateRepository(ITemplateRepository):
         self.db.commit()
         return self._refresh_to_entity(model)
     
-    def update(self, entity):
+    def save(self, entity):
         model=self.db.get(Template,entity.id)
         if model is None:
             raise DomainException('Template not found',404)

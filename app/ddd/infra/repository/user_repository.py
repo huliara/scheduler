@@ -29,7 +29,7 @@ class UserRepository(IUserRepository):
         self.db.commit()
         return self._refresh_to_entity(model)
     
-    def update(self, entity:UserEntity):
+    def save(self, entity:UserEntity):
         model = self.db.get(User, entity.id)
         if model is None:
             raise DomainException('User not found',404)

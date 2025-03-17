@@ -21,5 +21,5 @@ class UserApplyTaskUseCase(TransactionUseCaseBase):
         user=self.user_repository.find_by_id(user_id)
         task=self.task_reposiotry.find_by_id(task_id)
         task.add(user)
-        _=self.task_reposiotry.update(task)
+        _=self.task_reposiotry.save(task)
         return self.user_repository.find_by_id(user.id)

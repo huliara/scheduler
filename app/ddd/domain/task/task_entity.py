@@ -20,7 +20,7 @@ class TaskEntity(IEntity):
     start_time:datetime.datetime
     status:TaskState
     taskdetail:TaskDetailEntity
-    workers:list[UserId]=field(default_factory=list)
+    workers:list[UserEntity]=field(default_factory=list)
     creater_id:UserId|None=None
     @property
     def end_time(self) -> datetime.datetime:
@@ -54,12 +54,12 @@ class TaskEntity(IEntity):
         if self.end_time < datetime.datetime.now():
             raise DomainException(status_code=status.CONFLICT,message='この仕事は既に終了しています')
 
-        exp_assignees = list(filter(lambda x: self.task in x.exp_tasks, self.workers))
+        exp_assignees = list(filter(lambda x: self.taskdetail in x.exp_tasks, self.workers))
         if len(self.workers)>= self.taskdetail.max_worker:
             raise DomainException(status_code=status.CONFLICT)
-        if (self.task not in user.exp_tasks) and self.task.max_worker_num - len(
+        if (self.taskdetail not in user.exp_tasks) and self.taskdetail.max_worker - len(
             self.workers
-        ) + len(exp_assignees) <= self.task.exp_worker_num:
+        ) + len(exp_assignees) <= self.taskdetail.exp_worker:
             raise DomainException(status_code=status.CONFLICT)
         self.workers.append(user)
         return self
@@ -68,5 +68,11 @@ class TaskEntity(IEntity):
         if user not in self.workers:
             raise DomainException(status_code=status.CONFLICT)
         self.workers.remove(user)
+        return self
+    
+    def complete(self,user:UserEntity):
+        if user not in self.workers:
+            raise DomainException(status_code=status.CONFLICT)
+        self.status=TaskState.archive
         return self
     

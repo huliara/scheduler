@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 
 from app.ddd.core.i_entity import IEntity
 
-    
 
 class IRepository[T:IEntity,ID](ABC):
     
@@ -26,7 +25,7 @@ class IRepository[T:IEntity,ID](ABC):
         pass
     
     @abstractmethod
-    def update(self, entity: T) -> T:
+    def save(self, entity: T) -> T:
         pass
     
     @abstractmethod

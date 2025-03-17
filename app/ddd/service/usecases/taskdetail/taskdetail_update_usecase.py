@@ -23,5 +23,5 @@ class TaskDetailUpdateUseCase(TransactionUseCaseBase):
             _=self.taskdetail_repository.find_by_id(task_detail.id)
         except:
             raise UseCaseException(f'taskdetail_id:{task_detail.id} not found')
-        task_detail=self.taskdetail_repository.update(task_detail)
+        task_detail=self.taskdetail_repository.save(task_detail)
         return task_detail
