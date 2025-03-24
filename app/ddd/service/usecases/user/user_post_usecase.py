@@ -8,12 +8,12 @@ class UserPostUseCase(TransactionUseCaseBase):
         super().__init__(db)
         self.user_repository=user_repository
     
-    def execute(self,user_entity:UserEntity):
-        return super().execute(user_entity)
+    def execute(self,entity:UserEntity,password:str)->UserEntity:
+        return super().execute(entity,password)
     
-    def _transaction(self, user_entity:UserEntity):
+    def _transaction(self, entity:UserEntity,password:str)->UserEntity:
         try:
-            user=self.user_repository.add(user_entity)
+            user=self.user_repository.add(entity,password)
         except:
-            raise UseCaseException(f'user_id:{user_entity.id} not found')
+            raise UseCaseException(f'invalid enitity:{entity}')
         return user

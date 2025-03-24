@@ -9,7 +9,7 @@ class GroupPostRequest(BaseModel):
 
 
 class AddUserRequest(BaseModel):
-    users: list[str]
+    user_ids: list[str]
 
     class Config:
         from_attributes = True

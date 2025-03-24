@@ -8,12 +8,13 @@ class GroupPostUseCase(TransactionUseCaseBase):
         super().__init__(db)
         self.group_repository=group_repository
         
-    def execute(self,group:GroupEntity):
-        return self._transaction(group)
+    def execute(self,name:str):
+        group_entity=GroupEntity(name=name)
+        return self._transaction(group_entity)
     
-    def _transaction(self,group:GroupEntity)->GroupEntity:
+    def _transaction(self,entity:GroupEntity)->GroupEntity:
         try:
-            group=self.group_repository.add(group)
+            group=self.group_repository.add(entity)
         except:
             raise UseCaseException('Invalid Group Entity')
         return group

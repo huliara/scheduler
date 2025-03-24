@@ -4,8 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.database import DATABASE
-from app.router import admin, auth, groups, message, role, task, user
-from app.router.task import slot
+from app.router import auth, message
+from app.router.admin.index import router as admin
+from app.router.group.index import router as group
+from app.router.task.index import router as task
+from app.router.task_detail.index import router as task_detail
 from app.router.template.index import router as template
 
 app = FastAPI()
@@ -34,11 +37,10 @@ async def root():
 
 
 app.include_router(auth.router, prefix="")
-app.include_router(admin.router, prefix="/admin")
-app.include_router(groups.router, prefix="/groups")
-app.include_router(slot.router, prefix="/{group_id}/slots")
-app.include_router(task.router, prefix="/{group_id}/tasks")
+app.include_router(admin, prefix="/admin")
+app.include_router(group, prefix="/groups")
+app.include_router(user, prefix="/mypage")
+app.include_router(task, prefix="/{group_id}/tasks")
+app.include_router(task_detail, prefix="/{group_id}/task_details")
 app.include_router(template, prefix="/{group_id}/templates")
-app.include_router(user.router, prefix="/{group_id}/users")
-app.include_router(role.router, prefix="/{group_id}/roles")
 app.include_router(message.router, prefix="/{group_id}/message")

@@ -10,6 +10,9 @@ from app.models.models import User
 
 class IUserRepository(IRepository[UserEntity,UserId]):
     @abstractmethod
+    def find_all(self,group_id:GroupId|None) -> list[UserEntity]:
+        pass
+    @abstractmethod
     def add(self,password:str, entity: UserEntity) -> UserEntity:
         pass
     

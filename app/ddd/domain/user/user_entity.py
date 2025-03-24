@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.task.task_value_object import TaskId
-from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
+from app.ddd.domain.task_detail.task_detail_entity import TaskDetailId
 from app.ddd.domain.user.user_value_object import UserId
 from app.models.models import User
 
@@ -14,15 +14,27 @@ class UserEntity(IEntity):
     name:str
     room_number:str
     tasks:list[TaskId]
-    exp_tasks:list[TaskDetailEntity]
+    exp_tasks:list[TaskDetailId]
     point:int=0
+    is_admin:bool=False
+    is_active:bool=True
+    @classmethod
+    def from_params(cls,data:dict) -> 'UserEntity':
+        return cls(
+            id=UserId(data['id']) if data['id'] is not None else None,
+            name=data['name'],
+            room_number=data['room_number'],
+            exp_tasks=data['exp_tasks'],
+            is_admin=data['is_admin'] if 'is_admin' in data else False,
+            point=data['point'] if 'point' in data else 0
+        )
     @classmethod
     def from_model(cls, data: User) -> 'UserEntity':
         return cls(
             id=data.id,
             name=data.name,
             tasks=[task.id for task in data.tasks],
-            exp_tasks=[TaskDetailEntity.from_model(task_detail) for task_detail in data.exp_tasks],
+            exp_tasks=data['exp_tasks'],
             point=data.point
         )
     def to_dict(self):
@@ -35,3 +47,4 @@ class UserEntity(IEntity):
         }
     def add(self,task:TaskId):
         self.tasks.append(task)
+    

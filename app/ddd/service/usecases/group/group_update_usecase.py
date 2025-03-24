@@ -3,7 +3,7 @@ from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from app.ddd.domain.group import GroupEntity, IGroupRepository
 
 
-class GroupUseCase(TransactionUseCaseBase):
+class GroupUpdateUseCase(TransactionUseCaseBase):
     def __init__(self, db,group_repository:IGroupRepository):
         super().__init__(db)
         self.group_repository=group_repository

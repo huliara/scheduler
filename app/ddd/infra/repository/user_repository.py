@@ -3,7 +3,7 @@ from sqlalchemy.future import select
 from app.cruds.auth import get_password_hash
 from app.ddd.core.exception import DomainException
 from app.ddd.domain.user import IUserRepository, UserEntity
-from app.models.models import TaskDetail, User
+from app.models.models import GroupUser, TaskDetail, User
 
 
 class UserRepository(IUserRepository):
@@ -14,16 +14,19 @@ class UserRepository(IUserRepository):
         model = self.db.get(User, id)
         return self._refresh_to_entity(model)
         
-    def find_all(self):
+    def find_all(self,group_id):
+        if group_id is not None:
+            return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).join(GroupUser).filter(GroupUser.group_id==group_id).all()]
         return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).all()]
     
-    def add(self,password:str, entity:UserEntity):
+    def add(self, entity:UserEntity, password:str):
         exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task.id for task in entity.exp_tasks]))).all()
         model = User(
             name=entity.name,
             password=get_password_hash(password),
             room_number=entity.room_number,
             exp_tasks=exp_tasks,
+            is_admin=entity.is_admin
         )
         self.db.add(model)
         self.db.commit()
@@ -36,6 +39,7 @@ class UserRepository(IUserRepository):
         model.name = entity.name
         model.room_number = entity.room_number
         model.exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task.id for task in entity.exp_tasks]))).all()
+        model.point = entity.point
         self.db.commit()
         return self._refresh_to_entity(model)
     

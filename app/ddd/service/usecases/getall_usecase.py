@@ -11,9 +11,9 @@ class GetAllUseCase[T:IEntity,U:IRepository](TransactionUseCaseBase):
         super().__init__(db)
         self.repository=repository
         
-    def execute(self,group_id:GroupId)->list[T]:
+    def execute(self,group_id:GroupId|None)->list[T]:
         return self._transaction(group_id)
     
-    def _transaction(self,group_id:GroupId)->list[T]:
+    def _transaction(self,group_id:GroupId|None)->list[T]:
         result=self.repository.find_all(group_id)
         return result

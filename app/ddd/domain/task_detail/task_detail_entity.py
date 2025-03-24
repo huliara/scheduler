@@ -27,12 +27,27 @@ class TaskDetailEntity(IEntity):
             id=TaskDetailId(data.id),
             name=data.name,
             subtask=[subtask.description for subtask in data.subtask],
-            max_assignees=data.max_worker,
-            min_assignees=data.min_worker,
-            exp_assignees=data.exp_worker,
+            max_worker=data.max_worker,
+            min_worker=data.min_worker,
+            exp_worker=data.exp_worker,
             wage=data.wage,
             duration=data.duration,
+            group_id=data.group_id,
             permissions=[permission for permission in data.permissions]
+        )
+    def from_params(cls, data: dict) -> 'TaskDetailEntity':
+        return cls(
+            id=TaskDetailId(data['id']) if data['id'] is not None else None,
+            name=data['name'],
+            subtask=data['subtask'],
+            max_worker=data['max_assignees'],
+            min_worker=data['min_assignees'],
+            exp_worker=data['exp_assignees'],
+            wage=data['wage'],
+            duration=data['duration'],
+            group_id=GroupId(data['group_id']),
+            permissions=[permission for permission in data['permissions']],
+            creater_id=UserId(data['creater_id'])
         )
     def to_dict(self):
         return {

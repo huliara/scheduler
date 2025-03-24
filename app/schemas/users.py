@@ -26,8 +26,8 @@ class AdminUserCreate(UserBase):
 
 
 class AdminUserPatch(UserBase):
-    is_active: bool
-    is_admin: bool
+    exp_task: list[UUID]
+    point: int
 
 
 class AdminUserDisplay(UserBase):

@@ -15,7 +15,7 @@ class UserUpdateUseCase(TransactionUseCaseBase):
     
     def _transaction(self, user_entity:UserEntity):
         try:
-            _=self.taskdetail_repository.find_by_ids([taskdetail.id for taskdetail in user_entity.exp_tasks])
+            _=self.taskdetail_repository.find_by_ids([taskdetail for taskdetail in user_entity.exp_tasks])
         except:
             raise UseCaseException('Invalid exp_task found')
         
