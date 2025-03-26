@@ -20,3 +20,9 @@ class IUserRepository(IRepository[UserEntity,UserId]):
     def refresh_to_entity(self, model: User) -> UserEntity:
         pass
     
+    @abstractmethod
+    def update_password(self, user_id: UserId, password: str):
+        pass
+    
+    
+    

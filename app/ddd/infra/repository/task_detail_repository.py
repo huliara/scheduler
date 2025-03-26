@@ -15,6 +15,9 @@ class TaskDetailRepository(ITaskDetailRepository):
     def find_all(self):
         return [self._refresh_to_entity(model) 
                 for model in self.db.scalars(select(TaskDetail)).all()]
+    def find_by_ids(self, ids):
+        models=self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_(ids))).all()
+        return [self._refresh_to_entity(model) for model in models]
     def add(self, entity: TaskDetailEntity):
         model=TaskDetail(
             name=entity.name,

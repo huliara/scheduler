@@ -32,6 +32,14 @@ class UserRepository(IUserRepository):
         self.db.commit()
         return self._refresh_to_entity(model)
     
+    def update_password(self, user_id, password):
+        target=self.db.get(User,user_id)
+        if target is None:
+            raise DomainException('User not found',404)
+        target.password=get_password_hash(password)
+        self.db.commit()    
+        return
+    
     def save(self, entity:UserEntity):
         model = self.db.get(User, entity.id)
         if model is None:

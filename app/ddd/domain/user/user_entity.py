@@ -28,6 +28,11 @@ class UserEntity(IEntity):
             is_admin=data['is_admin'] if 'is_admin' in data else False,
             point=data['point'] if 'point' in data else 0
         )
+    def update_profile(self,data:dict):
+        self.name=data['name']
+        self.room_number=data['room_number']
+        self.exp_tasks=data['exp_tasks']
+        
     @classmethod
     def from_model(cls, data: User) -> 'UserEntity':
         return cls(

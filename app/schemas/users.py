@@ -3,6 +3,9 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
+class UserUpdatePassword(BaseModel):
+    password: str
+
 class UserBase(BaseModel):
     name: str
     room_number: str
