@@ -4,85 +4,105 @@ import datetime
 import uuid
 from uuid import uuid4
 
-from sqlalchemy import Column, ForeignKey, String, Table
+from sqlalchemy import ARRAY, Column, Enum, ForeignKey, String, Table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+from app.ddd.domain.permission.permission import Permission
+from app.ddd.domain.task.task_state import TaskState
 
 experience_table = Table(
     "experience_table",
     Base.metadata,
     Column("user", ForeignKey("user.id"), primary_key=True),
-    Column("task", ForeignKey("task.id"), primary_key=True),
+    Column("taskdetail", ForeignKey("taskdetail.id"), primary_key=True),
 )
 
-slots_table = Table(
-    "slots_table",
+tasks_table = Table(
+    "tasks_table",
     Base.metadata,
     Column("user", ForeignKey("user.id")),
-    Column("slot", ForeignKey("slot.id")),
+    Column("task", ForeignKey("task.id")),
 )
 
-roles_table = Table(
-    "roles_table",
+
+authority_table=Table(
+    "authority_table",
     Base.metadata,
-    Column("groupuser", ForeignKey("groupuser.id"), primary_key=True),
-    Column("role", ForeignKey("role.id"), primary_key=True),
+    Column("taskdetail", ForeignKey("taskdetail.id"), primary_key=True),
+    Column("authority", ForeignKey("authority.id"), primary_key=True),
 )
 
-
-class Slot(Base):
-    __tablename__ = "slot"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20))
-    start_time: Mapped[datetime.datetime]
-    assignees: Mapped[None | list[User]] = relationship(
-        secondary=slots_table, back_populates="slots"
-    )
-    creater_id: Mapped[None | uuid.UUID] = mapped_column(
-        ForeignKey("user.id", ondelete="SET NULL")
-    )
-    creater: Mapped[User | None] = relationship(back_populates="create_slot")
-    task_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("task.id", ondelete="CASCADE")
-    )
-    task: Mapped[Task] = relationship(back_populates="slots", uselist=False)
-
-    @hybrid_property
-    def end_time(self):
-        return self.start_time + self.task.duration
 
 
 class Task(Base):
     __tablename__ = "task"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(String(20))
-    detail: Mapped[str] = mapped_column(String(400))
-    max_worker_num: Mapped[int] = mapped_column(default=1)  # 最大人数
-    min_worker_num: Mapped[int] = mapped_column(default=1)  # 最少人数
-    exp_worker_num: Mapped[int] = mapped_column(default=0)  # 必要な経験者の人数
-    point: Mapped[int] = mapped_column(default=0)
+    start_time: Mapped[datetime.datetime]
+    status:Mapped[TaskState]=mapped_column(Enum(TaskState),default=TaskState.before_hiring)
+    workers: Mapped[list[User]] = relationship(
+        secondary=tasks_table, back_populates="tasks"
+    )
+    creater_id: Mapped[None | uuid.UUID] = mapped_column(
+        ForeignKey("user.id", ondelete="SET NULL")
+    )
+    creater: Mapped[User| None] = relationship(back_populates="create_tasks")
+    taskdetail_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("taskdetail.id", ondelete="CASCADE")
+    )
+    taskdetail: Mapped[TaskDetail] = relationship(back_populates="tasks", uselist=False)
+
+    @hybrid_property
+    def end_time(self):
+        return self.start_time + self.taskdetail.duration
+
+
+class TaskDetail(Base):
+    __tablename__ = "taskdetail"
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
+    name: Mapped[str] = mapped_column(String(20))
+    group_id:Mapped[uuid.UUID]=mapped_column(
+        ForeignKey("group_id",ondelete="CASCADE")
+    )
+    group:Mapped[Group]=relationship(back_populates="taskdetail")
+    subtask: Mapped[list[SubTask]] = relationship(
+        back_populates="taskdetail", cascade="all,delete"
+    )
+    max_worker: Mapped[int] = mapped_column(default=1)  # 最大人数
+    min_worker: Mapped[int] = mapped_column(default=1)  # 最少人数
+    exp_worker: Mapped[int] = mapped_column(default=0)  # 必要な経験者の人数
+    wage: Mapped[int] = mapped_column(default=0)
     duration: Mapped[datetime.timedelta] = mapped_column(
         default=datetime.timedelta(hours=1)
     )
-    slots: Mapped[list[Slot] | None] = relationship(
-        back_populates="task", cascade="all,delete"
+    permissions:Mapped[list[Permission]] =mapped_column(ARRAY(Enum(Permission))) 
+    tasks: Mapped[list[Task] ] = relationship(
+        back_populates="taskdetail", cascade="all,delete"
     )
-    experts: Mapped[None | list[User]] = relationship(
+    experts: Mapped[list[User]] = relationship(
         secondary=experience_table, back_populates="exp_tasks"
     )
     creater_id: Mapped[None | uuid.UUID] = mapped_column(
         ForeignKey("user.id", ondelete="SET NULL")
     )
-    creater: Mapped[None | User] = relationship(back_populates="create_task")
-    tasktemplates: Mapped[None | list[TaskTemplate]] = relationship(
-        back_populates="task", cascade="all,delete"
+    creater: Mapped[None | User] = relationship(back_populates="create_taskdetail")
+    tasktemplates: Mapped[list[TaskTemplate]] = relationship(
+        back_populates="taskdetail", cascade="all,delete"
     )
-    group_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("group.id", ondelete="CASCADE")
+
+
+class SubTask(Base):
+    __tablename__ = "subtask"
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
+    order: Mapped[int]
+    taskdetail_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("taskdetail.id", ondelete="CASCADE")
     )
-    group: Mapped[Group] = relationship(back_populates="tasks")
+    taskdetail: Mapped[TaskDetail] = relationship(back_populates="subtask")
+    description: Mapped[str] = mapped_column(String(100))
+    
 
 
 class TaskTemplate(Base):
@@ -92,22 +112,22 @@ class TaskTemplate(Base):
         ForeignKey("template.id", ondelete="CASCADE")
     )
     template: Mapped[Template] = relationship(back_populates="tasktemplates")
-    task_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("task.id", ondelete="CASCADE")
+    taskdetail_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("taskdetail.id", ondelete="CASCADE")
     )
-    task: Mapped[Task] = relationship(back_populates="tasktemplates")
+    taskdetail: Mapped[TaskDetail] = relationship(back_populates="tasktemplates")
     date_from_start: Mapped[int] = mapped_column(default=0)
     start_time: Mapped[datetime.time]
 
     @hybrid_property
     def name(self):
-        return self.start_time.strftime("%H時") + self.task.name
+        return self.start_time.strftime("%H時") + self.taskdetail.name
 
     @hybrid_property
     def end_time(self):
         return (
             datetime.datetime.combine(datetime.date.today(), self.start_time)
-            + self.task.duration
+            + self.taskdetail.duration
         ).time()
 
 
@@ -115,97 +135,52 @@ class Template(Base):
     __tablename__ = "template"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(String(20))
-    tasktemplates: Mapped[list[TaskTemplate] | None] = relationship(
+    tasktemplates: Mapped[list[TaskTemplate]] = relationship(
         back_populates="template", cascade="all,delete"
     )
     group_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("group.id", ondelete="CASCADE")
     )
     group: Mapped[Group] = relationship(back_populates="templates")
-
-
+    
 class Group(Base):
     __tablename__ = "group"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20))
-    users: Mapped[None | list[GroupUser]] = relationship(
-        back_populates="group",
-    )
-    tasks: Mapped[None | list[Task]] = relationship(
-        back_populates="group", cascade="all,delete"
-    )
-    templates: Mapped[None | list[Template]] = relationship(
-        back_populates="group", cascade="all,delete"
-    )
-    roles: Mapped[None | list[Role]] = relationship(
-        back_populates="group", cascade="all,delete"
-    )
-
-
-class Role(Base):
-    __tablename__ = "role"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20))
-    group_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("group.id", ondelete="CASCADE")
-    )
-    group: Mapped[Group] = relationship(back_populates="roles")
-    users: Mapped[None | list[GroupUser]] = relationship(
-        secondary="roles_table",
-        back_populates="roles",
-    )
-    add_user: Mapped[bool] = mapped_column(default=False)
-    remove_user: Mapped[bool] = mapped_column(default=False)
-    edit_task: Mapped[bool] = mapped_column(default=False)
-    edit_template: Mapped[bool] = mapped_column(default=False)
-    edit_role: Mapped[bool] = mapped_column(default=False)  # ロールの追加、削除、編集
-    change_user_role: Mapped[bool] = mapped_column(
-        default=False
-    )  # ユーザーのロールの付与、剥奪
-    edit_slot: Mapped[bool] = mapped_column(default=False)  # スロットの追加、削除、編集
-    add_slot_from_template: Mapped[bool] = mapped_column(
-        default=False
-    )  # テンプレートからスロットを追加
-    edit_point: Mapped[bool] = mapped_column(default=False)  # ユーザーのポイントの操作
-
-
+    id:Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
+    name:Mapped[str] = mapped_column(String(20))
+    users:Mapped[list[GroupUser]] = relationship(back_populates="group",cascade="all,delete")
+    taskdetail:Mapped[list[TaskDetail]]=relationship(back_populates='group',cascade='all,delete')
+    templates:Mapped[list[Template]] = relationship(back_populates="group",cascade="all,delete")
+    
 class GroupUser(Base):
-    __tablename__ = "groupuser"
+    __tablename__ = "group_user"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     group_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("group.id", ondelete="CASCADE")
+        ForeignKey("group.id", ondelete="CASCADE"), primary_key=True
     )
     group: Mapped[Group] = relationship(back_populates="users")
     user_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("user.id", ondelete="CASCADE")
+        ForeignKey("user.id", ondelete="CASCADE"), primary_key=True
     )
     user: Mapped[User] = relationship(back_populates="groups")
-    point: Mapped[int] = mapped_column(default=0)
-    roles: Mapped[None | list[Role]] = relationship(
-        secondary="roles_table", back_populates="users"
-    )
-    is_owner: Mapped[bool] = mapped_column(default=False)
-
+    point: Mapped[float] = mapped_column(default=0)
 
 class User(Base):
     __tablename__ = "user"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20))
+    name: Mapped[str] = mapped_column(String(20),unique=True)
     password: Mapped[str] = mapped_column(String(400))
     room_number: Mapped[str] = mapped_column(String(10))
-    groups: Mapped[None | list[GroupUser]] = relationship(
-        back_populates="user", cascade="all,delete"
-    )
-    exp_tasks: Mapped[None | list[Task]] = relationship(
+    point:Mapped[float] = mapped_column(default=0)
+    exp_tasks: Mapped[list[TaskDetail]] = relationship(
         secondary=experience_table, back_populates="experts"
     )
-    slots: Mapped[None | list[Slot]] = relationship(
-        secondary=slots_table, back_populates="assignees"
+    tasks: Mapped[list[Task]] = relationship(
+        secondary=tasks_table, back_populates="workers"
     )
-    create_slot: Mapped[None | list[Slot]] = relationship(back_populates="creater")
-    create_task: Mapped[None | list[Task]] = relationship(back_populates="creater")
+    create_tasks: Mapped[list[Task]] = relationship(back_populates="creater")
+    create_taskdetail: Mapped[list[TaskDetail]] = relationship(back_populates="creater")
     is_active: Mapped[bool] = mapped_column(default=True)
     is_admin: Mapped[bool] = mapped_column(default=False)
 
-    def has_exp(self, task: Task):
+    def has_exp(self, task: TaskDetail):
         return task in self.exp_tasks

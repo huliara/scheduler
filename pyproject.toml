@@ -1,0 +1,23 @@
+[project]
+name = "scheduler"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "discordwebhook>=1.0.3",
+    "fastapi>=0.115.8",
+    "mip>=1.15.0",
+    "mock-alchemy>=0.2.6",
+    "pandas>=2.2.3",
+    "passlib>=1.7.4",
+    "psycopg2-binary>=2.9.10",
+    "pytest>=8.3.4",
+    "python-jose>=3.3.0",
+    "python-multipart>=0.0.20",
+    "sqlalchemy>=2.0.38",
+    "sqlalchemy-utils>=0.41.2",
+    "uvicorn>=0.34.0",
+]
+[tool.pytest.ini_options]
+pythonpath =[".", ".venv/lib/python3.12/site-packages"]

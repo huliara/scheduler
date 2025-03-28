@@ -1,0 +1,25 @@
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+from app.cruds.auth import get_current_active_user
+from app.database import get_db
+from app.ddd.infra.repository import (GroupRepository, TaskDetailRepository,
+                                      TaskRepository, UserRepository)
+from app.ddd.service.usecases.task import TaskPostUseCase
+from app.schemas.task import TaskCreate, TaskDisplay
+
+router = APIRouter()
+
+def __usecase_di(db:Session=Depends(get_db)):
+    return TaskPostUseCase(db,TaskRepository(db),
+                           UserRepository(db),
+                           GroupRepository(db),
+                           TaskDetailRepository(db))
+
+@router.post("/", response_model=TaskDisplay)
+async def task_post(group_id: str,request:TaskCreate,
+                    user=Depends(get_current_active_user),
+                    usecase:TaskPostUseCase=Depends(__usecase_di)):
+    response=usecase.execute(request.name,request.start_time,user.id,request.taskdetail_id).to_dict()
+    return response
+    

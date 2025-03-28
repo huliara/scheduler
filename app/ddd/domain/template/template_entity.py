@@ -1,0 +1,50 @@
+import datetime
+
+from app.ddd.core.i_entity import IEntity
+from app.ddd.domain.group.group_value_object import GroupId
+from app.models.models import Template
+
+from .template_value_object import TemplateId, TemplateSlot
+
+
+class TemplateEntity(IEntity):
+    id:TemplateId|None
+    name:str
+    slots:set[TemplateSlot]
+    group_id:GroupId
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+    @classmethod
+    def from_model(cls, data:Template) -> 'TemplateEntity':
+        return cls(
+            id=data.id,
+            name=data.name,
+            slots=[
+                TemplateSlot(taskdetail_id=slot.taskdetail_id,
+                             date_from_start=slot.date_from_start,
+                             start_time=slot.start_time) 
+                for slot in data.tasktemplates]
+        )
+    @classmethod
+    def from_params(cls, name:str, group_id:GroupId, slots:list[TemplateSlot]) -> 'TemplateEntity':
+        return cls(
+            name=name,
+            group_id=group_id,
+            slots=set(slots)
+        )
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'slots': 
+                [{'taskdetail_id':slot.taskdetail_id,
+                  'date_from_start':slot.date_from_start,
+                  'start_time':slot.start_time} 
+                 for slot in self.slots]
+        }
+    def add(self,slot:TemplateSlot):
+        self.slots.add(slot)
+        

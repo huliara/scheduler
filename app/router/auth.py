@@ -7,14 +7,11 @@ from pydantic import BaseModel
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from app.cruds.auth import (
-    authenticate_user,
-    create_access_token,
-    get_current_active_user,
-)
+from app.cruds.auth import (authenticate_user, create_access_token,
+                            get_current_active_user)
 from app.cruds.response import tasks_display, user_detail_display
 from app.database import get_db
-from app.models.models import GroupUser, Task, User
+from app.models.models import GroupUser, TaskDetail, User
 from app.schemas.users import UserUpdate
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
@@ -82,7 +79,7 @@ async def update_current_user(
     current_user.room_number = request.room_number
     exp_task = []
     for task_id in request.exp_task:
-        task = db.get(Task, task_id)
+        task = db.get(TaskDetail, task_id)
         exp_task.append(task)
     current_user.exp_tasks = exp_task
     db.commit()

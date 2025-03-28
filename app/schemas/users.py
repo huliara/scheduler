@@ -3,6 +3,9 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
+class UserUpdatePassword(BaseModel):
+    password: str
+
 class UserBase(BaseModel):
     name: str
     room_number: str
@@ -26,8 +29,8 @@ class AdminUserCreate(UserBase):
 
 
 class AdminUserPatch(UserBase):
-    is_active: bool
-    is_admin: bool
+    exp_task: list[UUID]
+    point: int
 
 
 class AdminUserDisplay(UserBase):
