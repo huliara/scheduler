@@ -33,6 +33,7 @@ class TaskDetailRepository(ITaskDetailRepository):
         )
         self.db.add(model)
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     def save(self, entity: TaskDetailEntity):
         model=self.db.get(TaskDetail,entity.id)
@@ -42,6 +43,7 @@ class TaskDetailRepository(ITaskDetailRepository):
         model.subtask=entity.subtask
         
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
     def remove(self, id):

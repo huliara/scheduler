@@ -4,8 +4,8 @@ from dataclasses import dataclass, field
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.group.group_value_object import GroupId
 from app.ddd.domain.permission.permission import Permission
-from app.ddd.domain.task_detail.task_detail_value_object import TaskDetailId
-from app.ddd.domain.user import UserId
+from .task_detail_value_object import TaskDetailId
+from app.ddd.domain.user.user_value_object import UserId
 from app.models.models import TaskDetail
 
 
@@ -18,10 +18,12 @@ class TaskDetailEntity(IEntity):
     exp_worker: int
     duration: datetime.timedelta
     group_id:GroupId
+    creater_id:UserId
     permissions: list[Permission]=field(default_factory=list)
     wage: int=0
     subtask:list[str]=field(default_factory=list)
-    creater_id:UserId
+    
+    @classmethod
     def from_model(cls,data:TaskDetail) -> 'TaskDetailEntity':
         return cls(
             id=TaskDetailId(data.id),
@@ -33,8 +35,10 @@ class TaskDetailEntity(IEntity):
             wage=data.wage,
             duration=data.duration,
             group_id=data.group_id,
+            creater_id=data.creater_id,
             permissions=[permission for permission in data.permissions]
         )
+    @classmethod
     def from_params(cls, data: dict) -> 'TaskDetailEntity':
         return cls(
             id=TaskDetailId(data['id']) if data['id'] is not None else None,

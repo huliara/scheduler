@@ -12,12 +12,7 @@ class TemplateSlot:
     taskdetail_id:TaskDetailId
     date_from_start:int
     start_time:datetime.time
-    def __init__(self,
-                 taskdetail:TaskDetailId,
-                 date_from_start:int,
-                 start_time:datetime.time):
-        if date_from_start<0:
+    def __post_init__(self):
+        if self.date_from_start<0:
             raise ValueError('date_from_start must be positive')
-        self.taskdetail_id=taskdetail
-        self.date_from_start=date_from_start
-        self.start_time=start_time
+ 

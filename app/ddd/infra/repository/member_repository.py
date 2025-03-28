@@ -37,6 +37,7 @@ class MemberRepository(IMemberRepository):
         )
         self.db.add(model)
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
 
     def bulk_add(self,group_id, entities:list[MemberEntity]):
@@ -57,6 +58,7 @@ class MemberRepository(IMemberRepository):
             raise DomainException(f'member_id:{entity.user_id} is not found in group_id:{entity.group_id}')
         model.point=entity.point
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
 
     def remove(self, user_id, group_id):

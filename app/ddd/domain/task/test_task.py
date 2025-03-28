@@ -3,19 +3,22 @@ import uuid
 from http import HTTPStatus as status
 
 import pytest
-from .task_entity import TaskEntity
-from .task_state import TaskState
+from deepdiff import DeepDiff
 
 from app.ddd.core.exception import DomainException
 from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
 from app.ddd.domain.user.user_entity import UserEntity
 from app.models.models import Task, TaskDetail, User
 
+from .task_entity import TaskEntity
+from .task_state import TaskState
+
 
 def test_task_add_user():
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[],
         point=0
@@ -27,7 +30,8 @@ def test_task_add_user():
         min_worker=1,
         exp_worker=0,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
     )
     task=TaskEntity(
         id=uuid.uuid4(),
@@ -38,7 +42,7 @@ def test_task_add_user():
         
     )
     task.add(user)
-    assert task.workers==[user.id]
+    assert task.workers==[user]
 
 def test_task_add_exp_user():
     task_detail=TaskDetailEntity(
@@ -48,11 +52,13 @@ def test_task_add_exp_user():
         min_worker=1,
         exp_worker=1,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
     )
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[task_detail.id],
         point=0
@@ -65,7 +71,7 @@ def test_task_add_exp_user():
         taskdetail=task_detail,
     )
     task.add(user)
-    assert task.workers==[user.id]
+    assert task.workers==[user]
     
 def test_task_add_beginner_with_expert():
     task_detail=TaskDetailEntity(
@@ -75,11 +81,13 @@ def test_task_add_beginner_with_expert():
         min_worker=1,
         exp_worker=1,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
     )
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[],
         point=0
@@ -87,6 +95,7 @@ def test_task_add_beginner_with_expert():
     expert=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[task_detail.id],
         point=0
@@ -97,15 +106,16 @@ def test_task_add_beginner_with_expert():
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=TaskState.hiring,
         taskdetail=task_detail,
-        workers=[expert.id]
+        workers=[expert]
     )
     task.add(user)
-    assert task.workers==[user.id]
+    assert DeepDiff(list[task.workers],[expert,user],ignore_order=True)
 
 def test_task_add_nonexpert():
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[],
         point=0
@@ -117,7 +127,8 @@ def test_task_add_nonexpert():
         min_worker=1,
         exp_worker=1,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
     )
     task=TaskEntity(
         id=uuid.uuid4(),
@@ -132,9 +143,20 @@ def test_task_add_nonexpert():
         assert e.value.status_code==status.CONFLICT
     
 def test_task_add_user_over_max():
+    dummy_user=UserEntity(
+        id=uuid.uuid4(),
+        name='test',
+        room_number='test',
+        tasks=[],
+        exp_tasks=[],
+        point=0
+    )
+
+                    
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[],
         point=0
@@ -146,7 +168,8 @@ def test_task_add_user_over_max():
         min_worker=1,
         exp_worker=0,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
     )
     task=TaskEntity(
         id=uuid.uuid4(),
@@ -154,7 +177,7 @@ def test_task_add_user_over_max():
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=TaskState.hiring,
         taskdetail=task_detail,
-        workers=[uuid.uuid4()]
+        workers=[dummy_user]
     )
     with pytest.raises(DomainException) as e:
         task.add(user)
@@ -164,6 +187,7 @@ def test_task_add_only_beginner():
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[],
         point=0
@@ -175,7 +199,8 @@ def test_task_add_only_beginner():
         min_worker=1,
         exp_worker=1,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
     )
     task=TaskEntity(
         id=uuid.uuid4(),
@@ -183,7 +208,7 @@ def test_task_add_only_beginner():
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=TaskState.hiring,
         taskdetail=task_detail,
-        workers=[user.id]
+        workers=[user]
     )
     with pytest.raises(DomainException) as e:
         task.add(user)
@@ -193,6 +218,7 @@ def test_task_add_user_after_end():
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[],
         point=0
@@ -204,7 +230,9 @@ def test_task_add_user_after_end():
         min_worker=1,
         exp_worker=0,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
+        
     )
     task=TaskEntity(
         id=uuid.uuid4(),
@@ -222,6 +250,7 @@ def test_task_add_double_booking():
     user=UserEntity(
         id=uuid.uuid4(),
         name='test',
+        room_number='test',
         tasks=[],
         exp_tasks=[],
         point=0
@@ -233,7 +262,8 @@ def test_task_add_double_booking():
         min_worker=1,
         exp_worker=0,
         duration=datetime.timedelta(hours=1),
-        group_id=uuid.uuid4()
+        group_id=uuid.uuid4(),
+        creater_id=uuid.uuid4()
     )
     task=TaskEntity(
         id=uuid.uuid4(),
@@ -241,7 +271,7 @@ def test_task_add_double_booking():
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=TaskState.hiring,
         taskdetail=task_detail,
-        workers=[user.id]
+        workers=[user]
     )
     with pytest.raises(DomainException) as e:
         task.add(user)

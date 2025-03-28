@@ -24,6 +24,7 @@ class GroupRepository(IGroupRepository):
         )
         self.db.add(model)
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
     def save(self, entity:GroupEntity):
@@ -33,6 +34,7 @@ class GroupRepository(IGroupRepository):
         model.name=entity.name
         model.users=[ GroupUser(group_id=model.id,user_id=user.user.id,point=user.point) for user in entity.users]
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
     def remove(self, id):
