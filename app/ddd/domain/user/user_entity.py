@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.task.task_value_object import TaskId
-from app.ddd.domain.task_detail.task_detail_entity import TaskDetailId
-from app.ddd.domain.user.user_value_object import UserId
+from app.ddd.domain.task_detail.task_detail_value_object import TaskDetailId
+from .user_value_object import UserId
 from app.models.models import User
 
 
@@ -38,8 +38,9 @@ class UserEntity(IEntity):
         return cls(
             id=data.id,
             name=data.name,
+            room_number=data.room_number,
             tasks=[task.id for task in data.tasks],
-            exp_tasks=data['exp_tasks'],
+            exp_tasks=data.exp_tasks,
             point=data.point
         )
     def to_dict(self):

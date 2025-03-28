@@ -19,7 +19,7 @@ class UserRepository(IUserRepository):
             return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).join(GroupUser).filter(GroupUser.group_id==group_id).all()]
         return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).all()]
     
-    def add(self, entity:UserEntity, password:str):
+    def add(self, entity:UserEntity, password:str)->UserEntity:
         exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task.id for task in entity.exp_tasks]))).all()
         model = User(
             name=entity.name,
@@ -30,6 +30,7 @@ class UserRepository(IUserRepository):
         )
         self.db.add(model)
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
     def update_password(self, user_id, password):
@@ -49,9 +50,10 @@ class UserRepository(IUserRepository):
         model.exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task.id for task in entity.exp_tasks]))).all()
         model.point = entity.point
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
-    def delete(self, id):
+    def remove(self, id):
         model = self.db.get(User, id)
         if model is None:
             raise DomainException('User not found',404)

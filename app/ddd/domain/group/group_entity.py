@@ -9,7 +9,7 @@ from app.models.models import Group
 from .group_value_object import GroupId
 
 
-@dataclass(frozen=True)
+@dataclass
 class GroupEntity(IEntity):
     id:GroupId|None
     name:str

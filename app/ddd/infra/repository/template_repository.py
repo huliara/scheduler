@@ -21,12 +21,13 @@ class TemplateRepository(ITemplateRepository):
             name=entity.name,
             group_id=entity.group_id,
             tasktemplates=[
-            TaskTemplate(taskdetail_id=slot.taskdetail_id.id,
+            TaskTemplate(taskdetail_id=slot.taskdetail_id,
                         date_from_start=slot.date_from_start,
                         start_time=slot.start_time) for slot in entity.slots]
         )
         self.db.add(model)
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
     def save(self, entity):
@@ -38,6 +39,7 @@ class TemplateRepository(ITemplateRepository):
                         date_from_start=slot.date_from_start,
                         start_time=slot.start_time) for slot in entity.slots]
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
     def update_name(self, id, name):
@@ -46,6 +48,7 @@ class TemplateRepository(ITemplateRepository):
             raise DomainException('Template not found',404)
         model.name=name
         self.db.commit()
+        self.db.refresh(model)
         return self._refresh_to_entity(model)
     
     def remove(self, id):
@@ -58,4 +61,5 @@ class TemplateRepository(ITemplateRepository):
     
     def _refresh_to_entity(self, model):
         entity=TemplateEntity.from_model(model)
+        print(entity)
         return entity

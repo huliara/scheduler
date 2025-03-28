@@ -64,7 +64,7 @@ class TaskDetail(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(String(20))
     group_id:Mapped[uuid.UUID]=mapped_column(
-        ForeignKey("group_id",ondelete="CASCADE")
+        ForeignKey("group.id",ondelete="CASCADE")
     )
     group:Mapped[Group]=relationship(back_populates="taskdetail")
     subtask: Mapped[list[SubTask]] = relationship(
@@ -170,6 +170,7 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(20),unique=True)
     password: Mapped[str] = mapped_column(String(400))
     room_number: Mapped[str] = mapped_column(String(10))
+    groups: Mapped[list[GroupUser]] = relationship( back_populates="user",cascade="all,delete")
     point:Mapped[float] = mapped_column(default=0)
     exp_tasks: Mapped[list[TaskDetail]] = relationship(
         secondary=experience_table, back_populates="experts"

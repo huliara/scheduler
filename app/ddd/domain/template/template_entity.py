@@ -1,4 +1,5 @@
 import datetime
+from dataclasses import dataclass
 
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.group.group_value_object import GroupId
@@ -7,6 +8,7 @@ from app.models.models import Template
 from .template_value_object import TemplateId, TemplateSlot
 
 
+@dataclass
 class TemplateEntity(IEntity):
     id:TemplateId|None
     name:str
@@ -20,17 +22,19 @@ class TemplateEntity(IEntity):
     @classmethod
     def from_model(cls, data:Template) -> 'TemplateEntity':
         return cls(
-            id=data.id,
+            id=TemplateId(data.id),
             name=data.name,
             slots=[
                 TemplateSlot(taskdetail_id=slot.taskdetail_id,
                              date_from_start=slot.date_from_start,
                              start_time=slot.start_time) 
-                for slot in data.tasktemplates]
+                for slot in data.tasktemplates],
+            group_id=GroupId(data.group_id),
         )
     @classmethod
     def from_params(cls, name:str, group_id:GroupId, slots:list[TemplateSlot]) -> 'TemplateEntity':
         return cls(
+            id=None,
             name=name,
             group_id=group_id,
             slots=set(slots)
