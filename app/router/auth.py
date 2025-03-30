@@ -9,10 +9,55 @@ from sqlalchemy.orm import Session
 
 from app.cruds.auth import (authenticate_user, create_access_token,
                             get_current_active_user)
-from app.cruds.response import tasks_display, user_detail_display
 from app.database import get_db
 from app.models.models import GroupUser, TaskDetail, User
 from app.schemas.users import UserUpdate
+
+
+def response_base(model):
+    return {
+        "id": model.id,
+        "name": model.name,
+    }
+    
+def user_display(user: User):
+    return {
+        "id": user.id,
+        "name": user.name,
+        "room_number": user.room_number,
+        "is_active": user.is_active,
+    }
+    
+def user_detail_display(user: User):
+    return user_display(user) | {
+        "groups": [
+            {"id": group.group_id, "name": group.group.name} for group in user.groups
+        ],
+        "exp_tasks": [response_base(task) for task in user.exp_tasks],
+        "slots": [response_base(slot) for slot in user.tasks],
+        "create_slot": [response_base(slot) for slot in user.create_tasks],
+        "create_task": [response_base(task) for task in user.create_taskdetail],
+        "is_admin": user.is_admin,
+    }
+
+def task_display(task: TaskDetail):
+    return {
+        "id": task.id,
+        "name": task.name,
+        "detail": task.detail,
+        "max_worker_num": task.max_worker,
+        "min_worker_num": task.min_worker,
+        "exp_worker_num": task.exp_worker,
+        "point": task.wage,
+        "duration": int(task.duration.total_seconds()),
+        "creater_id": task.creater_id,
+        "creater_name": task.creater.name,
+        "group_id": task.group_id,
+    }
+
+
+def tasks_display(tasks: TaskDetail):
+    return [task_display(task) for task in tasks]
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

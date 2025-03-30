@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 from app.ddd.core.i_repository import IRepository
-from app.models.models import TaskDetail
+import app.models.models as models
 
 from .task_detail_entity import TaskDetailEntity
 from .task_detail_value_object import TaskDetailId
@@ -10,7 +10,7 @@ from .task_detail_value_object import TaskDetailId
 class ITaskDetailRepository(IRepository[TaskDetailEntity,TaskDetailId]):
     
     @abstractmethod
-    def _refresh_to_entity(self, model: TaskDetail) -> TaskDetailEntity:
+    def _refresh_to_entity(self, model: "models.TaskDetail") -> TaskDetailEntity:
         pass
     
     @abstractmethod

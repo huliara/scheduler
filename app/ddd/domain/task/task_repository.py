@@ -5,7 +5,7 @@ import app.ddd.domain.group as group
 import app.ddd.domain.user as user
 from app.ddd.core.i_repository import IRepository
 from app.ddd.domain.task_detail import TaskDetailId
-from app.models.models import Task
+import app.models.models as models
 
 from .task_entity import TaskEntity
 from .task_value_object import TaskId
@@ -25,7 +25,7 @@ class ITaskRepository(IRepository[TaskEntity,TaskId]):
         pass
 
     @abstractmethod
-    def refresh_to_entity(self, model: Task) -> TaskEntity:
+    def refresh_to_entity(self, model:"models.Task") -> TaskEntity:
         pass
     
     @abstractmethod

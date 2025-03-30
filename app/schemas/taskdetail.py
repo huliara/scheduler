@@ -11,7 +11,7 @@ class TaskDetailBase(BaseModel):
     min_worker_num: int = Field(default=1, gte=0)
     exp_worker_num: int = Field(default=0, gte=0)
     point: int = Field(0, gt=0)
-    @model_validator(pre=True)
+    @model_validator(mode="before")
     def validate_worker_num(cls, values):
         if int(values["max_worker_num"]) < int(values["min_worker_num"]):
             raise ValueError("Be sure that the max worker is greater than min worker.")

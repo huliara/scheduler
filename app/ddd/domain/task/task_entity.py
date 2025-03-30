@@ -8,8 +8,7 @@ from app.ddd.core.exception import DomainException
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
 from app.ddd.domain.user.user_value_object import UserId
-from app.models.models import Task
-
+import app.models.models as models
 from .task_state import TaskState
 from .task_value_object import TaskId
 
@@ -30,7 +29,7 @@ class TaskEntity(IEntity):
     def group_id(self)->'group.GroupId':
         return self.taskdetail.group_id
     @classmethod
-    def from_model(cls, data: Task) -> 'TaskEntity':
+    def from_model(cls, data: "models.Task") -> 'TaskEntity':
         return cls(
             id=data.id,
             name=data.name,

@@ -4,8 +4,7 @@ from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.member.member_entity import MemberEntity
 from app.ddd.domain.task_detail.task_detail_entity import TaskDetailId
 from app.ddd.domain.template.template_entity import TemplateId
-from app.models.models import Group
-
+import app.models.models as models
 from .group_value_object import GroupId
 
 
@@ -17,7 +16,7 @@ class GroupEntity(IEntity):
     task_details:list[TaskDetailId]
     template:list[TemplateId]
     @classmethod
-    def from_model(cls, data: Group) -> 'GroupEntity':
+    def from_model(cls, data: "models.Group") -> 'GroupEntity':
         return cls(
             id=data.id,
             name=data.name,

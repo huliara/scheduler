@@ -22,8 +22,8 @@ services:
     working_dir: /usr/src/scripts
     command: ["sh", "./run_next.sh"]
   api:
-    image: "fastapi_starter"
-    container_name: "fastapi_starter"
+    image: "scheduler_api"
+    container_name: "scheduler_api"
     depends_on:
       db:
         condition: service_healthy
@@ -47,8 +47,8 @@ services:
     env_file:
       - .env.dev
   db:
-    image: "fastapi_db"
-    container_name: "fastapi_db"
+    image: "scheduler_db"
+    container_name: "scheduler_db"
     build:
       context: ./docker/test-db
       dockerfile: Dockerfile

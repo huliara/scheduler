@@ -10,7 +10,7 @@ from app.router.group.index import router as group
 from app.router.task.index import router as task
 from app.router.task_detail.index import router as task_detail
 from app.router.template.index import router as template
-
+from app.router.user.index import router as user
 app = FastAPI()
 
 

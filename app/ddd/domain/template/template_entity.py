@@ -3,8 +3,7 @@ from dataclasses import dataclass
 
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.group.group_value_object import GroupId
-from app.models.models import Template
-
+import app.models.models as models
 from .template_value_object import TemplateId, TemplateSlot
 
 
@@ -20,7 +19,7 @@ class TemplateEntity(IEntity):
             'name': self.name,
         }
     @classmethod
-    def from_model(cls, data:Template) -> 'TemplateEntity':
+    def from_model(cls, data:"models.Template") -> 'TemplateEntity':
         return cls(
             id=TemplateId(data.id),
             name=data.name,

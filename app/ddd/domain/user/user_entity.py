@@ -5,7 +5,7 @@ from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.task.task_value_object import TaskId
 from app.ddd.domain.task_detail.task_detail_value_object import TaskDetailId
 from .user_value_object import UserId
-from app.models.models import User
+import app.models.models as models
 
 
 @dataclass
@@ -34,7 +34,7 @@ class UserEntity(IEntity):
         self.exp_tasks=data['exp_tasks']
         
     @classmethod
-    def from_model(cls, data: User) -> 'UserEntity':
+    def from_model(cls, data: "models.User") -> 'UserEntity':
         return cls(
             id=data.id,
             name=data.name,

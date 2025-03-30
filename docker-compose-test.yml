@@ -50,10 +50,8 @@ services:
       timeout: 5s
       retries: 5
 
-    
 networks:
   fastapi_test_network:
     name: fastapi_test_network
     driver: bridge
     external: true
-

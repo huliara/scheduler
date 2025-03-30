@@ -6,7 +6,7 @@ from app.ddd.domain.group.group_value_object import GroupId
 from app.ddd.domain.permission.permission import Permission
 from .task_detail_value_object import TaskDetailId
 from app.ddd.domain.user.user_value_object import UserId
-from app.models.models import TaskDetail
+import app.models.models as models
 
 
 @dataclass
@@ -24,7 +24,7 @@ class TaskDetailEntity(IEntity):
     subtask:list[str]=field(default_factory=list)
     
     @classmethod
-    def from_model(cls,data:TaskDetail) -> 'TaskDetailEntity':
+    def from_model(cls,data:"models.TaskDetail") -> 'TaskDetailEntity':
         return cls(
             id=TaskDetailId(data.id),
             name=data.name,
