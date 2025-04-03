@@ -123,7 +123,7 @@ export const TaskForm = ({
           name="duration"
           type="number"
           inputProps={{ min: 0, step: 1 }}
-          defaultValue={data.duration / 60}
+          defaultValue={data.duration}
         />
       </Grid>
 

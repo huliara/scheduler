@@ -23,5 +23,6 @@ async def taskdetail_post(group_id: str,request:TaskDetailCreate,user=Depends(ge
     params["permissions"]=[]
     taskdetail=TaskDetailEntity.from_params(params)
     response=usecase.execute(taskdetail).to_dict()
+    response["creater_name"]=user.name
     return response
     

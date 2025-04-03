@@ -6,6 +6,8 @@ from pydantic import BaseModel, Field, model_validator
 from app.ddd.domain.permission.permission import Permission
 
 
+
+
 class TaskDetailBase(BaseModel):
     name: str = Field(max_length=20)
     subtasks: list[str] = Field(default_factory=list)
@@ -23,14 +25,13 @@ class TaskDetailBase(BaseModel):
         return values
 
 class TaskDetailCreate(TaskDetailBase):
-    duration: timedelta
+    duration: int #分単位
 
 
 
 class TaskDetailDisplay(TaskDetailBase):
     id: UUID
     creater_id: UUID
-    creater_name: str
     group_id: UUID
     duration: int
 

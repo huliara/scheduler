@@ -31,7 +31,7 @@ export default function TemplateCreate({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<TasksResponse>(`/${params.groupId}/tasks/`, fetcher);
+  } = useSWR<TasksResponse>(`/${params.groupId}/task_details/`, fetcher);
   const [data, setTasks] = React.useState<TemplateTask[]>([]);
   const [name, setName] = React.useState("");
   const [stateField, setTemplateTask] = React.useState<

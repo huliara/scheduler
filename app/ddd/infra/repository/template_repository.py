@@ -19,12 +19,13 @@ class TemplateRepository(ITemplateRepository):
     def add(self, entity):
         model=Template(
             name=entity.name,
-            group_id=entity.group_id,
-            tasktemplates=[
-            TaskTemplate(taskdetail_id=slot.taskdetail_id,
-                        date_from_start=slot.date_from_start,
-                        start_time=slot.start_time) for slot in entity.slots]
+            group_id=entity.group_id
         )
+        for slot in entity.slots:
+            model.tasktemplates.append(TaskTemplate(taskdetail_id=slot.taskdetail_id,
+                                                    date_from_start=slot.date_from_start,
+                                                    start_time=slot.start_time))
+        
         self.db.add(model)
         self.db.commit()
         self.db.refresh(model)

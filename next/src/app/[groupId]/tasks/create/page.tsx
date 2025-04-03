@@ -25,7 +25,7 @@ export default function TaskCreateForm({
         min_worker: data.get("min_worker_num"),
         exp_worker: data.get("exp_worker_num"),
         wage: data.get("point"),
-        duration: parseInt(data.get("duration") as string) * 60,
+        duration: parseInt(data.get("duration") as string),
         permission: [],
       })
       .then((response) => {
@@ -44,7 +44,7 @@ export default function TaskCreateForm({
     min_worker_num: 1,
     exp_worker_num: 1,
     point: 1,
-    duration: 3600,
+    duration: 60,
     creater_id: "",
     creater_name: "",
     group_id: params.groupId,

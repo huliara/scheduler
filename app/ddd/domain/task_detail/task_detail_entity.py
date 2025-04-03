@@ -49,7 +49,7 @@ class TaskDetailEntity(IEntity):
             min_worker=data['min_worker'],
             exp_worker=data['exp_worker'],
             wage=data['wage'],
-            duration=data['duration'],
+            duration=datetime.timedelta(minutes=data['duration']),
             group_id=GroupId(data['group_id']),
             permissions=[permission for permission in data['permissions']],
             creater_id=UserId(data['creater_id'])
@@ -58,11 +58,13 @@ class TaskDetailEntity(IEntity):
         return {
             'id': self.id,
             'name': self.name,
-            'subtask': [{'order':index,'decription':subtask} for index,subtask in enumerate(self.subtask)],
+            'subtasks': self.subtask,
             'max_worker': self.max_worker,
             'min_worker': self.min_worker,
             'exp_worker': self.exp_worker,
             'wage': self.wage,
-            'duration': self.duration,
-            'permissions': [permission for permission in self.permissions]
+            'duration': divmod(self.duration.seconds,60)[0],
+            'permissions': [permission for permission in self.permissions],
+            'creater_id': self.creater_id,
+            'group_id': self.group_id
         }

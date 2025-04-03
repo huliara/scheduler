@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { fetcher } from "@/axios";
 import useSWR from "swr";
 import { TemplateResponse } from "@/types/ResponseType";
@@ -29,9 +29,13 @@ export default function TemplateDetail({
   if (!data) return <div>no data</div>;
   if (isLoading) return <div>loading...</div>;
 
-  const last_date =1+ data.slots
-    .map((slot) => slot.date_from_start)
-    .reduce((a, b) => Math.max(a, b)); // => 10
+  const last_date =
+    data.slots.length !== 0
+      ? 1 +
+        data.slots
+          .map((slot) => slot.date_from_start)
+          .reduce((a, b) => Math.max(a, b))
+      : 1; // => 10
 
   return (
     <>

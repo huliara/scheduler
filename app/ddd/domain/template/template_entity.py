@@ -1,9 +1,10 @@
 import datetime
 from dataclasses import dataclass
 
+import app.models.models as models
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.group.group_value_object import GroupId
-import app.models.models as models
+
 from .template_value_object import TemplateId, TemplateSlot
 
 
@@ -46,7 +47,8 @@ class TemplateEntity(IEntity):
                 [{'taskdetail_id':slot.taskdetail_id,
                   'date_from_start':slot.date_from_start,
                   'start_time':slot.start_time} 
-                 for slot in self.slots]
+                 for slot in self.slots],
+            'group_id': self.group_id
         }
     def add(self,slot:TemplateSlot):
         self.slots.add(slot)

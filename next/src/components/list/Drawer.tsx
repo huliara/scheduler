@@ -26,9 +26,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         <ListItem key={1} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/${groupId}/slots`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/${groupId}/slots`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -36,9 +34,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={2} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/${groupId}/tasks`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/${groupId}/tasks`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -46,9 +42,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={3} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/${groupId}/users`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/${groupId}/users`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -66,9 +60,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={5} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/${groupId}/roles`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/${groupId}/roles`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -76,9 +68,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={6} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/${groupId}`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/${groupId}`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -86,16 +76,13 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={7} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/groups`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
             <ListItemText primary={"グループ選択画面へ"} />
           </ListItemButton>
         </ListItem>
-        
       </List>
       <Divider />
       <List>

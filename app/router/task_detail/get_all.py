@@ -17,5 +17,5 @@ def __usecase_di(db:Session=Depends(get_db)):
 async def taskdetail_getall(group_id: str, usecase:TaskDetailGetAllUseCase=Depends(__usecase_di)):
     taskdetail=usecase.execute(group_id)
     response=[task.to_dict() for task in taskdetail]
-    return response
+    return {'tasks':response}
     

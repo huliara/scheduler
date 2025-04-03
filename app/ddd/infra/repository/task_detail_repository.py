@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy.future import select
 
 from app.ddd.core.exception import DomainException
@@ -12,9 +14,12 @@ class TaskDetailRepository(ITaskDetailRepository):
     def find_by_id(self, id):
         model=self.db.get(TaskDetail,id)
         return self._refresh_to_entity(model)
-    def find_all(self):
-        return [self._refresh_to_entity(model) 
-                for model in self.db.scalars(select(TaskDetail)).all()]
+    def find_all(self, group_id):
+        if group_id is None:
+            models=self.db.scalars(select(TaskDetail)).all()
+            return [self._refresh_to_entity(model) for model in models]
+        models=self.db.scalars(select(TaskDetail).filter(TaskDetail.group_id==group_id)).all()
+        return [self._refresh_to_entity(model) for model in models]
     def find_by_ids(self, ids):
         models=self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_(ids))).all()
         return [self._refresh_to_entity(model) for model in models]

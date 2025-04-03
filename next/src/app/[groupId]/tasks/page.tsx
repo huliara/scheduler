@@ -14,7 +14,7 @@ import axios, { fetcher } from "@/axios";
 import Link from "next/link";
 export default function TaskList({ params }: { params: { groupId: string } }) {
   const { data, error, mutate, isLoading } = useSWR<TasksResponse>(
-    `/${params.groupId}/tasks`,
+    `/${params.groupId}/task_details`,
     fetcher
   );
   if (error) return <div>error</div>;
@@ -22,7 +22,7 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
   if (isLoading) return <div>loading...</div>;
   const handleOnClick = (task_id: string) => {
     axios
-      .delete(`/${params.groupId}/tasks/${task_id}`)
+      .delete(`/${params.groupId}/task_details/${task_id}`)
       .then((res) => {
         mutate();
       })
@@ -47,7 +47,7 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
             <TableRow key={task.id}>
               <TableCell>{task.name}</TableCell>
               <TableCell>{task.point}</TableCell>
-              <TableCell>{task.duration/60}</TableCell>
+              <TableCell>{task.duration}</TableCell>
               <TableCell>
                 <Link href={`/${params.groupId}/tasks/${task.id}`}>詳細</Link>
               </TableCell>
