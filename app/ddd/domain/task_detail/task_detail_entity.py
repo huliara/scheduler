@@ -1,12 +1,13 @@
 import datetime
 from dataclasses import dataclass, field
 
+import app.models.models as models
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.group.group_value_object import GroupId
 from app.ddd.domain.permission.permission import Permission
-from .task_detail_value_object import TaskDetailId
 from app.ddd.domain.user.user_value_object import UserId
-import app.models.models as models
+
+from .task_detail_value_object import TaskDetailId
 
 
 @dataclass
@@ -41,12 +42,12 @@ class TaskDetailEntity(IEntity):
     @classmethod
     def from_params(cls, data: dict) -> 'TaskDetailEntity':
         return cls(
-            id=TaskDetailId(data['id']) if data['id'] is not None else None,
+            id=TaskDetailId(data['id']),
             name=data['name'],
-            subtask=data['subtask'],
-            max_worker=data['max_assignees'],
-            min_worker=data['min_assignees'],
-            exp_worker=data['exp_assignees'],
+            subtask=data['subtasks'],
+            max_worker=data['max_worker'],
+            min_worker=data['min_worker'],
+            exp_worker=data['exp_worker'],
             wage=data['wage'],
             duration=data['duration'],
             group_id=GroupId(data['group_id']),
@@ -58,9 +59,9 @@ class TaskDetailEntity(IEntity):
             'id': self.id,
             'name': self.name,
             'subtask': [{'order':index,'decription':subtask} for index,subtask in enumerate(self.subtask)],
-            'max_assignees': self.max_worker,
-            'min_assignees': self.min_worker,
-            'exp_assignees': self.exp_worker,
+            'max_worker': self.max_worker,
+            'min_worker': self.min_worker,
+            'exp_worker': self.exp_worker,
             'wage': self.wage,
             'duration': self.duration,
             'permissions': [permission for permission in self.permissions]

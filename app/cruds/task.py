@@ -44,7 +44,7 @@ def patch(request: TaskDetailCreate, task_id: str, db: Session):
         .where(TaskDetail.id == task_id)
         .values(
             name=request.name if request.name else task.name,
-            detail=request.detail if request.detail else task.detail,
+            detail=request.subtasks if request.subtasks else task.detail,
             max_worker_num=request.max_worker_num
             if request.max_worker_num
             else task.max_worker,

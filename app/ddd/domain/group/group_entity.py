@@ -1,10 +1,11 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+import app.models.models as models
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.member.member_entity import MemberEntity
 from app.ddd.domain.task_detail.task_detail_entity import TaskDetailId
 from app.ddd.domain.template.template_entity import TemplateId
-import app.models.models as models
+
 from .group_value_object import GroupId
 
 
@@ -12,9 +13,9 @@ from .group_value_object import GroupId
 class GroupEntity(IEntity):
     id:GroupId|None
     name:str
-    users:list[MemberEntity]
-    task_details:list[TaskDetailId]
-    template:list[TemplateId]
+    users:list[MemberEntity]=field(default_factory=list)
+    task_details:list[TaskDetailId]=field(default_factory=list)
+    template:list[TemplateId]=field(default_factory=list)
     @classmethod
     def from_model(cls, data: "models.Group") -> 'GroupEntity':
         return cls(
@@ -28,7 +29,7 @@ class GroupEntity(IEntity):
         return {
             'id': self.id,
             'name': self.name,
-            'users': [user.to_dict() for user in self.users],
+            'users': [{'id':user.user_id,'point':user.point} for user in self.users],
             'task_details': self.task_details,
             'template': self.template
         }

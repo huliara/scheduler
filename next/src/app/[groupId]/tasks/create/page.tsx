@@ -5,25 +5,28 @@ import Box from "@mui/material/Box";
 import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
+import { useState } from "react";
 export default function TaskCreateForm({
   params,
 }: {
   params: { groupId: string };
 }) {
   const { showSnackbar } = useSnackbarContext();
+  const [subtasks, setSubtasks] = useState<string[]>([]);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log(data.get("duration"));
     axios
-      .post(`${params.groupId}/tasks/`, {
+      .post(`${params.groupId}/task_details/`, {
         name: data.get("name"),
-        detail: data.get("detail"),
-        max_worker_num: data.get("max_worker_num"),
-        min_worker_num: data.get("min_worker_num"),
-        exp_worker_num: data.get("exp_worker_num"),
-        point: data.get("point"),
+        subtasks: subtasks,
+        max_worker: data.get("max_worker_num"),
+        min_worker: data.get("min_worker_num"),
+        exp_worker: data.get("exp_worker_num"),
+        wage: data.get("point"),
         duration: parseInt(data.get("duration") as string) * 60,
+        permission: [],
       })
       .then((response) => {
         showSnackbar("success", "作成しました");
@@ -36,7 +39,7 @@ export default function TaskCreateForm({
   const defaultData = {
     id: "",
     name: "",
-    detail: "",
+    detail: [],
     max_worker_num: 1,
     min_worker_num: 1,
     exp_worker_num: 1,
@@ -53,7 +56,11 @@ export default function TaskCreateForm({
         <Typography component="h1" variant="h5">
           仕事を新規作成
         </Typography>
-        <TaskForm data={defaultData} />
+        <TaskForm
+          data={defaultData}
+          subtasks={subtasks}
+          setSubtasks={setSubtasks}
+        />
       </Box>
       <Link href={`/${params.groupId}/tasks`}>一覧へ戻る</Link>
     </Container>

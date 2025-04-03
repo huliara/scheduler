@@ -27,7 +27,7 @@ export default function SlotEdit({
 
   React.useEffect(() => {
     if (!data) return;
-    setData(data.task_id);
+    setData(data.taskdetail_id);
   }, [data]);
   if (error | taskError) return <div>error</div>;
   if (isLoading || taskIsLoading) return <div>loading...</div>;

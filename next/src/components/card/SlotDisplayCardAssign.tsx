@@ -1,8 +1,7 @@
-import { useParams, usePathname } from "next/navigation";
-import { SlotResponse } from "@/types/ResponseType";
+import { useParams } from "next/navigation";
+import { UserTaskRespose, SlotResponse } from "@/types/ResponseType";
 import * as React from "react";
 import { SlotDisplayCardBase } from "./SlotDisplayCardBase";
-import Link from "next/link";
 import { Button } from "@mui/material";
 import axios from "@/axios";
 import CheckIcon from "@mui/icons-material/Check";
@@ -12,9 +11,7 @@ export const SlotDisplayCardAssign = ({
   mutate,
 }: {
   slot: SlotResponse;
-  mutate: KeyedMutator<{
-    slots: SlotResponse[];
-  }>;
+  mutate: KeyedMutator<UserTaskRespose>;
 }) => {
   const groupId = useParams().groupId;
   const handleCancel = (slot_id: string) => {

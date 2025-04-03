@@ -4,6 +4,7 @@ from .task_assign_usecase import TaskAssignUseCase
 from .task_bulk_remove_usecase import TaskBulkRemoveUseCase
 from .task_cancel_usecase import TaskCancelUseCase
 from .task_complete_usecase import TaskCompleteUseCase
+from .task_get_relevant_for_user import TaskGetUserRelevantUseCase
 from .task_get_usecase import TaskGetUseCase
 from .task_getall_usecase import TaskGetAllUseCase
 from .task_post_usecase import TaskPostUseCase

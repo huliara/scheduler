@@ -46,8 +46,9 @@ class TaskEntity(IEntity):
             'start_time': self.start_time,
             'end_time': self.end_time,
             'status': self.status,
-            'assignees': self.workers,
-            'taskdetail': self.taskdetail.to_dict()
+            'taskdetail': self.taskdetail.to_dict(),
+            'workers': [user.to_dict() for user in self.workers],
+            'creater_id': self.creater_id,
         }
         
     def add(self,user:'user.UserEntity'):

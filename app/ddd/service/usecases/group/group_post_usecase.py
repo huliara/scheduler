@@ -9,7 +9,7 @@ class GroupPostUseCase(TransactionUseCaseBase):
         self.group_repository=group_repository
         
     def execute(self,name:str):
-        group_entity=GroupEntity(name=name)
+        group_entity=GroupEntity(id=None,name=name)
         return self._transaction(group_entity)
     
     def _transaction(self,entity:GroupEntity)->GroupEntity:

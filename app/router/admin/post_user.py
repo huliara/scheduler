@@ -17,7 +17,7 @@ async def post_users(request:AdminUserCreate,usecase:UserPostUseCase=Depends(__u
     params={
         "name":request.name,
         "room_number":request.room_number,
-        "exp_task":[],
+        "exp_tasks":[],
         "is_admin":request.is_admin
     }
     user_entity=UserEntity.from_params(params)

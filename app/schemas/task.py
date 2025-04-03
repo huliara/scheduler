@@ -3,6 +3,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
+from app.ddd.domain.task.task_state import TaskState
+
 
 class TaskCreate(BaseModel):
     name: str = Field(max_length=20)
@@ -22,24 +24,34 @@ class Worker(BaseModel):
     name: str
 
 
-class TaskDisplay(TaskCreate):
+class TaskDisplay(BaseModel):
     id: UUID
+    name:str
+    start_time: datetime.datetime
     end_time: datetime.datetime
+    status:TaskState
+    taskdetail_id: UUID
+    taskdetail_name: str
+    workers: list[Worker] = []
     creater_id: UUID
-    creater_name: str
-    assignees: list[Worker] = []
-    task_name: str
 
     class Config:
         from_attributes = True
 
 
 class TaskList(BaseModel):
-    slots: list[TaskDisplay]
+    tasks: list[TaskDisplay]
 
     class Config:
         from_attributes = True
 
+class UserTaskList(BaseModel):
+    assign: list[TaskDisplay]
+    hiring: list[TaskDisplay]
+    end: list[TaskDisplay]
+
+    class Config:
+        from_attributes = True
 
 class TaskDelete(BaseModel):
     tasks: list[UUID]

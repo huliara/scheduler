@@ -9,7 +9,7 @@ from app.schemas.task import TaskList
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return TaskGetAllUseCase(db,TaskRepository)
+    return TaskGetAllUseCase(db,TaskRepository(db))
 
 
 

@@ -3,9 +3,9 @@ from abc import abstractmethod
 
 import app.ddd.domain.group as group
 import app.ddd.domain.user as user
+import app.models.models as models
 from app.ddd.core.i_repository import IRepository
 from app.ddd.domain.task_detail import TaskDetailId
-import app.models.models as models
 
 from .task_entity import TaskEntity
 from .task_value_object import TaskId
@@ -40,3 +40,6 @@ class ITaskRepository(IRepository[TaskEntity,TaskId]):
     def find_by_ids(self,ids:list[TaskId])->list[TaskEntity]:
         pass
     
+    @abstractmethod
+    def find_by_user(self,user_id:'user.UserId'):
+        pass

@@ -36,8 +36,8 @@ export default function SlotDetail({
       </Typography>
       <Typography variant="body1">
         仕事内容:
-        <Link href={`/${params.groupId}/tasks/${data.task_id}`}>
-          {data.task_name}
+        <Link href={`/${params.groupId}/tasks/${data.taskdetail_id}`}>
+          {data.taskdetail_name}
         </Link>
       </Typography>
       <Typography variant="body1">

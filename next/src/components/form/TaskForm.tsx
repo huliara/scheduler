@@ -1,9 +1,26 @@
 import { TaskResponse } from "@/types/ResponseType";
-import { Grid } from "@mui/material";
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
-export const TaskForm = ({ data }: { data: TaskResponse }) => {
+import { Dispatch, SetStateAction, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+export const TaskForm = ({
+  data,
+  subtasks,
+  setSubtasks,
+}: {
+  data: TaskResponse;
+  subtasks: string[];
+  setSubtasks: Dispatch<SetStateAction<string[]>>;
+}) => {
+  const [subtaskText, setSubtaskText] = useState<string>("");
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -18,18 +35,41 @@ export const TaskForm = ({ data }: { data: TaskResponse }) => {
         />
       </Grid>
       <Grid item xs={12}>
-        <TextField
-          fullWidth
-          multiline
-          required
-          id="detail"
-          label="詳細"
-          name="detail"
-          rows={15}
-          maxRows={18}
-          inputProps={{ maxLength: 400 }}
-          defaultValue={data.detail}
-        />
+        <List>
+          {subtasks.map((subtask, index) => (
+            <ListItem key={index}>
+              <ListItemText primary={`${index + 1}. ${subtask}`} />
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => {
+                  setSubtasks(subtasks.filter((_, i) => i !== index));
+                }}
+              >
+                <CloseIcon />
+              </Button>
+            </ListItem>
+          ))}
+          <ListItem>
+            <TextField
+              fullWidth
+              label="詳細"
+              variant="outlined"
+              value={subtaskText}
+              onChange={(e) => {
+                setSubtaskText(e.target.value);
+              }}
+            />
+            <ListItemButton
+              onClick={() => {
+                setSubtasks([...subtasks, subtaskText]);
+                setSubtaskText("");
+              }}
+            >
+              <AddIcon />
+            </ListItemButton>
+          </ListItem>
+        </List>
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
@@ -83,7 +123,7 @@ export const TaskForm = ({ data }: { data: TaskResponse }) => {
           name="duration"
           type="number"
           inputProps={{ min: 0, step: 1 }}
-          defaultValue={data.duration/60}
+          defaultValue={data.duration / 60}
         />
       </Grid>
 

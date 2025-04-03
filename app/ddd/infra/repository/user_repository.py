@@ -20,7 +20,7 @@ class UserRepository(IUserRepository):
         return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).all()]
     
     def add(self, entity:UserEntity, password:str)->UserEntity:
-        exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task.id for task in entity.exp_tasks]))).all()
+        exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task for task in entity.exp_tasks]))).all()
         model = User(
             name=entity.name,
             password=get_password_hash(password),
@@ -61,6 +61,6 @@ class UserRepository(IUserRepository):
         self.db.commit()
         return self._refresh_to_entity(model)
     
-    def _refresh_to_entity(self, model):
+    def _refresh_to_entity(self, model)-> UserEntity:
         entity = UserEntity.from_model(model)
         return entity

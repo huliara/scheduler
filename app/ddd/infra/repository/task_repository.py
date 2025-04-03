@@ -1,21 +1,26 @@
+import datetime
+
 from sqlalchemy import delete, insert
 from sqlalchemy.future import select
 
 from app.ddd.core.exception import DomainException
 from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId
-from app.models.models import Task
+from app.models.models import Group, Task, User
 
 
 class TaskRepository(ITaskRepository):
     
     def __init__(self, db):
-        super().__init__(db)
+        self.db = db
         
     def find_by_id(self, id):
         model=self.db.get(Task,id)
         return self.refresh_to_entity(model)
     
-    def find_all(self):
+    def find_all(self,group_id:str,end:bool|None=None):
+        if end is not None:
+            return [self.refresh_to_entity(model) 
+                    for model in self.db.scalars(select(Task).filter(Task.end_time<datetime.datetime.now())).all()]
         return [self.refresh_to_entity(model) 
                 for model in self.db.scalars(select(Task)).all()]
         
@@ -65,6 +70,19 @@ class TaskRepository(ITaskRepository):
         self.db.delete(model)
         self.db.commit()
         return self.refresh_to_entity(model)
+    
+    def find_by_user(self, user_id):
+        user=self.db.get(User,user_id)
+        if user is None:
+            raise DomainException('User not found',404)
+        joining_group_ids=[group.id for group in user.groups]
+        tasks=self.db.scalars(select(Task).filter(Task.group_id.in_(joining_group_ids))).all()
+
+        return{
+            "assign": [self.refresh_to_entity(task) for task in tasks if user in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
+            "hiring":[self.refresh_to_entity(task) for task in tasks if user not in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
+            "end":[self.refresh_to_entity(task) for task in tasks if user in task.workers and task.end_time<datetime.datetime.now() and task.status!=3],
+        }
     
     
     def refresh_to_entity(self, model: Task) -> TaskEntity:

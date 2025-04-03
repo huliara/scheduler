@@ -3,15 +3,17 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class Role(BaseModel):
+class Member(BaseModel):
     id: UUID
-    name: str
+    point: float
 
 
 class GroupDisplay(BaseModel):
     id: UUID
     name: str
-    role: list[Role]|None
+    users: list[Member]
+    task_details: list[UUID]
+    template: list[UUID]
 
 class GroupsDisplay(BaseModel):
     groups: list[GroupDisplay]

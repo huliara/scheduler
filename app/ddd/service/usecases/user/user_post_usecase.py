@@ -9,7 +9,7 @@ class UserPostUseCase(TransactionUseCaseBase):
         self.user_repository=user_repository
     
     def execute(self,entity:UserEntity,password:str)->UserEntity:
-        return super().execute(entity,password)
+        return self._transaction(entity,password)
     
     def _transaction(self, entity:UserEntity,password:str)->UserEntity:
         try:

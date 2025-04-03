@@ -1,11 +1,12 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+import app.models.models as models
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.task.task_value_object import TaskId
 from app.ddd.domain.task_detail.task_detail_value_object import TaskDetailId
+
 from .user_value_object import UserId
-import app.models.models as models
 
 
 @dataclass
@@ -13,15 +14,15 @@ class UserEntity(IEntity):
     id:UserId|None
     name:str
     room_number:str
-    tasks:list[TaskId]
     exp_tasks:list[TaskDetailId]
+    tasks:list[TaskId]=field(default_factory=list)
     point:int=0
     is_admin:bool=False
     is_active:bool=True
     @classmethod
     def from_params(cls,data:dict) -> 'UserEntity':
         return cls(
-            id=UserId(data['id']) if data['id'] is not None else None,
+            id=UserId(data['id']) if 'id'in data.keys() is not None else None,
             name=data['name'],
             room_number=data['room_number'],
             exp_tasks=data['exp_tasks'],
@@ -47,6 +48,7 @@ class UserEntity(IEntity):
         return {
             'id': self.id,
             'name': self.name,
+            'room_number': self.room_number,
             'tasks': self.tasks,
             'exp_tasks': [task.to_dict() for task in self.exp_tasks],
             'point': self.point

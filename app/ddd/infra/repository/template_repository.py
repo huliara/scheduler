@@ -12,9 +12,9 @@ class TemplateRepository(ITemplateRepository):
         model=self.db.get(Template,id)
         return self._refresh_to_entity(model)
     
-    def find_all(self):
+    def find_all(self,group_id):
         return [self._refresh_to_entity(model) 
-                for model in self.db.scalars(select(Template)).all()]
+                for model in self.db.scalars(select(Template).filter(Template.group_id==group_id)).all()]
     
     def add(self, entity):
         model=Template(

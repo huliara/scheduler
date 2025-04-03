@@ -1,68 +1,106 @@
 "use client";
-import { GroupResponse } from "@/types/ResponseType";
 import {
-  Container,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import axios, { fetcher } from "@/axios";
-import React from "react";
+  SlotDisplayCardAssign,
+  SlotDisplayCardEnd,
+  SlotDisplayCardUnassign,
+} from "@/components/card/SlotDisplayCardAssign";
+import { Accordion, AccordionSummary } from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
+import SlotListOneDay from "@/components/list/SlotListOneDay";
+import { ScrollMenu } from "react-horizontal-scrolling-menu";
+import "react-horizontal-scrolling-menu/dist/styles.css";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
-import NextAuthProvider from "@/components/provider/NextAuth";
+import { fetcher } from "@/axios";
+import { UserTaskRespose } from "@/types/ResponseType";
+import { useSession } from "next-auth/react";
 
-export default function Top() {
-  return (
-    <NextAuthProvider>
-      <GroupList />
-    </NextAuthProvider>
+export default function Home() {
+  const { data, error, mutate, isLoading } = useSWR<UserTaskRespose>(
+    `/user/tasks`,
+    fetcher
   );
-}
+  const session = useSession();
+  if (error || session.status === "unauthenticated")
+    return <div>Loading Failed</div>;
+  if (!data || !session.data || session.data.user === undefined)
+    return <div>loading...</div>;
+  if (isLoading) return <div>loading...</div>;
+  console.log(data);
 
-const GroupList = () => {
-  const { data, error, isLoading } = useSWR<{
-    groups: GroupResponse[];
-  }>("/groups", fetcher);
-  const router = useRouter();
-  if (error) return <div>Error</div>;
-  if (isLoading) return <div>Loading...</div>;
-  const joined_groups = data?.groups.filter((group) => group.role !== null);
-
-  const irrelevant_groups = data?.groups.filter((group) => group.role == null);
-
+  const days = Array.from(
+    new Set(
+      data.hiring.map((slot) =>
+        new Date(slot.start_time).toLocaleDateString("ja-JP", {
+          month: "2-digit",
+          day: "numeric",
+        })
+      )
+    )
+  ).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
   return (
     <>
-      <Container>
-        <Divider>参加中のグループ</Divider>
-        <List>
-          {joined_groups?.map((group) => (
-            <ListItem key={group.id}>
-              <ListItemText primary={group.name} />
-              <ListItemButton>
-                <ArrowForwardIcon
-                  onClick={() => {
-                    router.push(`/${group.id}/`);
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
+      <Accordion defaultExpanded>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <h2>入る予定のシフト</h2>
+        </AccordionSummary>
+        <ScrollMenu>
+          {data.assign.map((slot, index) => (
+            <SlotDisplayCardAssign slot={slot} key={index} mutate={mutate} />
           ))}
-        </List>
-      </Container>
-      <Container>
-        <Divider>他のグループ</Divider>
-        <List>
-          {irrelevant_groups?.map((group) => (
-            <ListItem key={group.id}>
-              <ListItemText primary={group.name} />
-            </ListItem>
-          ))}
-        </List>
-      </Container>
+        </ScrollMenu>
+      </Accordion>
+
+      <h2>募集中のシフト</h2>
+      <ScrollMenu>
+        {days.map((day, index) => {
+          const slots = data.hiring
+            .filter(
+              (slot) =>
+                new Date(slot.start_time).toLocaleDateString("ja-JP", {
+                  month: "2-digit",
+                  day: "numeric",
+                }) == day
+            )
+            .sort(
+              (a, b) =>
+                new Date(a.start_time).getTime() -
+                new Date(b.start_time).getTime()
+            );
+          return (
+            <SlotListOneDay day={day} key={index}>
+              {slots.map((slot, index) =>
+                slot.worker
+                  .map((worker) => worker.id)
+                  .includes(session.data.user.id) ? (
+                  <SlotDisplayCardAssign
+                    slot={slot}
+                    key={index}
+                    mutate={mutate}
+                  />
+                ) : (
+                  <SlotDisplayCardUnassign slot={slot} key={index} />
+                )
+              )}
+            </SlotListOneDay>
+          );
+        })}
+      </ScrollMenu>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <h2>過去に入ったシフト</h2>
+        </AccordionSummary>
+        <ScrollMenu>
+          {data.end
+            .sort(
+              (a, b) =>
+                new Date(a.start_time).getTime() -
+                new Date(b.start_time).getTime()
+            )
+            .map((slot, id) => (
+              <SlotDisplayCardEnd slot={slot} key={id} />
+            ))}
+        </ScrollMenu>
+      </Accordion>
     </>
   );
-};
+}

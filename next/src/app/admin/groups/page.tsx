@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export default function AdminGroupList() {
   const { data, error, isLoading } = useSWR<{ groups: ResponseBase[] }>(
-    `admin/groups`,
+    `/groups`,
     fetcher
   );
   if (error) return <div>error</div>;

@@ -7,6 +7,7 @@ from uuid import uuid4
 from sqlalchemy import ARRAY, Column, Enum, ForeignKey, String, Table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.ext.associationproxy import association_proxy,AssociationProxy
 
 from app.database import Base
 from app.ddd.domain.permission.permission import Permission
@@ -24,14 +25,6 @@ tasks_table = Table(
     Base.metadata,
     Column("user", ForeignKey("user.id")),
     Column("task", ForeignKey("task.id")),
-)
-
-
-authority_table=Table(
-    "authority_table",
-    Base.metadata,
-    Column("taskdetail", ForeignKey("taskdetail.id"), primary_key=True),
-    Column("authority", ForeignKey("authority.id"), primary_key=True),
 )
 
 
@@ -53,7 +46,10 @@ class Task(Base):
         ForeignKey("taskdetail.id", ondelete="CASCADE")
     )
     taskdetail: Mapped[TaskDetail] = relationship(back_populates="tasks", uselist=False)
-
+    group_id:AssociationProxy[list[uuid.UUID]]=association_proxy(
+        "taskdetail",
+        "group_id"
+    )
     @hybrid_property
     def end_time(self):
         return self.start_time + self.taskdetail.duration

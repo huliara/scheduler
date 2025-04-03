@@ -6,10 +6,7 @@ export type ResponseBase = {
   name: string;
 };
 
-export type GroupResponse = ResponseBase & {
-  role: ResponseBase[] | null;
-};
-
+export type GroupResponse = ResponseBase;
 export const permissions = [
   "add_user",
   "remove_user",
@@ -64,7 +61,7 @@ export type UserDetailResponse = ResponseBase & {
 };
 
 export type TaskResponse = ResponseBase & {
-  detail: string;
+  detail: string[];
   max_worker_num: number;
   min_worker_num: number;
   exp_worker_num: number;
@@ -82,11 +79,17 @@ export type TasksResponse = {
 export type SlotResponse = ResponseBase & {
   start_time: string;
   end_time: string;
+  status: number;
+  taskdetail_id: string;
+  taskdetail_name: string;
+  worker: ResponseBase[];
   creater_id: string;
-  creater_name: string;
-  assignees: ResponseBase[];
-  task_id: string;
-  task_name: string;
+};
+
+export type UserTaskRespose = {
+  assign: SlotResponse[];
+  hiring: SlotResponse[];
+  end: SlotResponse[];
 };
 
 export type TemplateTask = ResponseBase & {

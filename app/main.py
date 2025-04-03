@@ -39,7 +39,7 @@ async def root():
 app.include_router(auth.router, prefix="")
 app.include_router(admin, prefix="/admin")
 app.include_router(group, prefix="/groups")
-app.include_router(user, prefix="/mypage")
+app.include_router(user, prefix="/user")
 app.include_router(task, prefix="/{group_id}/tasks")
 app.include_router(task_detail, prefix="/{group_id}/task_details")
 app.include_router(template, prefix="/{group_id}/templates")
