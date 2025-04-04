@@ -44,7 +44,9 @@ class TemplateEntity(IEntity):
             'id': self.id,
             'name': self.name,
             'slots': 
-                [{'taskdetail_id':slot.taskdetail_id,
+                [{
+                    'id':f'{slot.taskdetail_id}#{slot.start_time}#{slot.date_from_start}',
+                    'taskdetail_id':slot.taskdetail_id,
                   'date_from_start':slot.date_from_start,
                   'start_time':slot.start_time} 
                  for slot in self.slots],
@@ -53,3 +55,5 @@ class TemplateEntity(IEntity):
     def add(self,slot:TemplateSlot):
         self.slots.add(slot)
         
+    def delete(self,slot:TemplateSlot):
+        self.slots=[slot  for slot in self.slots if slot!=slot]

@@ -17,6 +17,7 @@ import {
 import React from "react";
 import { TemplateAddTaskForm } from "@/components/form/TemplateAddTaskForm";
 import { TemplateNameForm } from "@/components/form/TemplateNameForm";
+import { TemplateEditTaskForm } from "@/components/form/TemplateEditTaskForm";
 
 export default function TemplateEdit({
   params,
@@ -46,7 +47,7 @@ export default function TemplateEdit({
 
   const handleTaskAdd = (selectTemplateTask: TemplateTaskResponse) => {
     axios
-      .post(`/${params.groupId}/templates/${params.templateId}/tasks`, {
+      .post(`/${params.groupId}/templates/${params.templateId}/slots`, {
         date_from_start: Number(selectTemplateTask?.date_from_start),
         start_time: selectTemplateTask?.start_time,
         id: selectTemplateTask?.task_id,
@@ -57,17 +58,24 @@ export default function TemplateEdit({
       .catch((err) => {});
   };
 
-  const handleTaskEdit = (templateTask: TemplateTaskResponse) => {
-    if (!templateTask) return;
+  const handleTaskEdit = (
+    src: TemplateTaskResponse,
+    dst: TemplateTaskResponse
+  ) => {
+    if (!dst) return;
     axios
-      .patch(
-        `/${params.groupId}/templates/${params.templateId}/tasks/${templateTask?.id}`,
-        {
-          id: templateTask.task_id,
-          date_from_start: Number(templateTask.date_from_start),
-          start_time: templateTask.start_time,
-        }
-      )
+      .patch(`/${params.groupId}/templates/${params.templateId}/slot`, {
+        src: {
+          taskdetail_id: src.task_id,
+          date_from_start: Number(src.date_from_start),
+          start_time: src.start_time,
+        },
+        dst: {
+          taskdetail_id: dst.task_id,
+          date_from_start: Number(dst.date_from_start),
+          start_time: dst.start_time,
+        },
+      })
       .then((response) => {
         mutate();
       })
@@ -88,7 +96,7 @@ export default function TemplateEdit({
       {selectId ? (
         <>
           {" "}
-          <TemplateAddTaskForm
+          <TemplateEditTaskForm
             groupId={params.groupId}
             handleSubmit={handleTaskEdit}
             templateTask={data.slots.find((slot) => selectId === slot.id)!}

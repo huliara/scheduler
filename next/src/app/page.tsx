@@ -4,7 +4,15 @@ import {
   SlotDisplayCardEnd,
   SlotDisplayCardUnassign,
 } from "@/components/card/SlotDisplayCardAssign";
-import { Accordion, AccordionSummary } from "@mui/material";
+import {
+  Accordion,
+  AccordionSummary,
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import SlotListOneDay from "@/components/list/SlotListOneDay";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
@@ -13,6 +21,8 @@ import useSWR from "swr";
 import { fetcher } from "@/axios";
 import { UserTaskRespose } from "@/types/ResponseType";
 import { useSession } from "next-auth/react";
+import { LogoutButton } from "@/components/button/logoutButton";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { data, error, mutate, isLoading } = useSWR<UserTaskRespose>(
@@ -20,6 +30,7 @@ export default function Home() {
     fetcher
   );
   const session = useSession();
+  const router = useRouter();
   if (error || session.status === "unauthenticated")
     return <div>Loading Failed</div>;
   if (!data || !session.data || session.data.user === undefined)
@@ -39,6 +50,19 @@ export default function Home() {
   ).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
   return (
     <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Scheduler
+            </Typography>
+            <Button color="inherit" onClick={() => router.push("/groups")}>
+              グループ一覧
+            </Button>
+            <LogoutButton />
+          </Toolbar>
+        </AppBar>
+      </Box>
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <h2>入る予定のシフト</h2>

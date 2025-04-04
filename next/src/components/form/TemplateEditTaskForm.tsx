@@ -5,14 +5,14 @@ import { TemplateAddTaskFields } from "./TemplateAddFields";
 import { TemplateTaskResponse, TasksResponse } from "@/types/ResponseType";
 import { useEffect, useState } from "react";
 import { fetcher } from "@/axios";
-export const TemplateAddTaskForm = ({
+export const TemplateEditTaskForm = ({
   groupId,
   handleSubmit,
   templateTask,
   buttonTitle,
 }: {
   groupId: string;
-  handleSubmit: (data: TemplateTaskResponse) => void;
+  handleSubmit: (src: TemplateTaskResponse, dst: TemplateTaskResponse) => void;
   templateTask: TemplateTaskResponse;
   buttonTitle: string;
 }) => {
@@ -22,8 +22,10 @@ export const TemplateAddTaskForm = ({
     isLoading: taskIsLoading,
   } = useSWR<TasksResponse>(`/${groupId}/task_details/`, fetcher);
   const [formData, setTemplateTask] = useState<TemplateTaskResponse>();
+  let prev_slot = templateTask;
   useEffect(() => {
     setTemplateTask(templateTask);
+    prev_slot = templateTask;
   }, [templateTask]);
   if (!formData) {
     return null;
@@ -35,7 +37,7 @@ export const TemplateAddTaskForm = ({
 
   const handleOnClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSubmit(formData);
+    handleSubmit(prev_slot, formData);
   };
 
   return (

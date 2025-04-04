@@ -7,7 +7,7 @@ from .generate_task import router as generate_task
 from .get import router as get
 from .get_all import router as get_all
 from .patch_name import router as patch_name
-from .patch_slots import router as patch_slots
+from .patch_slot import router as patch_slots
 from .post import router as post
 
 router.include_router(delete)

@@ -22,9 +22,10 @@ class TemplateRepository(ITemplateRepository):
             group_id=entity.group_id
         )
         for slot in entity.slots:
-            model.tasktemplates.append(TaskTemplate(taskdetail_id=slot.taskdetail_id,
+            model_slot=TaskTemplate(taskdetail_id=slot.taskdetail_id,
                                                     date_from_start=slot.date_from_start,
-                                                    start_time=slot.start_time))
+                                                    start_time=slot.start_time)
+            model.tasktemplates.append(model_slot)
         
         self.db.add(model)
         self.db.commit()
