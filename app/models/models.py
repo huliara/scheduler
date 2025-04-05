@@ -64,7 +64,7 @@ class TaskDetail(Base):
     )
     group:Mapped[Group]=relationship(back_populates="taskdetail")
     subtask: Mapped[list[SubTask]] = relationship(
-        back_populates="taskdetail", cascade="all,delete"
+        back_populates="taskdetail", cascade="all,delete-orphan"
     )
     max_worker: Mapped[int] = mapped_column(default=1)  # 最大人数
     min_worker: Mapped[int] = mapped_column(default=1)  # 最少人数

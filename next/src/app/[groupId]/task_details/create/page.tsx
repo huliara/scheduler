@@ -39,7 +39,7 @@ export default function TaskCreateForm({
   const defaultData = {
     id: "",
     name: "",
-    detail: [],
+    subtasks: [],
     max_worker_num: 1,
     min_worker_num: 1,
     exp_worker_num: 1,
@@ -62,7 +62,7 @@ export default function TaskCreateForm({
           setSubtasks={setSubtasks}
         />
       </Box>
-      <Link href={`/${params.groupId}/tasks`}>一覧へ戻る</Link>
+      <Link href={`/${params.groupId}/task_details`}>一覧へ戻る</Link>
     </Container>
   );
 }

@@ -61,11 +61,11 @@ export type UserDetailResponse = ResponseBase & {
 };
 
 export type TaskResponse = ResponseBase & {
-  detail: string[];
-  max_worker_num: number;
-  min_worker_num: number;
-  exp_worker_num: number;
-  point: number;
+  subtasks: string[];
+  max_worker: number;
+  min_worker: number;
+  exp_worker: number;
+  wage: number;
   duration: number;
   creater_id: string;
   creater_name: string;

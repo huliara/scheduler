@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { ResponseBase, SlotResponse, TaskResponse } from "@/types/ResponseType";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";
@@ -9,20 +9,21 @@ export default function TaskDetail({
   params: { groupId: string; taskId: string };
 }) {
   const { data, error, isLoading } = useSWR<TaskResponse>(
-    `/${params.groupId}/tasks/${params.taskId}`,
+    `/${params.groupId}/task_details/${params.taskId}`,
     fetcher
   );
 
   if (error) return <div>error</div>;
   if (!data) return <div>no data</div>;
   if (isLoading) return <div>loading...</div>;
+  const detail_text = data.subtasks[0];
 
   return (
     <>
       <Typography variant="h4" component="div">
         {data.name}
       </Typography>
-      <Typography variant="body1">仕事内容：{data.detail}</Typography>
+      <Typography variant="body1">仕事内容：{detail_text}</Typography>
       <Typography variant="body1">
         最大参加者数: {data.max_worker_num}
       </Typography>

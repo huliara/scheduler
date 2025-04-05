@@ -79,7 +79,7 @@ export const TaskForm = ({
           name="max_worker_num"
           type="number"
           inputProps={{ min: 1, max: 100, step: 1 }}
-          defaultValue={data.max_worker_num}
+          defaultValue={data.max_worker}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
@@ -90,7 +90,7 @@ export const TaskForm = ({
           name="min_worker_num"
           type="number"
           inputProps={{ min: 0, max: 100, step: 1 }}
-          defaultValue={data.min_worker_num}
+          defaultValue={data.min_worker}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
@@ -101,7 +101,7 @@ export const TaskForm = ({
           name="exp_worker_num"
           type="number"
           inputProps={{ min: 0, max: 100, step: 1 }}
-          defaultValue={data.exp_worker_num}
+          defaultValue={data.exp_worker}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
@@ -112,7 +112,7 @@ export const TaskForm = ({
           name="point"
           type="number"
           inputProps={{ min: -100, max: 100, step: 1 }}
-          defaultValue={data.point}
+          defaultValue={data.wage}
         />
       </Grid>
       <Grid item xs={12} sm={6}>

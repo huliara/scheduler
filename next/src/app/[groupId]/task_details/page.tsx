@@ -49,10 +49,12 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
               <TableCell>{task.point}</TableCell>
               <TableCell>{task.duration}</TableCell>
               <TableCell>
-                <Link href={`/${params.groupId}/tasks/${task.id}`}>詳細</Link>
+                <Link href={`/${params.groupId}/task_details/${task.id}`}>
+                  詳細
+                </Link>
               </TableCell>
               <TableCell>
-                <Link href={`/${params.groupId}/tasks/${task.id}/edit`}>
+                <Link href={`/${params.groupId}/task_details/${task.id}/edit`}>
                   編集
                 </Link>
               </TableCell>
@@ -69,7 +71,7 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
           ))}
         </TableBody>
       </Table>
-      <Link href={`/${params.groupId}/tasks/create`}>新規作成</Link>
+      <Link href={`/${params.groupId}/task_details/create`}>新規作成</Link>
     </>
   );
 }

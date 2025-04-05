@@ -23,7 +23,10 @@ export default function SlotEdit({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<{ tasks: TaskResponse[] }>(`/${params.groupId}/tasks/`, fetcher);
+  } = useSWR<{ tasks: TaskResponse[] }>(
+    `/${params.groupId}/task_details/`,
+    fetcher
+  );
 
   React.useEffect(() => {
     if (!data) return;

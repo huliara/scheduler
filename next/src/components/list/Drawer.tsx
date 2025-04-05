@@ -34,7 +34,9 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={2} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/${groupId}/tasks`)}>
+          <ListItemButton
+            onClick={() => router.replace(`/${groupId}/task_details`)}
+          >
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>

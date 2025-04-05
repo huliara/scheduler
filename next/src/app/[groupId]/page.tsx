@@ -35,7 +35,7 @@ export default function GroupHome({ params }: { params: { groupId: string } }) {
         <ListItem>
           <ListItemButton
             onClick={() => {
-              router.push(`/${params.groupId}/tasks`);
+              router.push(`/${params.groupId}/task_details`);
             }}
           >
             マニュアルなど
@@ -53,7 +53,7 @@ export default function GroupHome({ params }: { params: { groupId: string } }) {
         <ListItem>
           <ListItemButton
             onClick={() => {
-              router.push(`/${params.groupId}/tasks`);
+              router.push(`/${params.groupId}/users`);
             }}
           >
             ユーザー

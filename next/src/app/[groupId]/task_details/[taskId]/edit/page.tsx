@@ -9,34 +9,42 @@ import useSWR from "swr";
 import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
+import { permission } from "process";
 
 export default function TaskEdit({
   params,
 }: {
   params: { groupId: string; taskId: string };
-  }) {
+}) {
   const { showSnackbar } = useSnackbarContext();
+  const [subtasks, setSubtasks] = React.useState<string[]>([]);
   const { data, error, isLoading, mutate } = useSWR<TaskResponse>(
-    `/${params.groupId}/tasks/${params.taskId}`,
+    `/${params.groupId}/task_details/${params.taskId}`,
     fetcher
   );
+  console.log(data);
+  React.useEffect(() => {
+    if (!data) return;
+    setSubtasks(data.subtasks);
+  }, [data]);
+  if (!data) return <div>no data</div>;
   if (error) return <div>error</div>;
   if (isLoading) return <div>loading...</div>;
-  if (!data) return <div>no data</div>;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     axios
-      .patch(`${params.groupId}/tasks/${params.taskId}`, {
+      .patch(`${params.groupId}/task_details/${params.taskId}`, {
         name: data.get("name"),
-        detail: data.get("detail"),
-        max_worker_num: data.get("max_worker_num"),
-        min_worker_num: data.get("min_worker_num"),
-        exp_worker_num: data.get("exp_worker_num"),
-        point: data.get("point"),
+        subtasks: subtasks,
+        max_worker: data.get("max_worker_num"),
+        min_worker: data.get("min_worker_num"),
+        exp_worker: data.get("exp_worker_num"),
+        wage: data.get("point"),
         duration: parseInt(data.get("duration") as string) * 60,
+        permission: [],
       })
       .then((response) => {
         mutate();
@@ -53,10 +61,9 @@ export default function TaskEdit({
         <Typography component="h1" variant="h5">
           仕事を編集
         </Typography>
-        <TaskForm data={data} />
+        <TaskForm data={data} subtasks={subtasks} setSubtasks={setSubtasks} />
       </Box>
-      <Link href={`/${params.groupId}/tasks`}>一覧へ戻る</Link>
-
+      <Link href={`/${params.groupId}/task_details`}>一覧へ戻る</Link>
     </Container>
   );
 }

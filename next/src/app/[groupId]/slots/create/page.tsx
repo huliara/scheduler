@@ -20,7 +20,7 @@ export default function SlotCreate({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<TasksResponse>(`/${params.groupId}/tasks/`, fetcher);
+  } = useSWR<TasksResponse>(`/${params.groupId}/task_details/`, fetcher);
   if (taskError) return <div>error</div>;
   if (taskIsLoading) return <div>loading...</div>;
   if (!taskData) return <div>no data</div>;

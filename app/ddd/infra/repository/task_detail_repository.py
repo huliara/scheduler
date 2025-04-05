@@ -45,7 +45,8 @@ class TaskDetailRepository(ITaskDetailRepository):
         if model is None:
             raise DomainException('TaskDetail not found',404)
         model.name=entity.name
-        model.subtask=entity.subtask
+        
+        model.subtask=[SubTask(order=index,description=subtask,taskdetail_id=model.id) for index, subtask in enumerate(entity.subtask)]
         
         self.db.commit()
         self.db.refresh(model)

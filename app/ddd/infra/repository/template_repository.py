@@ -55,11 +55,12 @@ class TemplateRepository(ITemplateRepository):
     
     def remove(self, id):
         model=self.db.get(Template,id)
+        resposnse=self._refresh_to_entity(model)
         if model is None:
             raise DomainException('Template not found',404)
         self.db.delete(model)
         self.db.commit()
-        return self._refresh_to_entity(model)
+        return resposnse
     
     def _refresh_to_entity(self, model):
         entity=TemplateEntity.from_model(model)
