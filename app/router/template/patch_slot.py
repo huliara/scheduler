@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.ddd.domain.template import TemplateEntity, TemplateSlot
 from app.ddd.infra.repository import TemplateRepository
 from app.ddd.service.usecases.template import TemplateUpdateSlotUseCase
 from app.schemas.template import TemplateDisplay, TemplatePatchSlot

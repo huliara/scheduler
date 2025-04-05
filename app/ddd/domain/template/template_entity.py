@@ -57,5 +57,5 @@ class TemplateEntity(IEntity):
     def add(self,slot:TemplateSlot):
         self.slots.add(slot)
         
-    def delete(self,slot:TemplateSlot):
-        self.slots=[slot  for slot in self.slots if slot!=slot]
+    def delete(self,target_slot:TemplateSlot):
+        self.slots=[slot  for slot in self.slots if slot!=target_slot]

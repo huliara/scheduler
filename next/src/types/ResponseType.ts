@@ -98,7 +98,7 @@ export type TemplateTask = ResponseBase & {
 };
 
 export type TemplateTaskResponse = TemplateTask & {
-  task_id: string;
+  taskdetail_id: string;
 };
 
 export type TemplateResponse = ResponseBase & {
