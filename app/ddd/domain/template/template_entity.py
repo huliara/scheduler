@@ -26,6 +26,7 @@ class TemplateEntity(IEntity):
             name=data.name,
             slots=[
                 TemplateSlot(taskdetail_id=slot.taskdetail_id,
+                             taskdetail_name=slot.taskdetail.name,
                              date_from_start=slot.date_from_start,
                              start_time=slot.start_time) 
                 for slot in data.tasktemplates],
@@ -47,6 +48,7 @@ class TemplateEntity(IEntity):
                 [{
                     'id':f'{slot.taskdetail_id}#{slot.start_time}#{slot.date_from_start}',
                     'taskdetail_id':slot.taskdetail_id,
+                    'name':slot.name,
                   'date_from_start':slot.date_from_start,
                   'start_time':slot.start_time} 
                  for slot in self.slots],

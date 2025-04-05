@@ -18,6 +18,7 @@ class TemplateUpdateSlotUseCase(TransactionUseCaseBase):
             template=self.template_repository.find_by_id(template_id)
         except:
             raise UseCaseException(f'template:ID{template_id} not found')
+        
         prev_entity=TemplateSlot(
             taskdetail_id=prev_slot.taskdetail_id,
             date_from_start=prev_slot.date_from_start,
