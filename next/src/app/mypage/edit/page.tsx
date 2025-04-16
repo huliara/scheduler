@@ -11,12 +11,12 @@ import { useState } from "react";
 import axios, { fetcher } from "@/axios";
 import { MultiSelect } from "@/components/form/MultiSelect";
 import useSWR from "swr";
-import { TaskResponse, UserDetailResponse } from "@/types/ResponseType";
+import { TaskDetailResponse, UserDetailResponse } from "@/types/ResponseType";
 
 export default function ProfileEdit() {
   const [exp_task, setExpTask] = useState<string[]>([]);
   const { data: user } = useSWR<UserDetailResponse>("/me", fetcher);
-  const { data: tasks } = useSWR<TaskResponse[]>("/tasks", fetcher);
+  const { data: tasks } = useSWR<TaskDetailResponse[]>("/tasks", fetcher);
   React.useEffect(() => {
     if (!user) {
       return;

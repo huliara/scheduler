@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation";
-import { UserTaskRespose, SlotResponse } from "@/types/ResponseType";
+import { UserTaskRespose, TaskResponse } from "@/types/ResponseType";
 import * as React from "react";
 import { SlotDisplayCardBase } from "./SlotDisplayCardBase";
 import { Button } from "@mui/material";
@@ -10,7 +10,7 @@ export const SlotDisplayCardAssign = ({
   slot,
   mutate,
 }: {
-  slot: SlotResponse;
+  slot: TaskResponse;
   mutate: KeyedMutator<UserTaskRespose>;
 }) => {
   const groupId = useParams().groupId;
@@ -29,7 +29,7 @@ export const SlotDisplayCardAssign = ({
   );
 };
 
-export const SlotDisplayCardUnassign = ({ slot }: { slot: SlotResponse }) => {
+export const SlotDisplayCardUnassign = ({ slot }: { slot: TaskResponse }) => {
   const groupId = useParams().groupId;
   const [isAssigned, setAssigned] = React.useState(false);
   const assignSlot = () => {
@@ -53,7 +53,7 @@ export const SlotDisplayCardUnassign = ({ slot }: { slot: SlotResponse }) => {
   );
 };
 
-export const SlotDisplayCardEnd = ({ slot }: { slot: SlotResponse }) => {
+export const SlotDisplayCardEnd = ({ slot }: { slot: TaskResponse }) => {
   const groupId = useParams().groupId;
   const [isCompleted, setCompleted] = React.useState(false);
   const completeSlot = (done: boolean) => {

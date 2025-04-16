@@ -5,17 +5,17 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { SlotResponse, TaskResponse } from "@/types/ResponseType";
+import { TaskResponse, TaskDetailResponse } from "@/types/ResponseType";
 import useSWR from "swr";
-import { SlotForm } from "@/components/form/SlotForm";
+import { TaskForm } from "@/components/form/TaskForm";
 
 export default function SlotEdit({
   params,
 }: {
-  params: { groupId: string; slotId: string };
+  params: { groupId: string; taskId: string };
 }) {
-  const { data, error, isLoading } = useSWR<SlotResponse>(
-    `/${params.groupId}/slots/${params.slotId}`,
+  const { data, error, isLoading } = useSWR<TaskResponse>(
+    `/${params.groupId}/tasks/${params.taskId}`,
     fetcher
   );
   const [task_id, setData] = React.useState<string>();
@@ -23,14 +23,14 @@ export default function SlotEdit({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<{ tasks: TaskResponse[] }>(
+  } = useSWR<{ tasks: TaskDetailResponse[] }>(
     `/${params.groupId}/task_details/`,
     fetcher
   );
 
   React.useEffect(() => {
     if (!data) return;
-    setData(data.taskdetail_id);
+    setData(data.taskdetail.id);
   }, [data]);
   if (error | taskError) return <div>error</div>;
   if (isLoading || taskIsLoading) return <div>loading...</div>;
@@ -43,10 +43,10 @@ export default function SlotEdit({
     console.log(data.get("start_time"));
     console.log(new Date(data.get("start_time") as string).toISOString());
     axios
-      .patch(`${params.groupId}/slots/${params.slotId}`, {
+      .patch(`${params.groupId}/tasks/${params.taskId}`, {
         name: data.get("name"),
         start_time: new Date(data.get("start_time") as string).toISOString(),
-        task_id: task_id,
+        taskdetail_id: task_id,
       })
       .then((response) => {
         //mutate();
@@ -62,7 +62,7 @@ export default function SlotEdit({
         <Typography component="h1" variant="h5">
           仕事を編集
         </Typography>
-        <SlotForm
+        <TaskForm
           data={data}
           tasks={taskData.tasks.map((task) => {
             return { id: task.id, name: task.name };

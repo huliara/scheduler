@@ -13,6 +13,10 @@ class UserRepository(IUserRepository):
     def find_by_id(self, id):
         model = self.db.get(User, id)
         return self._refresh_to_entity(model)
+    
+    def find_by_ids(self, ids):
+        models = self.db.scalars(select(User).filter(User.id.in_(ids))).all()
+        return [self._refresh_to_entity(model) for model in models]
         
     def find_all(self,group_id):
         if group_id is not None:

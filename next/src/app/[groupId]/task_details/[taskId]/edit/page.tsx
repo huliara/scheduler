@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { TaskResponse } from "@/types/ResponseType";
+import { TaskDetailResponse } from "@/types/ResponseType";
 import useSWR from "swr";
-import { TaskForm } from "@/components/form/TaskForm";
+import { TaskDetailForm } from "@/components/form/TaskDetailForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
 import { permission } from "process";
@@ -18,7 +18,7 @@ export default function TaskEdit({
 }) {
   const { showSnackbar } = useSnackbarContext();
   const [subtasks, setSubtasks] = React.useState<string[]>([]);
-  const { data, error, isLoading, mutate } = useSWR<TaskResponse>(
+  const { data, error, isLoading, mutate } = useSWR<TaskDetailResponse>(
     `/${params.groupId}/task_details/${params.taskId}`,
     fetcher
   );
@@ -61,7 +61,11 @@ export default function TaskEdit({
         <Typography component="h1" variant="h5">
           仕事を編集
         </Typography>
-        <TaskForm data={data} subtasks={subtasks} setSubtasks={setSubtasks} />
+        <TaskDetailForm
+          data={data}
+          subtasks={subtasks}
+          setSubtasks={setSubtasks}
+        />
       </Box>
       <Link href={`/${params.groupId}/task_details`}>一覧へ戻る</Link>
     </Container>

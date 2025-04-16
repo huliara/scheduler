@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { TasksResponse } from "@/types/ResponseType";
+import { TaskDetailsResponse } from "@/types/ResponseType";
 import {
   Button,
   Tab,
@@ -13,7 +13,7 @@ import {
 import axios, { fetcher } from "@/axios";
 import Link from "next/link";
 export default function TaskList({ params }: { params: { groupId: string } }) {
-  const { data, error, mutate, isLoading } = useSWR<TasksResponse>(
+  const { data, error, mutate, isLoading } = useSWR<TaskDetailsResponse>(
     `/${params.groupId}/task_details`,
     fetcher
   );

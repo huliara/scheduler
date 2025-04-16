@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { SlotResponse, TasksResponse } from "@/types/ResponseType";
+import { TaskResponse, TaskDetailResponse } from "@/types/ResponseType";
 import useSWR from "swr";
-import { SlotForm } from "@/components/form/SlotForm";
+import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 
 export default function SlotCreate({
@@ -20,7 +20,7 @@ export default function SlotCreate({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<TasksResponse>(`/${params.groupId}/task_details/`, fetcher);
+  } = useSWR<TaskDetailResponse>(`/${params.groupId}/task_details/`, fetcher);
   if (taskError) return <div>error</div>;
   if (taskIsLoading) return <div>loading...</div>;
   if (!taskData) return <div>no data</div>;
@@ -60,7 +60,7 @@ export default function SlotCreate({
         <Typography component="h1" variant="h5">
           仕事を作成
         </Typography>
-        <SlotForm
+        <TaskForm
           data={slot_data}
           tasks={taskData.tasks.map((task) => {
             return { id: task.id, name: task.name };

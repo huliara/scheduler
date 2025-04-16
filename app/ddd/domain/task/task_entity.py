@@ -4,11 +4,12 @@ from http import HTTPStatus as status
 
 import app.ddd.domain.group as group
 import app.ddd.domain.user.user_entity as user
+import app.models.models as models
 from app.ddd.core.exception import DomainException
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
 from app.ddd.domain.user.user_value_object import UserId
-import app.models.models as models
+
 from .task_state import TaskState
 from .task_value_object import TaskId
 
@@ -19,7 +20,7 @@ class TaskEntity(IEntity):
     name:str
     start_time:datetime.datetime
     status:TaskState
-    taskdetail:TaskDetailEntity
+    taskdetail:TaskDetailEntity|None
     workers:list['user.UserEntity']=field(default_factory=list)
     creater_id:UserId|None=None
     @property
@@ -34,10 +35,10 @@ class TaskEntity(IEntity):
             id=data.id,
             name=data.name,
             start_time=data.start_time,
-            end_time=data.end_time,
             status=data.status,
             workers=[user for user in data.workers],
-            taskdetail=TaskDetailEntity.from_model(data.taskdetail)
+            taskdetail=TaskDetailEntity.from_model(data.taskdetail),
+            creater_id=data.creater_id,
         )
     def to_dict(self) -> dict:
         return {

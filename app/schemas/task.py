@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 
 from app.ddd.domain.task.task_state import TaskState
 
+from .taskdetail import TaskDetailDisplay
+
 
 class TaskCreate(BaseModel):
     name: str = Field(max_length=20)
@@ -30,10 +32,9 @@ class TaskDisplay(BaseModel):
     start_time: datetime.datetime
     end_time: datetime.datetime
     status:TaskState
-    taskdetail_id: UUID
-    taskdetail_name: str
+    taskdetail:TaskDetailDisplay
     workers: list[Worker] = []
-    creater_id: UUID
+    creater_id: UUID|None=None
 
     class Config:
         from_attributes = True

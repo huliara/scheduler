@@ -50,8 +50,9 @@ class UserEntity(IEntity):
             'name': self.name,
             'room_number': self.room_number,
             'tasks': self.tasks,
-            'exp_tasks': [task.to_dict() for task in self.exp_tasks],
-            'point': self.point
+            'exp_tasks': [task for task in self.exp_tasks],
+            'point': self.point,
+            'is_active': self.is_active,
         }
     def add(self,task:TaskId):
         self.tasks.append(task)

@@ -33,6 +33,18 @@ class AdminUserPatch(UserBase):
     point: int
 
 
+class UserDisplay(UserBase):
+    id: UUID
+    point: float
+    is_active: bool
+    exp_tasks: list[UUID]
+    tasks: list[UUID]
+
+class UsersDisplay(BaseModel):
+    users: list[UserDisplay]
+
+
+
 class AdminUserDisplay(UserBase):
     id: UUID
     is_admin: bool
@@ -43,15 +55,15 @@ class Role(BaseModel):
     name: str
 
 
-class UserDisplay(UserBase):
+class MemberDisplay(BaseModel):
     id: UUID
-    point: int
-    role: list[Role]
-    is_active: bool
+    point: float
+    user_id: UUID
+    group_id: UUID
 
 
 class GroupUsers(BaseModel):
-    users: list[UserDisplay]
+    users: list[MemberDisplay]
 
 
 class UserAddRequest(BaseModel):

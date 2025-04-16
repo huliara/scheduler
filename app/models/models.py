@@ -5,9 +5,9 @@ import uuid
 from uuid import uuid4
 
 from sqlalchemy import ARRAY, Column, Enum, ForeignKey, String, Table
+from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.ext.associationproxy import association_proxy,AssociationProxy
 
 from app.database import Base
 from app.ddd.domain.permission.permission import Permission
@@ -149,7 +149,6 @@ class Group(Base):
     
 class GroupUser(Base):
     __tablename__ = "group_user"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     group_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("group.id", ondelete="CASCADE"), primary_key=True
     )
@@ -167,7 +166,6 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(400))
     room_number: Mapped[str] = mapped_column(String(10))
     groups: Mapped[list[GroupUser]] = relationship( back_populates="user",cascade="all,delete")
-    point:Mapped[float] = mapped_column(default=0)
     exp_tasks: Mapped[list[TaskDetail]] = relationship(
         secondary=experience_table, back_populates="experts"
     )
@@ -178,6 +176,10 @@ class User(Base):
     create_taskdetail: Mapped[list[TaskDetail]] = relationship(back_populates="creater")
     is_active: Mapped[bool] = mapped_column(default=True)
     is_admin: Mapped[bool] = mapped_column(default=False)
+    
+    @hybrid_property
+    def point(self):
+        return sum([group.point for group in self.groups])
 
     def has_exp(self, task: TaskDetail):
         return task in self.exp_tasks

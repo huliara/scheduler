@@ -16,8 +16,19 @@ class MemberRepository(IMemberRepository):
     def find_by_id(self, group_id:GroupId, user_id:UserId):
         member=self.db.scalars(select(GroupUser).filter_by(group_id=group_id, user_id=user_id)).first()
         if member is None:
-            raise DomainException(f'member_id:{user_id} is not found in group_id:{group_id}')
+            return None
         return self._refresh_to_entity(member)
+    
+    def find_by_group_id(self, group_id:GroupId):
+        members=self.db.scalars(select(GroupUser).filter_by(group_id=group_id)).all()
+        return [{
+            'id':member.user_id,
+            'name':member.user.name,
+            'room_number':member.user.room_number,
+            'point':member.point,
+            'is_active':member.user.is_active,
+        }
+            for member in members]
 
     def find_all(self, group_id:GroupId, room_number):
         if room_number is None:
@@ -46,10 +57,13 @@ class MemberRepository(IMemberRepository):
             raise DomainException(f'group_id:{group_id} not found')
         target=self.db.scalars(select(GroupUser).filter(GroupUser.group_id==group_id,
                                                          GroupUser.user_id.in_([entity.user_id for entity in entities]))).all()
-        if target>0:
+        if len(target)>0:
             raise DomainException(f'member_id is already in group_id')
         data=[entity.to_dict() for entity in entities]
         result=self.db.scalars(insert(GroupUser).returning(GroupUser),data).all()
+        self.db.commit()
+        for model in result:
+            self.db.refresh(model)
         return [self._refresh_to_entity(model) for model in result]
 
     def save(self, entity):
@@ -71,5 +85,6 @@ class MemberRepository(IMemberRepository):
         
     
     def _refresh_to_entity(self, model:GroupUser)->MemberEntity:
-        return MemberEntity.from_model(model)
+        entity=MemberEntity.from_model(model)
+        return entity
         

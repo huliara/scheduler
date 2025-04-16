@@ -37,7 +37,7 @@ export default function AddUserForm({
   const handleAddUser = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axios
-      .post(`/${params.groupId}/users`, {
+      .post(`/${params.groupId}/members`, {
         user_ids: userIds,
       })
       .then((res) => {

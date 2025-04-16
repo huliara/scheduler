@@ -17,6 +17,10 @@ class IMemberRepository(ABC):
         pass
     
     @abstractmethod
+    def find_by_group_id(self,group_id:'group.GroupId'):
+        pass
+    
+    @abstractmethod
     def find_all(self,group_id:'group.GroupId',room_number:str|None)->list[MemberEntity]:
         pass
     

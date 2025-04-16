@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { SlotResponse } from "@/types/ResponseType";
+import { TaskResponse } from "@/types/ResponseType";
 import {
   Button,
   Table,
@@ -12,17 +12,18 @@ import {
 import { fetcher } from "@/axios";
 import Link from "next/link";
 import axios from "@/axios";
-export default function SlotList({ params }: { params: { groupId: string } }) {
-  const { data, error, mutate, isLoading } = useSWR<{ slots: SlotResponse[] }>(
-    `/${params.groupId}/slots`,
+export default function TaskList({ params }: { params: { groupId: string } }) {
+  const { data, error, mutate, isLoading } = useSWR<{ tasks: TaskResponse[] }>(
+    `/${params.groupId}/tasks`,
     fetcher
   );
   if (error) return <div>error</div>;
   if (!data) return <div>no data</div>;
   if (isLoading) return <div>loading...</div>;
+  console.log(data);
   const handleOnClick = (slot_id: string) => {
     axios
-      .delete(`/${params.groupId}/slots/${slot_id}`)
+      .delete(`/${params.groupId}/tasks/${slot_id}`)
       .then((res) => {
         mutate();
       })
@@ -30,7 +31,7 @@ export default function SlotList({ params }: { params: { groupId: string } }) {
   };
   const handleOnDeletePrune = () => {
     axios
-      .delete(`/${params.groupId}/slots`, {
+      .delete(`/${params.groupId}/tasks`, {
         params: {
           expired: true,
         },
@@ -60,7 +61,7 @@ export default function SlotList({ params }: { params: { groupId: string } }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.slots.map((slot) => {
+          {data.tasks.map((slot) => {
             const start_time = new Date(slot.start_time);
             return (
               <TableRow key={slot.id}>
@@ -74,10 +75,10 @@ export default function SlotList({ params }: { params: { groupId: string } }) {
                   })}
                 </TableCell>
                 <TableCell>
-                  <Link href={`slots/${slot.id}`}>詳細</Link>
+                  <Link href={`tasks/${slot.id}`}>詳細</Link>
                 </TableCell>
                 <TableCell>
-                  <Link href={`slots/${slot.id}/edit`}>編集</Link>
+                  <Link href={`tasks/${slot.id}/edit`}>編集</Link>
                 </TableCell>
                 <TableCell>
                   <Button

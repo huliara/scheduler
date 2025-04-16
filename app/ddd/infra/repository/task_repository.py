@@ -5,7 +5,7 @@ from sqlalchemy.future import select
 
 from app.ddd.core.exception import DomainException
 from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId
-from app.models.models import Group, Task, User
+from app.models.models import Task, User
 
 
 class TaskRepository(ITaskRepository):
@@ -36,10 +36,16 @@ class TaskRepository(ITaskRepository):
         return self.refresh_to_entity(model)
     
     def bulk_add(self, tasks):
-        data=[entity.to_dict() for entity in tasks]
+        data=[{'name':entity.name,
+               'start_time':entity.start_time,
+               'status':entity.status,
+               'creater_id':entity.creater_id,
+               'taskdetail_id':entity.taskdetail.id,
+               'group_id':entity.group_id} for entity in tasks]
         result=self.db.scalars(insert(Task).returning(Task),data).all()
         self.db.commit()
-        self.db.refresh(result)
+        for model in result:
+            self.db.refresh(model)
         return [self.refresh_to_entity(model) for model in result]
     
     def bulk_remove(self, tasks):
@@ -69,7 +75,15 @@ class TaskRepository(ITaskRepository):
             raise DomainException('Task not found',404)
         self.db.delete(model)
         self.db.commit()
-        return self.refresh_to_entity(model)
+        return TaskEntity(
+            id=model.id,
+            name=model.name,
+            start_time=model.start_time,
+            status=model.status,
+            taskdetail=None,
+            workers=[],
+            creater_id=model.creater_id,
+        )
     
     def find_by_user(self, user_id):
         user=self.db.get(User,user_id)

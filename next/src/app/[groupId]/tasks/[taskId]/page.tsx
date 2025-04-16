@@ -1,5 +1,5 @@
 "use client";
-import { SlotResponse } from "@/types/ResponseType";
+import { TaskResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";
@@ -7,10 +7,10 @@ import Link from "next/link";
 export default function SlotDetail({
   params,
 }: {
-  params: { groupId: string; slotId: string };
+  params: { groupId: string; taskId: string };
 }) {
-  const { data, error, isLoading } = useSWR<SlotResponse>(
-    `/${params.groupId}/slots/${params.slotId}`,
+  const { data, error, isLoading } = useSWR<TaskResponse>(
+    `/${params.groupId}/tasks/${params.taskId}`,
     fetcher
   );
 
@@ -36,14 +36,13 @@ export default function SlotDetail({
       </Typography>
       <Typography variant="body1">
         仕事内容:
-        <Link href={`/${params.groupId}/task_details/${data.taskdetail_id}`}>
-          {data.taskdetail_name}
+        <Link href={`/${params.groupId}/task_details/${data.taskdetail.id}`}>
+          {data.taskdetail.name}
         </Link>
       </Typography>
       <Typography variant="body1">
-        参加者:{data.assignees.map((assignee) => assignee.name).join(", ")}
+        参加者:{data.workers.map((assignee) => assignee.name).join(", ")}
       </Typography>
-      <Typography variant="body2">作成者:{data.creater_name}</Typography>
     </>
   );
 }

@@ -30,6 +30,6 @@ class TaskUpdateUseCase(TransactionUseCaseBase):
         target_task.name=request.name
         target_task.start_time=request.start_time
         target_task.taskdetail=taskdetail
-        task_new=self.task_repository.save(task_id,target_task)
+        task_new=self.task_repository.save(target_task)
         
         return task_new

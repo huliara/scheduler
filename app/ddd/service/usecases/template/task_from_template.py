@@ -49,10 +49,11 @@ class TaskFromTemplateUseCase(TransactionUseCaseBase):
                 + str(taskdetail.name)
             )
             task = TaskEntity(
+                id=None,
                 name=name,
                 start_time=start,
-                status=TaskState.before_hiring,
-                taskdetail=taskdetail.id,
+                status=TaskState.hiring,
+                taskdetail=taskdetail,
                 creater_id=creater_id,
             )
             tasks.append(task)            

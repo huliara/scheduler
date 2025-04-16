@@ -2,7 +2,7 @@
 import axios from "@/axios";
 import { Container, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import { TaskForm } from "@/components/form/TaskForm";
+import { TaskDetailForm } from "@/components/form/TaskDetailForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
 import { useState } from "react";
@@ -40,10 +40,10 @@ export default function TaskCreateForm({
     id: "",
     name: "",
     subtasks: [],
-    max_worker_num: 1,
-    min_worker_num: 1,
-    exp_worker_num: 1,
-    point: 1,
+    max_worker: 1,
+    min_worker: 1,
+    exp_worker: 1,
+    wage: 1,
     duration: 60,
     creater_id: "",
     creater_name: "",
@@ -56,7 +56,7 @@ export default function TaskCreateForm({
         <Typography component="h1" variant="h5">
           仕事を新規作成
         </Typography>
-        <TaskForm
+        <TaskDetailForm
           data={defaultData}
           subtasks={subtasks}
           setSubtasks={setSubtasks}

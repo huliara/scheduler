@@ -93,7 +93,7 @@ export default function Home() {
           return (
             <SlotListOneDay day={day} key={index}>
               {slots.map((slot, index) =>
-                slot.worker
+                slot.workers
                   .map((worker) => worker.id)
                   .includes(session.data.user.id) ? (
                   <SlotDisplayCardAssign

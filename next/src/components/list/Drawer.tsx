@@ -26,7 +26,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         <ListItem key={1} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/${groupId}/slots`)}>
+          <ListItemButton onClick={() => router.replace(`/${groupId}/tasks`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -61,22 +61,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
             <ListItemText primary={"テンプレート"} />
           </ListItemButton>
         </ListItem>
-        <ListItem key={5} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/${groupId}/roles`)}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary={"ロール"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={6} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/${groupId}`)}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary={"募集中の仕事"} />
-          </ListItemButton>
-        </ListItem>
+
         <ListItem key={7} disablePadding>
           <ListItemButton onClick={() => router.replace(`/groups`)}>
             <ListItemIcon>
@@ -88,16 +73,14 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
       </List>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem key={6} disablePadding>
+          <ListItemButton onClick={() => router.replace(`/`)}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={"ホーム"} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );

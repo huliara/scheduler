@@ -1,9 +1,9 @@
 from abc import abstractmethod
 
 import app.ddd.domain.group as group
+import app.models.models as models
 from app.ddd.core.i_repository import IRepository
 from app.ddd.domain.user.user_entity import UserEntity, UserId
-import app.models.models as models
 
 
 class IUserRepository(IRepository[UserEntity,UserId]):
@@ -12,6 +12,10 @@ class IUserRepository(IRepository[UserEntity,UserId]):
         pass
     @abstractmethod
     def add(self,password:str, entity: UserEntity) -> UserEntity:
+        pass
+    
+    @abstractmethod
+    def find_by_ids(self, ids: list[UserId]) -> list[UserEntity]:
         pass
     
     @abstractmethod

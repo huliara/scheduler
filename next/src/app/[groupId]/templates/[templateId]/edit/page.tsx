@@ -17,6 +17,7 @@ import {
 import React from "react";
 import { TemplateAddTaskForm } from "@/components/form/TemplateAddTaskForm";
 import { TemplateNameForm } from "@/components/form/TemplateNameForm";
+import Link from "next/link";
 
 export default function TemplateEdit({
   params,
@@ -69,6 +70,7 @@ export default function TemplateEdit({
       <Typography variant="h4" component="h1" gutterBottom>
         テンプレートを編集
       </Typography>
+      <Link href={`/${params.groupId}/templates`}>一覧へ戻る</Link>
       <TemplateNameForm
         groupId={params.groupId}
         templateId={params.templateId}

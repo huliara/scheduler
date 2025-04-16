@@ -28,16 +28,10 @@ export default function GroupUserAddPage({
   const [users, setUsers] = useState<UserResponse[]>([]);
 
   useEffect(() => {
-    axios
-      .get(`${params.groupId}/users/search`, {
-        params: {
-          room_number: searchParam,
-        },
-      })
-      .then((res) => {
-        setUsers(res.data.users);
-      });
-  }, [searchParam]);
+    axios.get(`admin/users`).then((res) => {
+      setUsers(res.data.users);
+    });
+  }, []);
 
   const handleAddUser = () => {
     axios
@@ -95,30 +89,32 @@ export default function GroupUserAddPage({
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((user) => {
-            return (
-              <TableRow key={user.id}>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.room_number}</TableCell>
-                <TableCell>{user.is_active ? "" : "休寮中"}</TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => {
-                      if (postUsers.includes(user)) {
-                        setPostUsers(
-                          postUsers.filter((userId) => userId.id !== user.id)
-                        );
-                      } else {
-                        setPostUsers([...postUsers, user]);
-                      }
-                    }}
-                  >
-                    {postUsers.includes(user) ? "削除" : "選択"}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {users
+            .filter((user) => !user.room_number.indexOf(searchParam))
+            .map((user) => {
+              return (
+                <TableRow key={user.id}>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.room_number}</TableCell>
+                  <TableCell>{user.is_active ? "" : "休寮中"}</TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => {
+                        if (postUsers.includes(user)) {
+                          setPostUsers(
+                            postUsers.filter((userId) => userId.id !== user.id)
+                          );
+                        } else {
+                          setPostUsers([...postUsers, user]);
+                        }
+                      }}
+                    >
+                      {postUsers.includes(user) ? "削除" : "選択"}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
         </TableBody>
       </Table>
     </>

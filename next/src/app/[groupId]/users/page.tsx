@@ -15,14 +15,14 @@ import axios, { fetcher } from "@/axios";
 export default function UserList({ params }: { params: { groupId: string } }) {
   const { data, error, isLoading, mutate } = useSWR<{
     users: GroupUserResponse[];
-  }>(`/${params.groupId}/users`, fetcher);
+  }>(`/${params.groupId}/members`, fetcher);
   if (error) return <div>error</div>;
   if (!data) return <div>no data</div>;
   if (isLoading) return <div>loading...</div>;
 
   const handleUserRemove = (userId: string) => {
     axios
-      .delete(`${params.groupId}/users/${userId}`)
+      .delete(`${params.groupId}/members/${userId}`)
       .then((res) => {
         mutate();
       })
