@@ -46,7 +46,7 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
           {data.tasks.map((task) => (
             <TableRow key={task.id}>
               <TableCell>{task.name}</TableCell>
-              <TableCell>{task.point}</TableCell>
+              <TableCell>{task.wage}</TableCell>
               <TableCell>{task.duration}</TableCell>
               <TableCell>
                 <Link href={`/${params.groupId}/task_details/${task.id}`}>

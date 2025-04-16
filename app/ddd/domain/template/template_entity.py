@@ -24,12 +24,12 @@ class TemplateEntity(IEntity):
         return cls(
             id=TemplateId(data.id),
             name=data.name,
-            slots=[
+            slots=set([
                 TemplateSlot(taskdetail_id=slot.taskdetail_id,
                              taskdetail_name=slot.taskdetail.name,
                              date_from_start=slot.date_from_start,
                              start_time=slot.start_time) 
-                for slot in data.tasktemplates],
+                for slot in data.tasktemplates]),
             group_id=GroupId(data.group_id),
         )
     @classmethod

@@ -36,8 +36,13 @@ class TemplateRepository(ITemplateRepository):
         model=self.db.get(Template,entity.id)
         if model is None:
             raise DomainException('Template not found',404)
+        for slot in model.tasktemplates:
+            self.db.delete(slot)
+        model.name=entity.name
         model.tasktemplates=[
-            TaskTemplate(taskdetail_id=slot.taskdetail_id,
+            TaskTemplate(
+                template_id=model.id,
+                taskdetail_id=slot.taskdetail_id,
                         date_from_start=slot.date_from_start,
                         start_time=slot.start_time) for slot in entity.slots]
         self.db.commit()

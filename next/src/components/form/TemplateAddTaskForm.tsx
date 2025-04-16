@@ -52,9 +52,6 @@ export const TemplateAddTaskForm = ({
         setTemplateTask={setTemplateTask}
         tasks={taskData.tasks}
       />
-      <li>{formData.task_id}</li>
-      <li>{formData.date_from_start}</li>
-      <li>{formData.start_time}</li>
     </Box>
   );
 };

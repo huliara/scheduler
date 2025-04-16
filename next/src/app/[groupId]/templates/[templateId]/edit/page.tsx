@@ -39,9 +39,11 @@ export default function TemplateEdit({
   ) => {
     axios
       .delete(`/${params.groupId}/templates/${params.templateId}/slots`, {
-        taskdetail_id: taskdetail_id,
-        date_from_start: date_from_start,
-        start_time: start_time,
+        data: {
+          taskdetail_id: taskdetail_id,
+          date_from_start: date_from_start,
+          start_time: start_time,
+        },
       })
       .then((response) => {
         mutate();
@@ -51,10 +53,10 @@ export default function TemplateEdit({
 
   const handleTaskAdd = (selectTemplateTask: TemplateTaskResponse) => {
     axios
-      .post(`/${params.groupId}/templates/${params.templateId}/slots`, {
-        date_from_start: Number(selectTemplateTask?.date_from_start),
-        start_time: selectTemplateTask?.start_time,
-        taskdetail_id: selectTemplateTask?.taskdetail_id,
+      .patch(`/${params.groupId}/templates/${params.templateId}/slots`, {
+        date_from_start: Number(selectTemplateTask.date_from_start),
+        start_time: selectTemplateTask.start_time,
+        taskdetail_id: selectTemplateTask.taskdetail_id,
       })
       .then((response) => {
         mutate();

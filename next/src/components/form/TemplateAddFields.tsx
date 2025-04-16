@@ -1,9 +1,6 @@
 import { Button, Grid, TextField } from "@mui/material";
 import SelectField from "./SelectField";
-import {
-  ResponseBase,
-  TemplateTaskResponse,
-} from "@/types/ResponseType";
+import { ResponseBase, TemplateTaskResponse } from "@/types/ResponseType";
 
 export const TemplateAddTaskFields = ({
   templateTask,
@@ -14,10 +11,12 @@ export const TemplateAddTaskFields = ({
   templateTask: TemplateTaskResponse;
   buttonLabel: string;
   tasks: ResponseBase[];
-  setTemplateTask: React.Dispatch<React.SetStateAction<TemplateTaskResponse|undefined>>;
+  setTemplateTask: React.Dispatch<
+    React.SetStateAction<TemplateTaskResponse | undefined>
+  >;
 }) => {
   const setTaskId = (id: string) => {
-    setTemplateTask({ ...templateTask, task_id: id });
+    setTemplateTask({ ...templateTask, taskdetail_id: id });
   };
   return (
     <Grid container spacing={2}>
@@ -59,7 +58,7 @@ export const TemplateAddTaskFields = ({
         <SelectField
           data={tasks}
           title="仕事内容"
-          id={templateTask.task_id}
+          id={templateTask.taskdetail_id}
           setData={setTaskId}
         />
       </Grid>

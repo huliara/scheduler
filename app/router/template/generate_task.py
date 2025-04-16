@@ -25,8 +25,7 @@ async def template_generate_tasks(group_id: str,template_id:str,request:TaskFrom
                               usecase2:TaskAllocationByGroup=Depends(__usecase_di_2)):
     generated_tasks=usecase.execute(TaskFromTemplateParams(creater_id=user.id,
                                                     template_id=template_id,
-                                                    start_date=request.start_day,
-                                                    add_default_worker=request.add_default_worker))
+                                                    start_date=request.start_day))
     if request.add_default_worker:
         generated_tasks=await usecase2.execute([task.id for task in generated_tasks],group_id)
     response=[task.to_dict() for task in generated_tasks]
