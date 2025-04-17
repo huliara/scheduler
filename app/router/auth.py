@@ -109,27 +109,7 @@ async def login_for_access_token(
     }
 
 
-@router.get("/me")
-async def get_current_user(user: User = Depends(get_current_active_user)):
-    return user_detail_display(user)
 
-
-@router.patch("/me")
-async def update_current_user(
-    request: UserUpdate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
-):
-    current_user.name = request.name
-    current_user.room_number = request.room_number
-    exp_task = []
-    for task_id in request.exp_task:
-        task = db.get(TaskDetail, task_id)
-        exp_task.append(task)
-    current_user.exp_tasks = exp_task
-    db.commit()
-    db.refresh(current_user)
-    return user_detail_display(current_user)
 
 
 @router.get("/tasks")
@@ -142,5 +122,5 @@ async def get_user_tasks(
     ).all()
     tasks = []
     for group in group_user:
-        tasks += group.group.tasks
+        tasks += group.group.taskdetail
     return tasks_display(tasks)

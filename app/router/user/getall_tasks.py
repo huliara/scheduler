@@ -20,8 +20,10 @@ def to_response(task):
         "start_time": task["start_time"],
         "end_time": task["end_time"],
         "status": task["status"],
-        "taskdetail_id": task["taskdetail"]["id"],
-        "taskdetail_name": task["taskdetail"]["name"],
+        "taskdetail": {
+            "id": task["taskdetail"]["id"],
+            "name": task["taskdetail"]["name"],
+        },
         "workers": [
             {
                 "id": worker["id"],
@@ -30,6 +32,7 @@ def to_response(task):
             for worker in task["workers"]
         ],
         "creater_id": task['creater_id'],
+        "group_id": task['group_id'],
     }
 
 @router.get("/tasks", response_model=UserTaskList)

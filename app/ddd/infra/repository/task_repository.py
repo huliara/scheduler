@@ -65,6 +65,8 @@ class TaskRepository(ITaskRepository):
         model.start_time=entity.start_time
         model.creater_id=entity.creater_id
         model.taskdetail_id=entity.taskdetail.id
+        worker_ids=[user.id for user in entity.workers]
+        model.workers=[user for user in self.db.scalars(select(User).filter(User.id.in_(worker_ids))).all()]
         self.db.commit()
         self.db.refresh(model)
         return self.refresh_to_entity(model)
@@ -89,7 +91,7 @@ class TaskRepository(ITaskRepository):
         user=self.db.get(User,user_id)
         if user is None:
             raise DomainException('User not found',404)
-        joining_group_ids=[group.id for group in user.groups]
+        joining_group_ids=[group.group_id for group in user.groups]
         tasks=self.db.scalars(select(Task).filter(Task.group_id.in_(joining_group_ids))).all()
 
         return{

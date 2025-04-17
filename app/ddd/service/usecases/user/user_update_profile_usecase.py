@@ -2,13 +2,13 @@ from dataclasses import dataclass
 
 from app.ddd.core.exception import UseCaseException
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.task_detail import ITaskDetailRepository
+from app.ddd.domain.task_detail import ITaskDetailRepository, TaskDetailId
 from app.ddd.domain.user import IUserRepository, UserEntity
 
 
 @dataclass
 class UserUpdateParams:
-    def __init__(self,id:int,name:str,room_number:str,exp_tasks:list):
+    def __init__(self,id:int,name:str,room_number:str,exp_tasks:list[TaskDetailId]):
         self.id=id
         self.name=name
         self.room_number=room_number
@@ -21,7 +21,7 @@ class UserUpdateUseCase(TransactionUseCaseBase):
         self.taskdetail_repository=taskdetail_repository
     
     def execute(self,params:type[UserUpdateParams])->UserEntity:
-        return super().execute(params)
+        return self._transaction(params)
 
     def _transaction(self, params:type[UserUpdateParams])->UserEntity:
         try:

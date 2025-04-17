@@ -102,7 +102,7 @@ export default function Home() {
                     mutate={mutate}
                   />
                 ) : (
-                  <SlotDisplayCardUnassign slot={slot} key={index} />
+                  <SlotDisplayCardUnassign task={slot} key={index} />
                 )
               )}
             </SlotListOneDay>

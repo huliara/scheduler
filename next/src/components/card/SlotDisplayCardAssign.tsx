@@ -16,7 +16,7 @@ export const SlotDisplayCardAssign = ({
   const groupId = useParams().groupId;
   const handleCancel = (slot_id: string) => {
     axios
-      .post(`/${groupId}/slots/${slot_id}/cancel`)
+      .post(`/${groupId}/tasks/${slot_id}/cancel`)
       .then((res) => {
         mutate();
       })
@@ -29,19 +29,18 @@ export const SlotDisplayCardAssign = ({
   );
 };
 
-export const SlotDisplayCardUnassign = ({ slot }: { slot: TaskResponse }) => {
-  const groupId = useParams().groupId;
+export const SlotDisplayCardUnassign = ({ task }: { task: TaskResponse }) => {
   const [isAssigned, setAssigned] = React.useState(false);
   const assignSlot = () => {
     axios
-      .post(`/${groupId}/slots/${slot.id}/assign`)
+      .post(`/${task.group_id}/tasks/${task.id}/assign`)
       .then((res) => {
         setAssigned(true);
       })
       .catch((err) => {});
   };
   return (
-    <SlotDisplayCardBase slot={slot} style={{ backgroundColor: "white" }}>
+    <SlotDisplayCardBase slot={task} style={{ backgroundColor: "white" }}>
       {isAssigned ? (
         <CheckIcon />
       ) : (
@@ -58,7 +57,7 @@ export const SlotDisplayCardEnd = ({ slot }: { slot: TaskResponse }) => {
   const [isCompleted, setCompleted] = React.useState(false);
   const completeSlot = (done: boolean) => {
     axios
-      .post(`/${groupId}/slots/${slot.id}/complete`, { done: done })
+      .post(`/${groupId}/tasks/${slot.id}/complete`, { done: done })
       .then((res) => {
         setCompleted(true);
       })

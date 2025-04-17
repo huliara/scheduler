@@ -44,12 +44,12 @@ export const SlotDisplayCardBase = ({
   const startTimeString = toTimeString(slot.start_time);
   const endTimeString = toTimeString(slot.end_time);
   const dateString = toDateString(slot.start_time);
-  const assignees = slot.assignees.map((assignee) => assignee.name).join(", ");
+  const assignees = slot.workers.map((assignee) => assignee.name).join(", ");
   return (
     <Card sx={{ minWidth: 120 }} variant="outlined" style={style}>
       <CardContent>
         <Typography variant="h6" component="div">
-          <Link href={path + "/slots/" + slot.id}>{slot.name}</Link>
+          <Link href={path + "/tasks/" + slot.id}>{slot.name}</Link>
         </Typography>
         <Typography variant="body1">
           {dateString}: {startTimeString} 〜{endTimeString}

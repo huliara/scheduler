@@ -53,9 +53,6 @@ export type UserDetailResponse = ResponseBase & {
   room_number: string;
   groups: ResponseBase[];
   exp_tasks: ResponseBase[];
-  slots: ResponseBase[];
-  create_slot: ResponseBase[];
-  create_task: ResponseBase[];
   is_active: boolean;
   is_admin: boolean;
 };
@@ -83,6 +80,7 @@ export type TaskResponse = ResponseBase & {
   taskdetail: TaskDetailResponse;
   workers: ResponseBase[];
   creater_id: string;
+  group_id: string;
 };
 
 export type UserTaskRespose = {

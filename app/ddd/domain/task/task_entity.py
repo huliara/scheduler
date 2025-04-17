@@ -8,7 +8,7 @@ import app.models.models as models
 from app.ddd.core.exception import DomainException
 from app.ddd.core.i_entity import IEntity
 from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
-from app.ddd.domain.user.user_value_object import UserId
+from app.ddd.domain.user import UserEntity, UserId
 
 from .task_state import TaskState
 from .task_value_object import TaskId
@@ -20,7 +20,7 @@ class TaskEntity(IEntity):
     name:str
     start_time:datetime.datetime
     status:TaskState
-    taskdetail:TaskDetailEntity|None
+    taskdetail:TaskDetailEntity
     workers:list['user.UserEntity']=field(default_factory=list)
     creater_id:UserId|None=None
     @property
@@ -36,7 +36,7 @@ class TaskEntity(IEntity):
             name=data.name,
             start_time=data.start_time,
             status=data.status,
-            workers=[user for user in data.workers],
+            workers=[UserEntity.from_model(user) for user in data.workers],
             taskdetail=TaskDetailEntity.from_model(data.taskdetail),
             creater_id=data.creater_id,
         )
@@ -50,6 +50,7 @@ class TaskEntity(IEntity):
             'taskdetail': self.taskdetail.to_dict(),
             'workers': [user.to_dict() for user in self.workers],
             'creater_id': self.creater_id,
+            'group_id': self.group_id,
         }
         
     def add(self,user:'user.UserEntity'):

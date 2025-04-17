@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 
 from app.cruds.auth import get_current_active_user
 from app.database import get_db
-from app.ddd.infra.repository import TaskRepository
+from app.ddd.infra.repository import TaskRepository, UserRepository
 from app.ddd.service.usecases.task import TaskCancelUseCase
 from app.schemas.task import TaskDisplay
 
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return TaskCancelUseCase(db,TaskRepository(db))
+    return TaskCancelUseCase(db,TaskRepository(db),UserRepository(db))
 
 @router.post("/{task_id}/cancel", response_model=TaskDisplay)
 async def task_cancel(group_id: str,task_id:str,

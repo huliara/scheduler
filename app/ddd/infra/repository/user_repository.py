@@ -51,8 +51,7 @@ class UserRepository(IUserRepository):
             raise DomainException('User not found',404)
         model.name = entity.name
         model.room_number = entity.room_number
-        model.exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task.id for task in entity.exp_tasks]))).all()
-        model.point = entity.point
+        model.exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_(entity.exp_tasks))).all()
         self.db.commit()
         self.db.refresh(model)
         return self._refresh_to_entity(model)

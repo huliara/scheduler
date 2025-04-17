@@ -15,8 +15,11 @@ import { TaskDetailResponse, UserDetailResponse } from "@/types/ResponseType";
 
 export default function ProfileEdit() {
   const [exp_task, setExpTask] = useState<string[]>([]);
-  const { data: user } = useSWR<UserDetailResponse>("/me", fetcher);
-  const { data: tasks } = useSWR<TaskDetailResponse[]>("/tasks", fetcher);
+  const { data: user } = useSWR<UserDetailResponse>("/user", fetcher);
+  const { data: tasks } = useSWR<TaskDetailResponse[]>(
+    "/user/taskdetails",
+    fetcher
+  );
   React.useEffect(() => {
     if (!user) {
       return;
@@ -31,7 +34,7 @@ export default function ProfileEdit() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .patch("/me", {
+      .patch("/user/profile", {
         name: data.get("name"),
         room_number: data.get("room_number"),
         exp_task: exp_task,

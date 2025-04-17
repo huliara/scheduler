@@ -27,6 +27,7 @@ class UserEntity(IEntity):
             room_number=data['room_number'],
             exp_tasks=data['exp_tasks'],
             is_admin=data['is_admin'] if 'is_admin' in data else False,
+            is_active=data['is_active'] if 'is_active' in data else True,
             point=data['point'] if 'point' in data else 0
         )
     def update_profile(self,data:dict):
@@ -41,7 +42,7 @@ class UserEntity(IEntity):
             name=data.name,
             room_number=data.room_number,
             tasks=[task.id for task in data.tasks],
-            exp_tasks=data.exp_tasks,
+            exp_tasks=[taskdetail.id for taskdetail in data.exp_tasks],
             point=data.point
         )
     def to_dict(self):

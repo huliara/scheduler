@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Chip,
   Divider,
@@ -12,6 +12,7 @@ import { fetcher } from "@/axios";
 import { UserDetailResponse } from "@/types/ResponseType";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Hiking from "@mui/icons-material/Hiking";
+import Link from "next/link";
 
 const style = {
   p: 0,
@@ -24,7 +25,7 @@ const style = {
 };
 
 export default function MyPage() {
-  const { data: user } = useSWR<UserDetailResponse>("/me", fetcher);
+  const { data: user } = useSWR<UserDetailResponse>("/user", fetcher);
 
   return (
     <>
@@ -58,16 +59,6 @@ export default function MyPage() {
         </ListItem>
         <Divider component="li" />
         <ListItem>
-          <ListItemText primary="作成した仕事" />
-        </ListItem>
-        <Divider component="li" />
-        <ListItem>
-          {user?.create_task.map((task) => (
-            <Chip key={task.id} label={task.name} />
-          ))}
-        </ListItem>
-        <Divider component="li" />
-        <ListItem>
           {user?.is_admin ? (
             <>
               <PersonAddIcon />
@@ -86,6 +77,7 @@ export default function MyPage() {
           )}
         </ListItem>
       </List>
+      <Link href={"/mypage/edit"}>編集</Link>
     </>
   );
 }

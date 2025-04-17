@@ -14,6 +14,12 @@ class GroupRepository(IGroupRepository):
         model=self.db.get(Group,id)
         return self._refresh_to_entity(model)
     
+    def find_by_user_id(self, id):
+        models=self.db.scalars(select(Group).join(GroupUser).filter(GroupUser.user_id==id)).all()
+        return [{'id':model.id,'name':model.name} for model in models]
+    
+    
+    
     def find_all(self):
         return [self._refresh_to_entity(model) 
                 for model in self.db.scalars(select(Group)).all()]

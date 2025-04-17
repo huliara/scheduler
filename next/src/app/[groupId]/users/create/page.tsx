@@ -1,5 +1,5 @@
 "use client";
-import axios, { fetcher } from "@/axios";
+import axios from "@/axios";
 import { UserResponse } from "@/types/ResponseType";
 import { useEffect, useState } from "react";
 import {

@@ -25,6 +25,13 @@ class Worker(BaseModel):
     id: UUID
     name: str
 
+class ResponseBase(BaseModel):
+    id: UUID
+    name: str
+
+
+    class Config:
+        from_attributes = True
 
 class TaskDisplay(BaseModel):
     id: UUID
@@ -32,9 +39,10 @@ class TaskDisplay(BaseModel):
     start_time: datetime.datetime
     end_time: datetime.datetime
     status:TaskState
-    taskdetail:TaskDetailDisplay
+    taskdetail:ResponseBase
     workers: list[Worker] = []
     creater_id: UUID|None=None
+    group_id:UUID
 
     class Config:
         from_attributes = True
