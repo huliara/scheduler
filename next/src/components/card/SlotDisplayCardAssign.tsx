@@ -53,7 +53,7 @@ export const SlotDisplayCardUnassign = ({ task }: { task: TaskResponse }) => {
 };
 
 export const SlotDisplayCardEnd = ({ slot }: { slot: TaskResponse }) => {
-  const groupId = useParams().groupId;
+  const groupId = slot.group_id;
   const [isCompleted, setCompleted] = React.useState(false);
   const completeSlot = (done: boolean) => {
     axios

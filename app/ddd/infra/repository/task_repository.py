@@ -4,7 +4,7 @@ from sqlalchemy import delete, insert
 from sqlalchemy.future import select
 
 from app.ddd.core.exception import DomainException
-from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId
+from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId, TaskState
 from app.models.models import Task, User
 
 
@@ -65,6 +65,7 @@ class TaskRepository(ITaskRepository):
         model.start_time=entity.start_time
         model.creater_id=entity.creater_id
         model.taskdetail_id=entity.taskdetail.id
+        model.status=entity.status
         worker_ids=[user.id for user in entity.workers]
         model.workers=[user for user in self.db.scalars(select(User).filter(User.id.in_(worker_ids))).all()]
         self.db.commit()
@@ -95,9 +96,12 @@ class TaskRepository(ITaskRepository):
         tasks=self.db.scalars(select(Task).filter(Task.group_id.in_(joining_group_ids))).all()
 
         return{
-            "assign": [self.refresh_to_entity(task) for task in tasks if user in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
-            "hiring":[self.refresh_to_entity(task) for task in tasks if user not in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
-            "end":[self.refresh_to_entity(task) for task in tasks if user in task.workers and task.end_time<datetime.datetime.now() and task.status!=3],
+            "assign": [self.refresh_to_entity(task) for task in tasks 
+                       if user in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
+            "hiring":[self.refresh_to_entity(task) for task in tasks 
+                      if user not in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
+            "end":[self.refresh_to_entity(task) for task in tasks 
+                   if user in task.workers and task.end_time<datetime.datetime.now() and task.status!=TaskState.archive],
         }
     
     

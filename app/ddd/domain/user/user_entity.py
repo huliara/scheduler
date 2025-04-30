@@ -55,6 +55,8 @@ class UserEntity(IEntity):
             'point': self.point,
             'is_active': self.is_active,
         }
-    def add(self,task:TaskId):
+    def add_task(self,task:TaskId):
         self.tasks.append(task)
+    def add_exp(self,task:TaskDetailId):
+        self.exp_tasks.append(task)
     

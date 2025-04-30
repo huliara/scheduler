@@ -41,7 +41,7 @@ async def get_task_relevant_user(user:User=Depends(get_current_active_user),
     tasks=usecase.execute(user.id)
     assign_tasks_dict=[task.to_dict() for task in tasks["assign"] ]
     hiring_tasks_dict=[task.to_dict() for task in tasks['hiring'] ]
-    end_tasks_dict=[task.to_dict() for task in tasks if tasks["end"]]
+    end_tasks_dict=[task.to_dict() for task in tasks["end"]]
     response={
         "assign":[to_response(task) for task in assign_tasks_dict],
         "hiring":[to_response(task) for task in hiring_tasks_dict],

@@ -2,7 +2,7 @@ from app.ddd.core.exception import UseCaseException
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from app.ddd.domain.group import GroupId, IGroupRepository
 from app.ddd.domain.member import IMemberRepository
-from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId
+from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId, TaskState
 from app.ddd.domain.user import IUserRepository, UserId
 
 
@@ -37,15 +37,23 @@ class TaskCompleteUseCase(TransactionUseCaseBase):
         
         task=target_task.complete(user)
         member_list=[]
+        user_list=[]
         for worker in task.workers:
             try:
                 member=self.member_repository.find_by_id(group_id,worker.id)
             except:
                 raise UseCaseException(f'user_id:{worker.id} not found in group_id:{group_id}')
             member.point+=task.taskdetail.wage
+            user.add_exp(task.taskdetail.id)
             member_list.append(member)
+            user_list.append(worker)
        
         for member in member_list:
             _=self.member_repository.save(member)
+            
+        for user in user_list:
+            _=self.user_repository.save(user)
+        
+        task.status=TaskState.archive
         new_task=self.task_repository.save(task)
         return new_task
