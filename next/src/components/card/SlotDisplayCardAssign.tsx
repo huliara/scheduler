@@ -75,9 +75,11 @@ export const SlotDisplayCardEnd = ({ slot }: { slot: TaskResponse }) => {
           <Button size="small" onClick={() => completeSlot(true)}>
             仕事しました
           </Button>
+          /*
           <Button size="small" onClick={() => completeSlot(false)}>
             しませんでした
           </Button>
+          */
         </>
       )}
     </SlotDisplayCardBase>

@@ -24,7 +24,7 @@ class GroupAddMemberUseCase(TransactionUseCaseBase):
             member = self.member_repository.find_by_id(group_id,user_id)
             if member is not None:
                 raise UseCaseException(f'member_id:{user_id} is already in group_id:{group_id}')
-            member = MemberEntity(id=None,user_id=user_id,group_id=group_id)
+            member = MemberEntity(user_id=user_id,group_id=group_id)
             target_members.append(member)
         result=self.member_repository.bulk_add(group_id,target_members)
         return result
