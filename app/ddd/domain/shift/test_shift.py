@@ -6,12 +6,11 @@ import pytest
 from deepdiff import DeepDiff
 
 from app.ddd.core.exception import DomainException
-from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
+from app.ddd.domain.task.task_entity import TaskEntity
 from app.ddd.domain.user.user_entity import UserEntity
-from app.models.models import Task, TaskDetail, User
 
-from .task_entity import TaskEntity
-from .task_state import TaskState
+from .shift_entity import Shift
+from .shift_state import ShiftState
 
 
 def test_task_add_user():
@@ -23,7 +22,7 @@ def test_task_add_user():
         exp_tasks=[],
         point=0
     )
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         name='test_detail',
         id=uuid.uuid4(),
         max_worker=1,
@@ -33,11 +32,11 @@ def test_task_add_user():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=TaskState.hiring,
+        status=ShiftState.hiring,
         taskdetail=task_detail,
         
     )
@@ -45,7 +44,7 @@ def test_task_add_user():
     assert task.workers==[user]
 
 def test_task_add_exp_user():
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         id=uuid.uuid4(),
         name='test_detail',
         max_worker=1,
@@ -63,18 +62,18 @@ def test_task_add_exp_user():
         exp_tasks=[task_detail.id],
         point=0
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=TaskState.hiring,
+        status=ShiftState.hiring,
         taskdetail=task_detail,
     )
     task.add(user)
     assert task.workers==[user]
     
 def test_task_add_beginner_with_expert():
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         id=uuid.uuid4(),
         name='test_detail',
         max_worker=2,
@@ -100,11 +99,11 @@ def test_task_add_beginner_with_expert():
         exp_tasks=[task_detail.id],
         point=0
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=TaskState.hiring,
+        status=ShiftState.hiring,
         taskdetail=task_detail,
         workers=[expert]
     )
@@ -120,7 +119,7 @@ def test_task_add_nonexpert():
         exp_tasks=[],
         point=0
     )
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         id=uuid.uuid4(),
         name='test_detail',
         max_worker=1,
@@ -130,11 +129,11 @@ def test_task_add_nonexpert():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=TaskState.hiring,
+        status=ShiftState.hiring,
         taskdetail=task_detail,
         
     )
@@ -161,7 +160,7 @@ def test_task_add_user_over_max():
         exp_tasks=[],
         point=0
     )
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         id=uuid.uuid4(),
         name='test_detail',
         max_worker=1,
@@ -171,11 +170,11 @@ def test_task_add_user_over_max():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=TaskState.hiring,
+        status=ShiftState.hiring,
         taskdetail=task_detail,
         workers=[dummy_user]
     )
@@ -192,7 +191,7 @@ def test_task_add_only_beginner():
         exp_tasks=[],
         point=0
     )
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         id=uuid.uuid4(),
         name='test_detail',
         max_worker=2,
@@ -202,11 +201,11 @@ def test_task_add_only_beginner():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=TaskState.hiring,
+        status=ShiftState.hiring,
         taskdetail=task_detail,
         workers=[user]
     )
@@ -223,7 +222,7 @@ def test_task_add_user_after_end():
         exp_tasks=[],
         point=0
     )
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         id=uuid.uuid4(),
         name='test_detail',
         max_worker=1,
@@ -234,11 +233,11 @@ def test_task_add_user_after_end():
         creater_id=uuid.uuid4()
         
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()-datetime.timedelta(hours=2),
-        status=TaskState.decide_assignees,
+        status=ShiftState.decide_assignees,
         taskdetail=task_detail,
         workers=[]
     )
@@ -255,7 +254,7 @@ def test_task_add_double_booking():
         exp_tasks=[],
         point=0
     )
-    task_detail=TaskDetailEntity(
+    task_detail=TaskEntity(
         id=uuid.uuid4(),
         name='test_detail',
         max_worker=1,
@@ -265,11 +264,11 @@ def test_task_add_double_booking():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=TaskEntity(
+    task=Shift(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=TaskState.hiring,
+        status=ShiftState.hiring,
         taskdetail=task_detail,
         workers=[user]
     )

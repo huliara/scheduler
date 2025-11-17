@@ -3,8 +3,8 @@ from dataclasses import dataclass, field
 
 import app.models.models as models
 from app.ddd.core.i_entity import IEntity
+from app.ddd.domain.shift.shift_value_object import ShiftId
 from app.ddd.domain.task.task_value_object import TaskId
-from app.ddd.domain.task_detail.task_detail_value_object import TaskDetailId
 
 from .user_value_object import UserId
 
@@ -14,8 +14,8 @@ class UserEntity(IEntity):
     id:UserId|None
     name:str
     room_number:str
-    exp_tasks:list[TaskDetailId]
-    tasks:list[TaskId]=field(default_factory=list)
+    exp_tasks:list[TaskId]
+    tasks:list[ShiftId]=field(default_factory=list)
     point:int=0
     is_admin:bool=False
     is_active:bool=True
@@ -55,8 +55,8 @@ class UserEntity(IEntity):
             'point': self.point,
             'is_active': self.is_active,
         }
-    def add_task(self,task:TaskId):
+    def add_task(self,task:ShiftId):
         self.tasks.append(task)
-    def add_exp(self,task:TaskDetailId):
+    def add_exp(self,task:TaskId):
         self.exp_tasks.append(task)
     

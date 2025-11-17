@@ -1,81 +1,70 @@
 import datetime
 from dataclasses import dataclass, field
-from http import HTTPStatus as status
 
-import app.ddd.domain.group as group
-import app.ddd.domain.user.user_entity as user
 import app.models.models as models
-from app.ddd.core.exception import DomainException
 from app.ddd.core.i_entity import IEntity
-from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
-from app.ddd.domain.user import UserEntity, UserId
+from app.ddd.domain.group.group_value_object import GroupId
+from app.ddd.domain.permission.permission import Permission
+from app.ddd.domain.user.user_value_object import UserId
 
-from .task_state import TaskState
 from .task_value_object import TaskId
 
 
 @dataclass
 class TaskEntity(IEntity):
-    id:TaskId|None
-    name:str
-    start_time:datetime.datetime
-    status:TaskState
-    taskdetail:TaskDetailEntity
-    workers:list['user.UserEntity']=field(default_factory=list)
-    creater_id:UserId|None=None
-    @property
-    def end_time(self) -> datetime.datetime:
-        return self.start_time + self.taskdetail.duration
-    @property
-    def group_id(self)->'group.GroupId':
-        return self.taskdetail.group_id
+    id: TaskId|None
+    name: str
+    max_worker: int
+    min_worker: int
+    exp_worker: int
+    duration: datetime.timedelta
+    group_id:GroupId
+    creater_id:UserId
+    permissions: list[Permission]=field(default_factory=list)
+    wage: int=0
+    subtask:list[str]=field(default_factory=list)
+    
     @classmethod
-    def from_model(cls, data: "models.Task") -> 'TaskEntity':
+    def from_model(cls,data:"models.Task") -> 'TaskEntity':
         return cls(
-            id=data.id,
+            id=TaskId(data.id),
             name=data.name,
-            start_time=data.start_time,
-            status=data.status,
-            workers=[UserEntity.from_model(user) for user in data.workers],
-            taskdetail=TaskDetailEntity.from_model(data.taskdetail),
+            subtask=[subtask.description for subtask in data.subtask],
+            max_worker=data.max_worker,
+            min_worker=data.min_worker,
+            exp_worker=data.exp_worker,
+            wage=data.wage,
+            duration=data.duration,
+            group_id=data.group_id,
             creater_id=data.creater_id,
+            permissions=[permission for permission in data.permissions]
         )
-    def to_dict(self) -> dict:
+    @classmethod
+    def from_params(cls, data: dict) -> 'TaskEntity':
+        return cls(
+            id=TaskId(data['id']),
+            name=data['name'],
+            subtask=data['subtasks'],
+            max_worker=data['max_worker'],
+            min_worker=data['min_worker'],
+            exp_worker=data['exp_worker'],
+            wage=data['wage'],
+            duration=datetime.timedelta(minutes=data['duration']),
+            group_id=GroupId(data['group_id']),
+            permissions=[permission for permission in data['permissions']],
+            creater_id=UserId(data['creater_id'])
+        )
+    def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
-            'start_time': self.start_time,
-            'end_time': self.end_time,
-            'status': self.status,
-            'taskdetail': self.taskdetail.to_dict(),
-            'workers': [user.to_dict() for user in self.workers],
+            'subtasks': self.subtask,
+            'max_worker': self.max_worker,
+            'min_worker': self.min_worker,
+            'exp_worker': self.exp_worker,
+            'wage': self.wage,
+            'duration': divmod(self.duration.seconds,60)[0],
+            'permissions': [permission for permission in self.permissions],
             'creater_id': self.creater_id,
-            'group_id': self.group_id,
+            'group_id': self.group_id
         }
-        
-    def add(self,user:'user.UserEntity'):
-        if self.end_time < datetime.datetime.now():
-            raise DomainException(status_code=status.CONFLICT,description='この仕事は既に終了しています')
-
-        exp_assignees = list(filter(lambda x: self.taskdetail.id in x.exp_tasks, self.workers))
-        if len(self.workers)>= self.taskdetail.max_worker:
-            raise DomainException(status_code=status.CONFLICT,description='この仕事は定員に達しています')
-        if (self.taskdetail.id not in user.exp_tasks) and self.taskdetail.max_worker - len(
-            self.workers
-        ) + len(exp_assignees) <= self.taskdetail.exp_worker:
-            raise DomainException(status_code=status.CONFLICT,description='経験書のみ参加できます')
-        self.workers.append(user)
-        return self
-    
-    def remove(self,user:'user.UserEntity'):
-        if user not in self.workers:
-            raise DomainException(status_code=status.CONFLICT,description='このユーザーは参加していません')
-        self.workers.remove(user)
-        return self
-    
-    def complete(self,user:'user.UserEntity'):
-        if user not in self.workers:
-            raise DomainException(status_code=status.CONFLICT,description='このユーザーは参加していません')
-        self.status=TaskState.archive
-        return self
-    

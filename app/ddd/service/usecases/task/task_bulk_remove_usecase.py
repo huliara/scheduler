@@ -1,17 +1,17 @@
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from app.ddd.domain.group import GroupId
-from app.ddd.domain.task import ITaskRepository, TaskId
+from app.ddd.domain.shift import IShiftRepository, ShiftId
 
 
 class TaskBulkRemoveUseCase(TransactionUseCaseBase):
-    def __init__(self, db, task_repository: ITaskRepository):
+    def __init__(self, db, task_repository: IShiftRepository):
         super().__init__(db)
         self.task_repository = task_repository
         
-    def execute(self,group_id:GroupId,expired:bool|None, task_ids: list[TaskId]):
+    def execute(self,group_id:GroupId,expired:bool|None, task_ids: list[ShiftId]):
         return self._transaction(group_id,expired,task_ids)
     
-    def _transaction(self,group_id,expired, task_ids: list[TaskId]):
+    def _transaction(self,group_id,expired, task_ids: list[ShiftId]):
         if expired:
             tasks = self.task_repository.find_all(group_id,end=True)
             return tasks

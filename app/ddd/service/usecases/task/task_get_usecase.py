@@ -1,7 +1,7 @@
-from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId
+from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId
 
 from ..get_usecase import GetUseCase
 
 
-class TaskGetUseCase(GetUseCase[TaskId,TaskEntity,ITaskRepository]):
+class TaskGetUseCase(GetUseCase[ShiftId,Shift,IShiftRepository]):
     pass

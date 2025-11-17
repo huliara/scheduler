@@ -2,13 +2,13 @@ from app.ddd.core.exception import UseCaseException
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from app.ddd.domain.group import GroupId, IGroupRepository
 from app.ddd.domain.member import IMemberRepository
-from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId, TaskState
+from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId, ShiftState
 from app.ddd.domain.user import IUserRepository, UserId
 
 
 class TaskCompleteUseCase(TransactionUseCaseBase):
     def __init__(self, db,
-                 task_repository:ITaskRepository,
+                 task_repository:IShiftRepository,
                  user_repository:IUserRepository,
                  group_repository:IGroupRepository,
                  member_repository:IMemberRepository):
@@ -18,10 +18,10 @@ class TaskCompleteUseCase(TransactionUseCaseBase):
         self.group_repository=group_repository 
         self.member_repository=member_repository
         
-    def execute(self,group_id:GroupId,task_id:TaskId,user_id:UserId)->TaskEntity:
+    def execute(self,group_id:GroupId,task_id:ShiftId,user_id:UserId)->Shift:
         return self._transaction(group_id,task_id,user_id)
     
-    def _transaction(self,group_id, task_id,user_id)->TaskEntity:
+    def _transaction(self,group_id, task_id,user_id)->Shift:
         try:
             group=self.group_repository.find_by_id(group_id)
         except:
@@ -54,6 +54,6 @@ class TaskCompleteUseCase(TransactionUseCaseBase):
         for user in user_list:
             _=self.user_repository.save(user)
         
-        task.status=TaskState.archive
+        task.status=ShiftState.archive
         new_task=self.task_repository.save(task)
         return new_task

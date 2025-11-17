@@ -1,12 +1,12 @@
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from app.ddd.domain.group import IGroupRepository
-from app.ddd.domain.task_detail import ITaskDetailRepository
+from app.ddd.domain.task import ITaskRepository
 from app.ddd.domain.user import IUserRepository, UserId
 
 
 class UserGetUseCase(TransactionUseCaseBase):
     def __init__(self,db,user_repository:IUserRepository,
-                 taskdetail_repository:ITaskDetailRepository,
+                 taskdetail_repository:ITaskRepository,
                  group_repository:IGroupRepository):
         super().__init__(db)
         self.user_repository=user_repository

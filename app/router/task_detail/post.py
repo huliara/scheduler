@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.cruds.auth import get_current_active_user
 from app.database import get_db
-from app.ddd.domain.task_detail import TaskDetailEntity
+from app.ddd.domain.task import TaskEntity
 from app.ddd.infra.repository import GroupRepository, TaskDetailRepository
 from app.ddd.service.usecases.taskdetail import TaskDetailPostUseCase
 from app.schemas.taskdetail import TaskDetailCreate, TaskDetailDisplay
@@ -21,7 +21,7 @@ async def taskdetail_post(group_id: str,request:TaskDetailCreate,user=Depends(ge
     params["group_id"]=group_id
     params["id"]=None
     params["permissions"]=[]
-    taskdetail=TaskDetailEntity.from_params(params)
+    taskdetail=TaskEntity.from_params(params)
     response=usecase.execute(taskdetail).to_dict()
     response["creater_name"]=user.name
     return response

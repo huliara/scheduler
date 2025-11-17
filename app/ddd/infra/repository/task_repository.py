@@ -4,11 +4,11 @@ from sqlalchemy import delete, insert
 from sqlalchemy.future import select
 
 from app.ddd.core.exception import DomainException
-from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId, TaskState
+from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId, ShiftState
 from app.models.models import Task, User
 
 
-class TaskRepository(ITaskRepository):
+class TaskRepository(IShiftRepository):
     
     def __init__(self, db):
         self.db = db
@@ -24,7 +24,7 @@ class TaskRepository(ITaskRepository):
         return [self.refresh_to_entity(model) 
                 for model in self.db.scalars(select(Task)).all()]
         
-    def add(self, entity: TaskEntity):
+    def add(self, entity: Shift):
         model=Task(
             name=entity.name,
             start_time=entity.start_time,
@@ -57,7 +57,7 @@ class TaskRepository(ITaskRepository):
         tasks=self.db.scalars(select(Task).filter(Task.id.in_(ids))).all()
         return [self.refresh_to_entity(task) for task in tasks]
     
-    def save(self, entity: TaskEntity):
+    def save(self, entity: Shift):
         model=self.db.get(Task,entity.id)
         if model is None:
             raise DomainException('Task not found',404)
@@ -72,13 +72,13 @@ class TaskRepository(ITaskRepository):
         self.db.refresh(model)
         return self.refresh_to_entity(model)
 
-    def remove(self, id: TaskId):
+    def remove(self, id: ShiftId):
         model=self.db.get(Task,id)
         if model is None:
             raise DomainException('Task not found',404)
         self.db.delete(model)
         self.db.commit()
-        return TaskEntity(
+        return Shift(
             id=model.id,
             name=model.name,
             start_time=model.start_time,
@@ -101,10 +101,10 @@ class TaskRepository(ITaskRepository):
             "hiring":[self.refresh_to_entity(task) for task in tasks 
                       if user not in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
             "end":[self.refresh_to_entity(task) for task in tasks 
-                   if user in task.workers and task.end_time<datetime.datetime.now() and task.status!=TaskState.archive],
+                   if user in task.workers and task.end_time<datetime.datetime.now() and task.status!=ShiftState.archive],
         }
     
     
-    def refresh_to_entity(self, model: Task) -> TaskEntity:
-        entity=TaskEntity.from_model(model)
+    def refresh_to_entity(self, model: Task) -> Shift:
+        entity=Shift.from_model(model)
         return entity

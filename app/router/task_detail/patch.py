@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.cruds.auth import get_current_active_user
 from app.database import get_db
-from app.ddd.domain.task_detail import TaskDetailEntity
+from app.ddd.domain.task import TaskEntity
 from app.ddd.infra.repository import GroupRepository, TaskDetailRepository
 from app.ddd.service.usecases.taskdetail import TaskDetailUpdateUseCase
 from app.schemas.taskdetail import TaskDetailCreate, TaskDetailDisplay
@@ -20,7 +20,7 @@ async def taskdetail_patch(group_id: str,task_id:str,request:TaskDetailCreate,us
     params["id"]=task_id
     params["creater_id"]=user.id
     params["group_id"]=group_id
-    taskdetail=TaskDetailEntity.from_params(params)
+    taskdetail=TaskEntity.from_params(params)
     response=usecase.execute(taskdetail).to_dict()
     return response
     

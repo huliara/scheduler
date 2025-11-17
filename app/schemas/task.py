@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-from app.ddd.domain.task.task_state import TaskState
+from app.ddd.domain.shift.shift_state import ShiftState
 
 from .taskdetail import TaskDetailDisplay
 
@@ -38,7 +38,7 @@ class TaskDisplay(BaseModel):
     name:str
     start_time: datetime.datetime
     end_time: datetime.datetime
-    status:TaskState
+    status:ShiftState
     taskdetail:ResponseBase
     workers: list[Worker] = []
     creater_id: UUID|None=None

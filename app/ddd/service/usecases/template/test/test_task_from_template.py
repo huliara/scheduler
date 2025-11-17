@@ -4,8 +4,8 @@ import uuid
 import pytest
 
 from app.ddd.domain.group import GroupEntity
+from app.ddd.domain.shift.shift_entity import Shift
 from app.ddd.domain.task.task_entity import TaskEntity
-from app.ddd.domain.task_detail.task_detail_entity import TaskDetailEntity
 from app.ddd.domain.template import TemplateEntity, TemplateSlot
 from app.ddd.domain.user import UserEntity
 from app.ddd.infra.repository import (GroupRepository, TaskDetailRepository,
@@ -58,7 +58,7 @@ def test_task_from_template(db):
             
         }
     
-    task_detail_entity=TaskDetailEntity(**task_detail)
+    task_detail_entity=TaskEntity(**task_detail)
     task_detail_repository=TaskDetailRepository(db)
     task_detail_entity=task_detail_repository.add(task_detail_entity)
     slots=[
@@ -94,7 +94,7 @@ def test_task_from_template(db):
         template_id=target_entity.id,
         start_date=datetime.date(2222,2,22)
     )
-    tasks:list[TaskEntity]=usecase.execute(params)
+    tasks:list[Shift]=usecase.execute(params)
     assert len(tasks)==1
     assert tasks[0].name=='22時22分からtest'
     assert tasks[0].taskdetail.id==slots[0]['taskdetail_id']

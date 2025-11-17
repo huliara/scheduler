@@ -2,14 +2,14 @@ from mip import BINARY, Model, minimize, xsum
 from sqlalchemy.orm import Session
 
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.task import ITaskRepository, TaskEntity
+from app.ddd.domain.shift import IShiftRepository, Shift
 from app.ddd.domain.user import IUserRepository, UserEntity
 
 
 class TaskAllocationWorkerUseCase(TransactionUseCaseBase):
     def __init__(self):
         pass
-    async def execute(self, tasks:list[TaskEntity],users:list[UserEntity])->list[TaskEntity]:
+    async def execute(self, tasks:list[Shift],users:list[UserEntity])->list[Shift]:
         if len(tasks)==0:
             return []
         if len(users)==0:
@@ -22,11 +22,11 @@ class TaskAllocationWorkerUseCase(TransactionUseCaseBase):
         result=await self.shift_calculate(users,tasks)
         
         return result
-    def _transaction(self)->list[TaskEntity]:
+    def _transaction(self)->list[Shift]:
         pass
     
     #experimental
-    async def shift_calculate(users:list[UserEntity],tasks:list[TaskEntity])->list[TaskEntity]:
+    async def shift_calculate(users:list[UserEntity],tasks:list[Shift])->list[Shift]:
         m=Model()
         Var=m.add_var_tensor((len(tasks),len(users)),var_type=BINARY)
         tasks=[task for task in tasks if len(task.workers)>0]

@@ -1,4 +1,4 @@
 import uuid
 from typing import NewType
 
-TaskId=NewType('TaskId',uuid.UUID)
+ShiftId = NewType('ShiftId', uuid.UUID)

@@ -3,13 +3,13 @@ from dataclasses import dataclass
 from typing import NewType
 from uuid import UUID
 
-from app.ddd.domain.task_detail import TaskDetailId
+from app.ddd.domain.task import TaskId
 
 TemplateId = NewType('TemplateId', UUID)
 
 @dataclass(frozen=True)
 class TemplateSlot:
-    taskdetail_id:TaskDetailId
+    taskdetail_id:TaskId
     taskdetail_name:str
     date_from_start:int
     start_time:datetime.time

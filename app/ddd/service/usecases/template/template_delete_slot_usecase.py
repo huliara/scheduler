@@ -1,6 +1,6 @@
 from app.ddd.core.exception import UseCaseException
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.task_detail import ITaskDetailRepository
+from app.ddd.domain.task import ITaskRepository
 from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateSlot)
 from app.schemas.template import TemplateSlotBase
@@ -8,7 +8,7 @@ from app.schemas.template import TemplateSlotBase
 
 class TemplateDeleteSlotUseCase(TransactionUseCaseBase):
     
-    def __init__(self, db,template_repository:ITemplateRepository,taskdetail_repository:ITaskDetailRepository):
+    def __init__(self, db,template_repository:ITemplateRepository,taskdetail_repository:ITaskRepository):
         super().__init__(db)
         self.template_repository=template_repository
         self.taskdetail_repository=taskdetail_repository
