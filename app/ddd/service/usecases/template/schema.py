@@ -6,7 +6,7 @@ from app.ddd.domain.user import UserId
 
 
 @dataclass
-class TaskFromTemplateParams:
+class ShiftFromTemplateParams:
     creater_id:UserId
     template_id:TemplateId
     start_date:datetime.date

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.ddd.infra.repository import (GroupRepository, TaskDetailRepository,
+from app.ddd.infra.repository import (GroupRepository, TaskRepository,
                                       TemplateRepository)
 from app.ddd.service.usecases.template import TemplatePostUseCase
 from app.schemas.template import TemplateCreate, TemplateDisplay
@@ -12,7 +12,7 @@ router = APIRouter()
 def __usecase_di(db:Session=Depends(get_db)):
     return TemplatePostUseCase(db,TemplateRepository(db),
                                GroupRepository(db),
-                               TaskDetailRepository(db))
+                               TaskRepository(db))
 
 
 @router.post("/", response_model=TemplateDisplay)

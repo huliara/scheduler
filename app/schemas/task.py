@@ -11,7 +11,7 @@ from .taskdetail import TaskDetailDisplay
 class TaskCreate(BaseModel):
     name: str = Field(max_length=20)
     start_time: datetime.datetime
-    taskdetail_id: UUID
+    task_id: UUID
 
     class Config:
         from_attributes = True

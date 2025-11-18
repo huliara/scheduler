@@ -9,36 +9,36 @@ from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateId)
 from app.ddd.domain.user import UserId
 
-from .schema import TaskFromTemplateParams
+from .schema import ShiftFromTemplateParams
 
 
-class TaskFromTemplateUseCase(TransactionUseCaseBase):
+class ShiftFromTemplateUseCase(TransactionUseCaseBase):
     def __init__(self, db:Session,
                  template_repository:ITemplateRepository,
-                 task_repository:IShiftRepository,
-                 task_detail_repository:ITaskRepository):
+                 shift_repository:IShiftRepository,
+                 task_repository:ITaskRepository):
         super().__init__(db)
         self.template_repository=template_repository
+        self.shift_repository=shift_repository
         self.task_repository=task_repository
-        self.taskdetail_repository=task_detail_repository
         
-    def execute(self,data:TaskFromTemplateParams)->list[Shift]:
+    def execute(self,data:ShiftFromTemplateParams)->list[Shift]:
         return self._transaction(data.creater_id,data.template_id,data.start_date)
     
     def _transaction(self,creater_id,tempalte_id:TemplateId,start_date:datetime.date)->list[Shift]:
         template:TemplateEntity=self.template_repository.find_by_id(tempalte_id)
-        tasks=self.generate_tasks(creater_id,template,start_date)
-        result=self.task_repository.bulk_add(tasks)
+        shifts=self.generate_shifts(creater_id,template,start_date)
+        result=self.shift_repository.bulk_add(shifts)
         return result
     
-    def generate_tasks(self,
+    def generate_shifts(self,
                        creater_id:UserId,
                        template:TemplateEntity,
                        start_date:datetime.date,
                        )->list[Shift]:
-        tasks = []
+        shifts = []
         for slot in template.slots:
-            taskdetail=self.taskdetail_repository.find_by_id(slot.taskdetail_id)
+            task=self.task_repository.find_by_id(slot.task_id)
             date = start_date+datetime.timedelta(days=slot.date_from_start)
             start = datetime.datetime.combine(date, slot.start_time)
             name = (
@@ -46,15 +46,15 @@ class TaskFromTemplateUseCase(TransactionUseCaseBase):
                 + "時"
                 + str(start.minute)
                 + "分から"
-                + str(taskdetail.name)
+                + str(task.name)
             )
-            task = Shift(
+            shift = Shift(
                 id=None,
                 name=name,
                 start_time=start,
                 status=ShiftState.hiring,
-                taskdetail=taskdetail,
+                task=task,
                 creater_id=creater_id,
             )
-            tasks.append(task)            
-        return tasks
+            shifts.append(shift)            
+        return shifts

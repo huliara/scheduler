@@ -18,7 +18,7 @@ def test_task_add_user():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -37,7 +37,7 @@ def test_task_add_user():
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=ShiftState.hiring,
-        taskdetail=task_detail,
+        task=task_detail,
         
     )
     task.add(user)
@@ -58,7 +58,7 @@ def test_task_add_exp_user():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[task_detail.id],
         point=0
     )
@@ -67,7 +67,7 @@ def test_task_add_exp_user():
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=ShiftState.hiring,
-        taskdetail=task_detail,
+        task=task_detail,
     )
     task.add(user)
     assert task.workers==[user]
@@ -87,7 +87,7 @@ def test_task_add_beginner_with_expert():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -95,7 +95,7 @@ def test_task_add_beginner_with_expert():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[task_detail.id],
         point=0
     )
@@ -104,7 +104,7 @@ def test_task_add_beginner_with_expert():
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=ShiftState.hiring,
-        taskdetail=task_detail,
+        task=task_detail,
         workers=[expert]
     )
     task.add(user)
@@ -115,7 +115,7 @@ def test_task_add_nonexpert():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -134,7 +134,7 @@ def test_task_add_nonexpert():
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=ShiftState.hiring,
-        taskdetail=task_detail,
+        task=task_detail,
         
     )
     with pytest.raises(DomainException) as e:
@@ -146,7 +146,7 @@ def test_task_add_user_over_max():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -156,7 +156,7 @@ def test_task_add_user_over_max():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -175,7 +175,7 @@ def test_task_add_user_over_max():
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=ShiftState.hiring,
-        taskdetail=task_detail,
+        task=task_detail,
         workers=[dummy_user]
     )
     with pytest.raises(DomainException) as e:
@@ -187,7 +187,7 @@ def test_task_add_only_beginner():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -206,7 +206,7 @@ def test_task_add_only_beginner():
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=ShiftState.hiring,
-        taskdetail=task_detail,
+        task=task_detail,
         workers=[user]
     )
     with pytest.raises(DomainException) as e:
@@ -218,7 +218,7 @@ def test_task_add_user_after_end():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -238,7 +238,7 @@ def test_task_add_user_after_end():
         name='test',
         start_time=datetime.datetime.now()-datetime.timedelta(hours=2),
         status=ShiftState.decide_assignees,
-        taskdetail=task_detail,
+        task=task_detail,
         workers=[]
     )
     with pytest.raises(DomainException) as e:
@@ -250,7 +250,7 @@ def test_task_add_double_booking():
         id=uuid.uuid4(),
         name='test',
         room_number='test',
-        tasks=[],
+        shifts=[],
         exp_tasks=[],
         point=0
     )
@@ -269,7 +269,7 @@ def test_task_add_double_booking():
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
         status=ShiftState.hiring,
-        taskdetail=task_detail,
+        task=task_detail,
         workers=[user]
     )
     with pytest.raises(DomainException) as e:

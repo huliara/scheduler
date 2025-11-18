@@ -5,21 +5,21 @@ from app.ddd.domain.shift import IShiftRepository, ShiftId
 from app.ddd.domain.user import IUserRepository, UserId
 
 
-class UserApplyTaskUseCase(TransactionUseCaseBase):
+class UserApplyShiftUseCase(TransactionUseCaseBase):
     
     def __init__(self, db: Session,
                  user_repository:IUserRepository,
-                 task_repository:IShiftRepository) -> None:
+                 shift_repository:IShiftRepository) -> None:
         super().__init__(db)
         self.user_repository:IUserRepository = user_repository
-        self.task_reposiotry:IShiftRepository = task_repository
+        self.shift_reposiotry:IShiftRepository = shift_repository
         
-    def execute(self, user_id:UserId, task_id:ShiftId) :
-        return self._transaction(user_id, task_id)
+    def execute(self, user_id:UserId, shift_id:ShiftId) :
+        return self._transaction(user_id, shift_id)
         
-    def _transaction(self, user_id: UserId, task_id:ShiftId) -> None:
+    def _transaction(self, user_id: UserId, shift_id:ShiftId) -> None:
         user=self.user_repository.find_by_id(user_id)
-        task=self.task_reposiotry.find_by_id(task_id)
-        task.add(user)
-        _=self.task_reposiotry.save(task)
+        shift=self.shift_reposiotry.find_by_id(shift_id)
+        shift.add(user)
+        _=self.shift_reposiotry.save(shift)
         return self.user_repository.find_by_id(user.id)

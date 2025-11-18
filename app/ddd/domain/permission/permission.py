@@ -6,7 +6,7 @@ class Permission(Enum):
     remove_user='remove_user'
     edit_task='edit_task'
     edit_template='edit_template'
-    edit_taskdetail='edit_taskdetail'
-    generate_task_from_template='generate_task_from_template'
+    edit_shift='edit_shift'
+    generate_shift_from_template='generate_shift_from_template'
     edit_point='edit_point'
     

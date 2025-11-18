@@ -36,7 +36,7 @@ def user_detail_display(user: User):
         "exp_tasks": [response_base(task) for task in user.exp_tasks],
         "slots": [response_base(slot) for slot in user.tasks],
         "create_slot": [response_base(slot) for slot in user.create_tasks],
-        "create_task": [response_base(task) for task in user.create_taskdetail],
+        "create_task": [response_base(task) for task in user.create_task],
         "is_admin": user.is_admin,
     }
 

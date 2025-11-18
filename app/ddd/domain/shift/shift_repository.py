@@ -13,11 +13,11 @@ from .shift_value_object import ShiftId
 
 class IShiftRepository(IRepository[Shift,ShiftId]):
     @abstractmethod
-    def add(self,name:str,start_time:datetime.datetime,creater_id:'user.UserId',taskdetail_id:TaskId)->Shift:
+    def add(self,name:str,start_time:datetime.datetime,creater_id:'user.UserId',task_id:TaskId)->Shift:
         pass
     
     @abstractmethod
-    def save(self,task:Shift)->Shift:
+    def save(self,shift:Shift)->Shift:
         pass
     
     @abstractmethod
@@ -25,15 +25,15 @@ class IShiftRepository(IRepository[Shift,ShiftId]):
         pass
 
     @abstractmethod
-    def refresh_to_entity(self, model:"models.Task") -> Shift:
+    def refresh_to_entity(self, model:"models.Shift") -> Shift:
         pass
     
     @abstractmethod
-    def bulk_add(self,tasks:list[Shift])->list[Shift]:
+    def bulk_add(self,shifts:list[Shift])->list[Shift]:
         pass
     
     @abstractmethod
-    def bulk_remove(self,tasks:list[Shift])->list[Shift]:
+    def bulk_remove(self,shifts:list[Shift])->list[Shift]:
         pass
     
     @abstractmethod

@@ -5,13 +5,13 @@ from pydantic import BaseModel, Field
 
 
 class TemplateSlotBase(BaseModel):
-    taskdetail_id: UUID
+    task_id: UUID
     date_from_start: int
     start_time: datetime.time
     def __hash__(self):
         return hash(
             (
-                self.taskdetail_id,
+                self.task_id,
                 self.date_from_start,
                 self.start_time.hour,
                 self.start_time.minute,

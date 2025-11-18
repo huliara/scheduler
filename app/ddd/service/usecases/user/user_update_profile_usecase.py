@@ -15,10 +15,10 @@ class UserUpdateParams:
         self.exp_tasks=exp_tasks
 
 class UserUpdateUseCase(TransactionUseCaseBase):
-    def __init__(self, db,user_repository:IUserRepository,taskdetail_repository:ITaskRepository):
+    def __init__(self, db,user_repository:IUserRepository,task_repository:ITaskRepository):
         super().__init__(db)
         self.user_repository=user_repository
-        self.taskdetail_repository=taskdetail_repository
+        self.task_repository=task_repository
     
     def execute(self,params:type[UserUpdateParams])->UserEntity:
         return self._transaction(params)
@@ -29,7 +29,7 @@ class UserUpdateUseCase(TransactionUseCaseBase):
         except:
             raise UseCaseException(f'user_id:{params.id} not found')
         try:
-            _=self.taskdetail_repository.find_by_ids([taskdetail for taskdetail in params.exp_tasks])
+            _=self.task_repository.find_by_ids([task for task in params.exp_tasks])
         except:
             raise UseCaseException('Invalid exp_task found')
         

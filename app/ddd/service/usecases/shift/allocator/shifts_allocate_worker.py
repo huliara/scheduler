@@ -6,31 +6,31 @@ from app.ddd.domain.shift import IShiftRepository, Shift
 from app.ddd.domain.user import IUserRepository, UserEntity
 
 
-class TaskAllocationWorkerUseCase(TransactionUseCaseBase):
+class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
     def __init__(self):
         pass
-    async def execute(self, tasks:list[Shift],users:list[UserEntity])->list[Shift]:
-        if len(tasks)==0:
+    async def execute(self, shifts:list[Shift],users:list[UserEntity])->list[Shift]:
+        if len(shifts)==0:
             return []
         if len(users)==0:
             return []
-        if len(tasks)>40:
-            raise ValueError("task_ids must be less than 40")
+        if len(shifts)>40:
+            raise ValueError("shift_ids must be less than 40")
         if len(users)>500:
             raise ValueError("user_ids must be less than 500")
         
-        result=await self.shift_calculate(users,tasks)
+        result=await self.shift_calculate(users,shifts)
         
         return result
     def _transaction(self)->list[Shift]:
         pass
     
     #experimental
-    async def shift_calculate(users:list[UserEntity],tasks:list[Shift])->list[Shift]:
+    async def shift_calculate(users:list[UserEntity],shifts:list[Shift])->list[Shift]:
         m=Model()
-        Var=m.add_var_tensor((len(tasks),len(users)),var_type=BINARY)
-        tasks=[task for task in tasks if len(task.workers)>0]
-        tasks=tasks.sort(key=lambda x:x.start_time)
+        Var=m.add_var_tensor((len(shifts),len(users)),var_type=BINARY)
+        shifts=[shift for shift in shifts if len(shift.workers)>0]
+        shifts=shifts.sort(key=lambda x:x.start_time)
         
         C_more_than_min_worker=10
         C_less_than_max_woker=10
@@ -38,48 +38,48 @@ class TaskAllocationWorkerUseCase(TransactionUseCaseBase):
         C_add_new_worker=10
         C_point_equality=10
         
-        x_min=m.add_var_tensor((len(tasks),))
-        x_max=m.add_var_tensor((len(tasks),))
-        x_exp=m.add_var_tensor((len(tasks),))
-        x_new=m.add_var_tensor((len(tasks),))
+        x_min=m.add_var_tensor((len(shifts),))
+        x_max=m.add_var_tensor((len(shifts),))
+        x_exp=m.add_var_tensor((len(shifts),))
+        x_new=m.add_var_tensor((len(shifts),))
         x_point=m.add_var()
         
         m.objective=minimize(xsum(C_more_than_min_worker*x_min[i]
                                   +C_less_than_max_woker*x_max[i]
                                   +C_more_expert_than_need*x_exp[i]
-                                  +C_add_new_worker*x_new[i] for i in range(len(tasks)))
+                                  +C_add_new_worker*x_new[i] for i in range(len(shifts)))
                              +C_point_equality*x_point)
         
-        expert_metrics=[[0 for i in range(len(users))] for j in range(len(tasks))]
-        for i in range(len(tasks)):
+        expert_metrics=[[0 for i in range(len(users))] for j in range(len(shifts))]
+        for i in range(len(shifts)):
             for j in range(len(users)):
                 user=users[j]
-                if tasks[i].taskdetail in user.exp_tasks:
+                if shifts[i].task in user.exp_tasks:
                     expert_metrics[i][j]=1
         
-        slot_info_metrics=[[task.taskdetail.min_worker,
-                            task.taskdetail.max_worker,
-                            task.taskdetail.exp_worker,
-                            task.taskdetail.wage] for task in tasks]
+        slot_info_metrics=[[shift.task.min_worker,
+                            shift.task.max_worker,
+                            shift.task.exp_worker,
+                            shift.task.wage] for shift in shifts]
 
-        for i in range(len(tasks)):
+        for i in range(len(shifts)):
             m+=xsum(Var[i,j] for j in range(len(users)))+x_min[i]>=slot_info_metrics[i][0]
             m+=xsum(Var[i,j] for j in range(len(users)))-x_max[i]<=slot_info_metrics[i][1]
             m+=xsum(Var[i,j]*expert_metrics[i][j] for j in range(len(users)))+x_exp[i]>=slot_info_metrics[i][2]
             m+=xsum(Var[i,j]*(1-expert_metrics[i][j]) for j in range(len(users)))+x_new[i]>=slot_info_metrics[i][1]-slot_info_metrics[i][2]
         
         for j in range(len(users)):
-            m+=xsum(Var[i,j]*slot_info_metrics[i][3] for i in range(len(tasks)))+user[j].point<=x_point
+            m+=xsum(Var[i,j]*slot_info_metrics[i][3] for i in range(len(shifts)))+users[j].point<=x_point
 
         m.optimize()
         
-        result=[[Var[i,j].x for j in range(len(users))] for i in range(len(tasks))]
-        for i in range(len(tasks)):
+        result=[[Var[i,j].x for j in range(len(users))] for i in range(len(shifts))]
+        for i in range(len(shifts)):
             for j in range(len(users)):
                 if result[i][j]==1:
                     try:
-                        tasks[i].add(users[j])
+                        shifts[i].add(users[j])
                     except:
                         pass
-        return tasks
+        return shifts
     

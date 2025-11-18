@@ -6,45 +6,45 @@ from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId, ShiftState
 from app.ddd.domain.user import IUserRepository, UserId
 
 
-class TaskCompleteUseCase(TransactionUseCaseBase):
+class ShiftCompleteUseCase(TransactionUseCaseBase):
     def __init__(self, db,
-                 task_repository:IShiftRepository,
+                 shift_repository:IShiftRepository,
                  user_repository:IUserRepository,
                  group_repository:IGroupRepository,
                  member_repository:IMemberRepository):
         super().__init__(db)
-        self.task_repository=task_repository
+        self.shift_repository=shift_repository
         self.user_repository=user_repository
         self.group_repository=group_repository 
         self.member_repository=member_repository
         
-    def execute(self,group_id:GroupId,task_id:ShiftId,user_id:UserId)->Shift:
-        return self._transaction(group_id,task_id,user_id)
+    def execute(self,group_id:GroupId,shift_id:ShiftId,user_id:UserId)->Shift:
+        return self._transaction(group_id,shift_id,user_id)
     
-    def _transaction(self,group_id, task_id,user_id)->Shift:
+    def _transaction(self,group_id, shift_id,user_id)->Shift:
         try:
             group=self.group_repository.find_by_id(group_id)
         except:
             raise UseCaseException(f'group_id:{group_id} not found')
         try:
-            target_task=self.task_repository.find_by_id(task_id)
+            target_shift=self.shift_repository.find_by_id(shift_id)
         except:
-            raise UseCaseException(f'task_id:{task_id} not found')
+            raise UseCaseException(f'shift_id:{shift_id} not found')
         try:
             user=self.user_repository.find_by_id(user_id)
         except:
             raise UseCaseException(f'user_id:{user_id} not found')
         
-        task=target_task.complete(user)
+        shift=target_shift.complete(user)
         member_list=[]
         user_list=[]
-        for worker in task.workers:
+        for worker in shift.workers:
             try:
                 member=self.member_repository.find_by_id(group_id,worker.id)
             except:
                 raise UseCaseException(f'user_id:{worker.id} not found in group_id:{group_id}')
-            member.point+=task.taskdetail.wage
-            user.add_exp(task.taskdetail.id)
+            member.point+=shift.task.wage
+            user.add_exp(shift.task.id)
             member_list.append(member)
             user_list.append(worker)
        
@@ -54,6 +54,6 @@ class TaskCompleteUseCase(TransactionUseCaseBase):
         for user in user_list:
             _=self.user_repository.save(user)
         
-        task.status=ShiftState.archive
-        new_task=self.task_repository.save(task)
-        return new_task
+        shift.status=ShiftState.archive
+        new_shift=self.shift_repository.save(shift)
+        return new_shift

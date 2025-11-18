@@ -1,5 +1,5 @@
-from .schema import TaskFromTemplateParams
-from .task_from_template import TaskFromTemplateUseCase
+from .schema import ShiftFromTemplateParams
+from .shift_from_template import ShiftFromTemplateUseCase
 from .template_add_slot_usecase import TemplateAddSlotUseCase
 from .template_delete_slot_usecase import TemplateDeleteSlotUseCase
 from .template_get_usecase import TemplateGetUseCase

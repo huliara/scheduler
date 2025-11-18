@@ -20,13 +20,13 @@ class TemplateUpdateSlotUseCase(TransactionUseCaseBase):
             raise UseCaseException(f'template:ID{template_id} not found')
         
         prev_entity=TemplateSlot(
-            taskdetail_id=prev_slot.taskdetail_id,
+            task_id=prev_slot.task_id,
             date_from_start=prev_slot.date_from_start,
             start_time=prev_slot.start_time
         )
         
         slot_entity=TemplateSlot(
-            taskdetail_id=slot.taskdetail_id,
+            task_id=slot.task_id,
             date_from_start=slot.date_from_start,
             start_time=slot.start_time
         )

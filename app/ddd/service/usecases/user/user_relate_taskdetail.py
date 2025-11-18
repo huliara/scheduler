@@ -4,13 +4,13 @@ from app.ddd.domain.task import ITaskRepository, TaskEntity
 from app.ddd.domain.user import IUserRepository
 
 
-class UserRelateTaskDetailUseCase(TransactionUseCaseBase):
+class UserRelateTaskUseCase(TransactionUseCaseBase):
     def __init__(self, db, user_repository:IUserRepository,
-                 taskdetail_repository:ITaskRepository,
+                 task_repository:ITaskRepository,
                  group_repository:IGroupRepository):
         super().__init__(db)
         self.user_repository = user_repository
-        self.taskdetail_repository = taskdetail_repository
+        self.task_repository = task_repository
         self.group_repository = group_repository
 
     def execute(self, user_id)->list[TaskEntity]:
@@ -26,8 +26,8 @@ class UserRelateTaskDetailUseCase(TransactionUseCaseBase):
         except:
             raise Exception(f'There are invalid groups')
         
-        taskdetails=[]
+        task=[]
         for group in groups:
-            taskdetails+=self.taskdetail_repository.find_all(group['id'])
+            task+=self.task_repository.find_all(group['id'])
         
-        return taskdetails
+        return task

@@ -1,0 +1,32 @@
+from sqlalchemy.orm import Session
+
+from app.ddd.core.exception import UseCaseException
+from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId
+from app.ddd.domain.user import IUserRepository, UserId
+
+
+class ShiftCancelUseCase(TransactionUseCaseBase):
+    def __init__(self,db:Session,
+                 shift_repository:IShiftRepository,
+                 user_repository:IUserRepository,
+                 ):
+        super().__init__(db)
+        self.shift_repository=shift_repository
+        self.user_repository=user_repository        
+        
+    def execute(self,shift_id:ShiftId, user_id:UserId)->Shift:
+        return self._transaction(shift_id,user_id)
+    def _transaction(self,shift_id:ShiftId,user_id:UserId)->Shift:
+        try:
+            target_shift=self.shift_repository.find_by_id(shift_id)
+        except:
+            raise UseCaseException(f'shift_id:{shift_id} not found')
+        try:
+            worker=self.user_repository.find_by_id(user_id)
+        except:
+            raise UseCaseException(f'user_id:{user_id} not found')
+        target_shift.remove(worker)
+        shift_new=self.shift_repository.save(target_shift)
+    
+        return shift_new
