@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from app.cruds.auth import (authenticate_user, create_access_token,
                             get_current_active_user)
 from app.database import get_db
-from app.models.models import GroupUser, TaskDetail, User
+from app.models.models import GroupUser, Task, User
 from app.schemas.users import UserUpdate
 
 
@@ -36,11 +36,11 @@ def user_detail_display(user: User):
         "exp_tasks": [response_base(task) for task in user.exp_tasks],
         "slots": [response_base(slot) for slot in user.tasks],
         "create_slot": [response_base(slot) for slot in user.create_tasks],
-        "create_task": [response_base(task) for task in user.create_taskdetail],
+        "create_task": [response_base(task) for task in user.create_task],
         "is_admin": user.is_admin,
     }
 
-def task_display(task: TaskDetail):
+def task_display(task: Task):
     return {
         "id": task.id,
         "name": task.name,
@@ -56,7 +56,7 @@ def task_display(task: TaskDetail):
     }
 
 
-def tasks_display(tasks: TaskDetail):
+def tasks_display(tasks: Task):
     return [task_display(task) for task in tasks]
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60

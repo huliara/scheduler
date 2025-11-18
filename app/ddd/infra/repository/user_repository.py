@@ -3,7 +3,7 @@ from sqlalchemy.future import select
 from app.cruds.auth import get_password_hash
 from app.ddd.core.exception import DomainException
 from app.ddd.domain.user import IUserRepository, UserEntity
-from app.models.models import GroupUser, TaskDetail, User
+from app.models.models import GroupUser, Task, User
 
 
 class UserRepository(IUserRepository):
@@ -24,7 +24,7 @@ class UserRepository(IUserRepository):
         return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).all()]
     
     def add(self, entity:UserEntity, password:str)->UserEntity:
-        exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_([task for task in entity.exp_tasks]))).all()
+        exp_tasks = self.db.scalars(select(Task).filter(Task.id.in_([task for task in entity.exp_tasks]))).all()
         model = User(
             name=entity.name,
             password=get_password_hash(password),
@@ -51,7 +51,7 @@ class UserRepository(IUserRepository):
             raise DomainException('User not found',404)
         model.name = entity.name
         model.room_number = entity.room_number
-        model.exp_tasks = self.db.scalars(select(TaskDetail).filter(TaskDetail.id.in_(entity.exp_tasks))).all()
+        model.exp_tasks = self.db.scalars(select(Task).filter(Task.id.in_(entity.exp_tasks))).all()
         self.db.commit()
         self.db.refresh(model)
         return self._refresh_to_entity(model)

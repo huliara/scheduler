@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.cruds.auth import get_current_active_user
 from app.database import get_db
-from app.ddd.infra.repository import TaskDetailRepository, UserRepository
+from app.ddd.infra.repository import TaskRepository, UserRepository
 from app.ddd.service.usecases.user import UserUpdateParams, UserUpdateUseCase
 from app.models.models import User
 from app.schemas.users import UserUpdate
@@ -13,7 +13,7 @@ from app.schemas.users import UserUpdate
 router=APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return UserUpdateUseCase(db,UserRepository(db),TaskDetailRepository(db))
+    return UserUpdateUseCase(db,UserRepository(db),TaskRepository(db))
 
 
 

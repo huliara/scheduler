@@ -3,8 +3,8 @@ from dataclasses import dataclass, field
 
 import app.models.models as models
 from app.ddd.core.i_entity import IEntity
+from app.ddd.domain.shift.shift_value_object import ShiftId
 from app.ddd.domain.task.task_value_object import TaskId
-from app.ddd.domain.task_detail.task_detail_value_object import TaskDetailId
 
 from .user_value_object import UserId
 
@@ -14,8 +14,8 @@ class UserEntity(IEntity):
     id:UserId|None
     name:str
     room_number:str
-    exp_tasks:list[TaskDetailId]
-    tasks:list[TaskId]=field(default_factory=list)
+    exp_tasks:list[TaskId]
+    shifts:list[ShiftId]=field(default_factory=list)
     point:int=0
     is_admin:bool=False
     is_active:bool=True
@@ -41,8 +41,8 @@ class UserEntity(IEntity):
             id=data.id,
             name=data.name,
             room_number=data.room_number,
-            tasks=[task.id for task in data.tasks],
-            exp_tasks=[taskdetail.id for taskdetail in data.exp_tasks],
+            shifts=[task.id for task in data.shifts],
+            exp_tasks=[task.id for task in data.exp_tasks],
             point=data.point
         )
     def to_dict(self):
@@ -50,13 +50,13 @@ class UserEntity(IEntity):
             'id': self.id,
             'name': self.name,
             'room_number': self.room_number,
-            'tasks': self.tasks,
+            'shifts': self.shifts,
             'exp_tasks': [task for task in self.exp_tasks],
             'point': self.point,
             'is_active': self.is_active,
         }
-    def add_task(self,task:TaskId):
-        self.tasks.append(task)
-    def add_exp(self,task:TaskDetailId):
+    def add_shift(self,shift:ShiftId):
+        self.shifts.append(shift)
+    def add_exp(self,task:TaskId):
         self.exp_tasks.append(task)
     

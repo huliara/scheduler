@@ -4,20 +4,20 @@ from discordwebhook import Discord
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from app.models.models import Task
+from app.models.models import Shift
 
 Discord_URL = "https://discordapp.com/api/webhooks/1087558350109163520/jly9YybhouXEbu3NB5H5Juwf336SO_1N8kcwmbqVWitlmaG4ETswsaJk0-c5uzgHBLKp"
 
 discord = Discord(url=Discord_URL)
 
 
-def alert_shortage(slot: Task):
+def alert_shortage(slot: Shift):
     message_content = f"参加者が足りていません.{slot.start_time.month}月{slot.start_time.day}日{slot.name}"
     discord.post(content=message_content)
     return
 
 
-def alert_exp_shortage(slot: Task):
+def alert_exp_shortage(slot: Shift):
     message_content = f"経験者が足りていません.{slot.start_time.month}月{slot.start_time.day}日{slot.name}"
     discord.post(content=message_content)
     return
@@ -28,7 +28,7 @@ def today_slots(db: Session):
     today_start=datetime(today.year,today.month,today.day,0,0,0)
     today_end=datetime(today.year,today.month,today.day,23,59,59)
     slots = db.scalars(
-        select(Task).filter(Task.start_time>today_start,Task.start_time<today_end)
+        select(Shift).filter(Shift.start_time>today_start,Shift.start_time<today_end)
     ).all()
     if slots is None:
         return

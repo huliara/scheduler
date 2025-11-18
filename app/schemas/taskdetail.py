@@ -25,8 +25,6 @@ class TaskDetailBase(BaseModel):
 class TaskDetailCreate(TaskDetailBase):
     duration: int #分単位
 
-
-
 class TaskDetailDisplay(TaskDetailBase):
     id: UUID
     creater_id: UUID

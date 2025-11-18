@@ -1,35 +1,27 @@
-from sqlalchemy.orm import Session
-
 from app.ddd.core.exception import UseCaseException
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.task import ITaskRepository, TaskEntity, TaskId
-from app.ddd.domain.task_detail import ITaskDetailRepository
-from app.schemas.task import TaskCreate
+from app.ddd.domain.group import IGroupRepository
+from app.ddd.domain.task import ITaskRepository, TaskEntity
 
 
 class TaskUpdateUseCase(TransactionUseCaseBase):
-    def __init__(self,db:Session,
-                 task_repository:ITaskRepository,
-                 taskdetail_repository:ITaskDetailRepository
-                 ):
+    def __init__(self, db,task_repository:ITaskRepository,
+                 group_repository:IGroupRepository):
         super().__init__(db)
         self.task_repository=task_repository
-        self.taskdetail_repository=taskdetail_repository
+        self.group_repository=group_repository
+    def execute(self, task:TaskEntity):
         
-    def execute(self,task_id:TaskId, request:TaskCreate)->TaskEntity:
-        return self._transaction(task_id,request)
-    def _transaction(self,task_id:TaskId,request:TaskCreate)->TaskEntity:
+        return self._transaction(task)
+    
+    def _transaction(self, task:TaskEntity):
         try:
-            target_task=self.task_repository.find_by_id(task_id)
+            _=self.group_repository.find_by_id(task.group_id)
         except:
-            raise UseCaseException('taskdetail_id:f{task_id} not found')
+            raise UseCaseException(f'group_id:{task.group_id} not found')
         try:
-            taskdetail=self.taskdetail_repository.find_by_id(request.taskdetail_id)
+            _=self.task_repository.find_by_id(task.id)
         except:
-            raise UseCaseException('taskdetail_id:f{request.taskdetail_id} not found')
-        target_task.name=request.name
-        target_task.start_time=request.start_time
-        target_task.taskdetail=taskdetail
-        task_new=self.task_repository.save(target_task)
-        
-        return task_new
+            raise UseCaseException(f'taskdetail_id:{task.id} not found')
+        task=self.task_repository.save(task)
+        return task
