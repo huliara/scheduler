@@ -5,7 +5,7 @@ router = APIRouter()
 from .add_slot import router as add_slot
 from .delete import router as delete
 from .delete_slot import router as delete_slot
-from .generate_task import router as generate_task
+from .generate_shift import router as generate_task
 from .get import router as get
 from .get_all import router as get_all
 from .patch_name import router as patch_name

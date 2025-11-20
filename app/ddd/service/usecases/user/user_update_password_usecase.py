@@ -6,8 +6,7 @@ from app.ddd.domain.user import IUserRepository, UserEntity, UserId
 
 
 class UserUpdatePasswordUseCase(TransactionUseCaseBase):
-    def __init__(self, db,user_repository:IUserRepository):
-        super().__init__(db)
+    def __init__(self, user_repository:IUserRepository):
         self.user_repository=user_repository
     
     def execute(self,id:UserId,password:str):

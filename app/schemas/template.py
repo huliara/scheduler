@@ -54,6 +54,7 @@ class TemplateCreateBase(BaseModel):
 
 class TemplateCreate(TemplateCreateBase):
     slots: list[TemplateSlotBase]
+    group_id:UUID
 
     class Config:
         from_attributes = True
@@ -61,6 +62,6 @@ class TemplateCreate(TemplateCreateBase):
 class TaskFromTemplate(BaseModel):
     start_day: datetime.date
     add_default_worker:bool=False
-
+    group_id:UUID|None=None
     class Config:
         from_attributes = True

@@ -9,12 +9,6 @@ from app.ddd.core.usecase_base import UseCaseBase
 
 class TransactionUseCaseBase(UseCaseBase):
 
-    def __init__(self, db: Session) -> None:
-        self._db: Session = db
-
     @abstractmethod
     def _transaction(self, *args: Any, **kwargs: Any) -> Base:
         pass
-
-    def db(self) -> Session:
-        return self._db

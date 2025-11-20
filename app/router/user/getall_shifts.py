@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.cruds.auth import get_current_active_user
 from app.database import get_db
+from app.ddd.domain.user import UserEntity
+from app.ddd.infra.auth import get_current_active_user
 from app.ddd.infra.repository import ShiftRepository, UserRepository
 from app.ddd.service.usecases.shift import ShiftGetUserRelevantUseCase
-from app.models.models import User
-from app.schemas.task import UserTaskList
+from app.schemas.shift import UserShiftList
 
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return ShiftGetUserRelevantUseCase(db,ShiftRepository(db),UserRepository(db))
+    return ShiftGetUserRelevantUseCase(ShiftRepository(db))
 
 def to_response(task):
     return {
@@ -35,13 +35,13 @@ def to_response(task):
         "group_id": task['group_id'],
     }
 
-@router.get("/tasks", response_model=UserTaskList)
-async def get_task_relevant_user(user:User=Depends(get_current_active_user),
+@router.get("/shifts", response_model=UserShiftList)
+async def get_shifts_relevant_user(user:UserEntity=Depends(get_current_active_user),
                                  usecase:ShiftGetUserRelevantUseCase=Depends(__usecase_di)):
-    tasks=usecase.execute(user.id)
-    assign_tasks_dict=[task.to_dict() for task in tasks["assign"] ]
-    hiring_tasks_dict=[task.to_dict() for task in tasks['hiring'] ]
-    end_tasks_dict=[task.to_dict() for task in tasks["end"]]
+    shifts=usecase.execute(user.id)
+    assign_tasks_dict=[task.to_dict() for task in shifts["assign"] ]
+    hiring_tasks_dict=[task.to_dict() for task in shifts['hiring'] ]
+    end_tasks_dict=[task.to_dict() for task in shifts["end"]]
     response={
         "assign":[to_response(task) for task in assign_tasks_dict],
         "hiring":[to_response(task) for task in hiring_tasks_dict],

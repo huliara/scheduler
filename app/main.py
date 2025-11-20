@@ -4,10 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.database import DATABASE
-from app.router import auth, message
+from app.router import message
 from app.router.admin.index import router as admin
+from app.router.auth.index import router as auth
 from app.router.group.index import router as group
-from app.router.member.index import router as member
 from app.router.shift.index import router as shift
 from app.router.task.index import router as task
 from app.router.template.index import router as template
@@ -35,16 +35,15 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello Proletariat"}
 
 
-app.include_router(auth.router, prefix="")
+app.include_router(auth, prefix="")
 app.include_router(admin, prefix="/admin")
-app.include_router(group, prefix="/groups/{group_id}")
+app.include_router(group, prefix="/groups")
 app.include_router(user, prefix="/user")
 app.include_router(shift, prefix="/shifts")
 app.include_router(task, prefix="/tasks")
 app.include_router(template, prefix="/templates")
-app.include_router(member, prefix="/members")
 app.include_router(message.router, prefix="/message")
 

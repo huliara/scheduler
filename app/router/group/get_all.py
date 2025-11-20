@@ -9,7 +9,7 @@ from app.schemas.groups import GroupsDisplay
 router=APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return GroupGetAllUseCase(db,GroupRepository(db))
+    return GroupGetAllUseCase(GroupRepository(db))
 
 @router.get("/",response_model=GroupsDisplay)
 async def group_getall(usecase:GroupGetAllUseCase=Depends(__usecase_di)):

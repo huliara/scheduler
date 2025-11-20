@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from typing import Union
 
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
@@ -10,6 +10,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.ddd.domain.user import UserEntity
 from app.models.models import GroupUser, User
 
 # to get a string like this run:
@@ -27,8 +28,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-app = FastAPI()
-
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -44,7 +43,7 @@ def authenticate_user(db: Session, username: str, password: str):
         return False
     if not verify_password(password, user.password):
         return False
-    return user
+    return UserEntity.from_model(user)
 
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
@@ -77,16 +76,16 @@ async def get_current_user(
     user = db.scalars(select(User).filter_by(name=token_data.username).limit(1)).first()
     if user is None:
         raise credentials_exception
-    return user
+    return UserEntity.from_model(user)
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
+async def get_current_active_user(current_user: UserEntity = Depends(get_current_user)):
     if current_user.is_active:
         return current_user
     raise HTTPException(status_code=400, detail="Inactive user")
 
 
-async def get_admin_user(current_user: User = Depends(get_current_user)):
+async def get_admin_user(current_user: UserEntity = Depends(get_current_user)):
     if current_user.is_admin and current_user.is_active:
         return current_user
     raise HTTPException(status_code=403, detail="Not admin user")

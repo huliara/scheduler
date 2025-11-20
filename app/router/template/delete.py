@@ -9,12 +9,12 @@ from app.schemas.template import TemplateDisplay
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return TemplateRemoveUseCase(db,TemplateRepository(db))
+    return TemplateRemoveUseCase(TemplateRepository(db))
 
 
 
 @router.delete("/{template_id}", response_model=TemplateDisplay)
-async def template_delete(group_id:str,template_id:str,usecase:TemplateRemoveUseCase=Depends(__usecase_di)):
+async def template_delete(template_id:str,usecase:TemplateRemoveUseCase=Depends(__usecase_di)):
     response=usecase.execute(template_id).to_dict()
     return response
     

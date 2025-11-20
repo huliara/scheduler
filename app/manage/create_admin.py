@@ -1,4 +1,4 @@
-from app.cruds.auth import get_password_hash
+from app.ddd.infra.auth import get_password_hash
 from app.database import SessionLocal
 from app.models.models import User
 

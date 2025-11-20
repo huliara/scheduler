@@ -1,24 +1,22 @@
-from sqlalchemy.orm import Session
 
 from app.ddd.core.exception import UseCaseException
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId
+from app.ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId
 from app.ddd.domain.task import ITaskRepository
-from app.schemas.task import TaskCreate
+from app.schemas.shift import ShiftCreate
 
 
 class ShiftUpdateUseCase(TransactionUseCaseBase):
-    def __init__(self,db:Session,
+    def __init__(self,
                  shift_repository:IShiftRepository,
                  task_repository:ITaskRepository
                  ):
-        super().__init__(db)
         self.shift_repository=shift_repository
         self.task_repository=task_repository
         
-    def execute(self,shift_id:ShiftId, request:TaskCreate)->Shift:
+    def execute(self,shift_id:ShiftId, request:ShiftCreate)->ShiftEntity:
         return self._transaction(shift_id,request)
-    def _transaction(self,shift_id:ShiftId,request:TaskCreate)->Shift:
+    def _transaction(self,shift_id:ShiftId,request:ShiftCreate)->ShiftEntity:
         try:
             target_shift=self.shift_repository.find_by_id(shift_id)
         except:

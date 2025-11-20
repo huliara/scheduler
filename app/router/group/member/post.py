@@ -9,7 +9,7 @@ from app.schemas.users import GroupUsers, UsersAddRequest
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return GroupAddMemberUseCase(db,GroupRepository(db),MemberRepository(db))
+    return GroupAddMemberUseCase(GroupRepository(db),MemberRepository(db))
 
 
 

@@ -4,8 +4,7 @@ from app.ddd.domain.shift import IShiftRepository, ShiftId
 
 
 class ShiftBulkRemoveUseCase(TransactionUseCaseBase):
-    def __init__(self, db, shift_repository: IShiftRepository):
-        super().__init__(db)
+    def __init__(self,  shift_repository: IShiftRepository):
         self.shift_repository = shift_repository
         
     def execute(self,group_id:GroupId,expired:bool|None, shift_ids: list[ShiftId]):
@@ -15,6 +14,6 @@ class ShiftBulkRemoveUseCase(TransactionUseCaseBase):
         if expired:
             shifts = self.shift_repository.find_all(group_id,end=True)
             return shifts
-        shifts = self.shift_repository.find_by_ids(group_id,shift_ids)
+        shifts = self.shift_repository.find_by_ids(shift_ids)
         self.shift_repository.bulk_remove(shifts)
         return shifts

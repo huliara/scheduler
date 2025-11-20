@@ -8,8 +8,7 @@ from app.schemas.template import TemplateSlotBase
 
 class TemplateAddSlotUseCase(TransactionUseCaseBase):
     
-    def __init__(self, db,template_repository:ITemplateRepository,task_repository:ITaskRepository):
-        super().__init__(db)
+    def __init__(self, template_repository:ITemplateRepository,task_repository:ITaskRepository):
         self.template_repository=template_repository
         self.task_repository=task_repository
         

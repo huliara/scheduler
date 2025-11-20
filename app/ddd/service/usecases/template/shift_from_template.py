@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy.orm import Session
 
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.shift import IShiftRepository, Shift, ShiftState
+from app.ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftState
 from app.ddd.domain.task import ITaskRepository
 from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateId)
@@ -13,19 +13,18 @@ from .schema import ShiftFromTemplateParams
 
 
 class ShiftFromTemplateUseCase(TransactionUseCaseBase):
-    def __init__(self, db:Session,
+    def __init__(self,
                  template_repository:ITemplateRepository,
                  shift_repository:IShiftRepository,
                  task_repository:ITaskRepository):
-        super().__init__(db)
         self.template_repository=template_repository
         self.shift_repository=shift_repository
         self.task_repository=task_repository
         
-    def execute(self,data:ShiftFromTemplateParams)->list[Shift]:
+    def execute(self,data:ShiftFromTemplateParams)->list[ShiftEntity]:
         return self._transaction(data.creater_id,data.template_id,data.start_date)
     
-    def _transaction(self,creater_id,tempalte_id:TemplateId,start_date:datetime.date)->list[Shift]:
+    def _transaction(self,creater_id,tempalte_id:TemplateId,start_date:datetime.date)->list[ShiftEntity]:
         template:TemplateEntity=self.template_repository.find_by_id(tempalte_id)
         shifts=self.generate_shifts(creater_id,template,start_date)
         result=self.shift_repository.bulk_add(shifts)
@@ -35,7 +34,7 @@ class ShiftFromTemplateUseCase(TransactionUseCaseBase):
                        creater_id:UserId,
                        template:TemplateEntity,
                        start_date:datetime.date,
-                       )->list[Shift]:
+                       )->list[ShiftEntity]:
         shifts = []
         for slot in template.slots:
             task=self.task_repository.find_by_id(slot.task_id)
@@ -48,7 +47,7 @@ class ShiftFromTemplateUseCase(TransactionUseCaseBase):
                 + "分から"
                 + str(task.name)
             )
-            shift = Shift(
+            shift = ShiftEntity(
                 id=None,
                 name=name,
                 start_time=start,

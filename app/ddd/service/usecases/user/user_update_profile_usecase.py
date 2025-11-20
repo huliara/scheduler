@@ -15,8 +15,7 @@ class UserUpdateParams:
         self.exp_tasks=exp_tasks
 
 class UserUpdateUseCase(TransactionUseCaseBase):
-    def __init__(self, db,user_repository:IUserRepository,task_repository:ITaskRepository):
-        super().__init__(db)
+    def __init__(self, user_repository:IUserRepository,task_repository:ITaskRepository):
         self.user_repository=user_repository
         self.task_repository=task_repository
     

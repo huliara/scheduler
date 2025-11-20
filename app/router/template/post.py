@@ -10,13 +10,13 @@ from app.schemas.template import TemplateCreate, TemplateDisplay
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return TemplatePostUseCase(db,TemplateRepository(db),
+    return TemplatePostUseCase(TemplateRepository(db),
                                GroupRepository(db),
                                TaskRepository(db))
 
 
 @router.post("/", response_model=TemplateDisplay)
-async def template_get(group_id: str,request:TemplateCreate, usecase:TemplatePostUseCase=Depends(__usecase_di)):
-    response=usecase.execute(group_id,request).to_dict()
+async def template_get(request:TemplateCreate, usecase:TemplatePostUseCase=Depends(__usecase_di)):
+    response=usecase.execute(request).to_dict()
     return response
     

@@ -9,7 +9,7 @@ from app.schemas.users import GroupUsers
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return GroupRemoveMemberUseCase(db,GroupRepository(db),MemberRepository(db))
+    return GroupRemoveMemberUseCase(GroupRepository(db),MemberRepository(db))
 
 
 @router.delete("/{user_id}", response_model=GroupUsers)

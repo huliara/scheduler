@@ -11,7 +11,7 @@ from app.ddd.service.usecases.shift import ShiftRemoveUseCase
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return ShiftRemoveUseCase(db,ShiftRepository(db))
+    return ShiftRemoveUseCase(ShiftRepository(db))
 
 class TaskDeleteResponse(BaseModel):
     id: UUID
@@ -19,7 +19,7 @@ class TaskDeleteResponse(BaseModel):
 
 
 @router.delete("/{task_id}", response_model=TaskDeleteResponse)
-async def template_get(group_id: str,task_id:str, usecase:ShiftRemoveUseCase=Depends(__usecase_di)):
+async def template_get(task_id:str, usecase:ShiftRemoveUseCase=Depends(__usecase_di)):
     response=usecase.execute(task_id)
     return {
         "id": response.id,

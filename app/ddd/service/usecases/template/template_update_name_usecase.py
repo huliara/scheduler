@@ -5,8 +5,7 @@ from app.ddd.domain.template import ITemplateRepository, TemplateEntity
 
 class TemplateUpdateNameUseCase(TransactionUseCaseBase):
     
-    def __init__(self, db,template_repository:ITemplateRepository):
-        super().__init__(db)
+    def __init__(self,template_repository:ITemplateRepository):
         self.template_repository=template_repository
         
     def execute(self,id,name)->TemplateEntity:

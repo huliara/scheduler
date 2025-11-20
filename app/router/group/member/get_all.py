@@ -11,7 +11,7 @@ from app.ddd.service.usecases.group import GroupGetAllMemberUseCase
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return GroupGetAllMemberUseCase(db,MemberRepository(db),UserRepository(db))
+    return GroupGetAllMemberUseCase(MemberRepository(db),UserRepository(db))
 
 
 class MemberResponse(BaseModel):

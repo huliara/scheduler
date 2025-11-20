@@ -3,17 +3,16 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class UserUpdatePassword(BaseModel):
-    password: str
-
 class UserBase(BaseModel):
     name: str
     room_number: str
 
+class UserUpdatePassword(BaseModel):
+    password: str
 
 class UserCreate(UserBase):
     password: str
-    exp_task: list[UUID]
+    exp_tasks: list[UUID]
 
 
 class UserUpdate(UserBase):
