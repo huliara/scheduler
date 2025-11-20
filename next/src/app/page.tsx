@@ -36,7 +36,6 @@ export default function Home() {
   if (!data || !session.data || session.data.user === undefined)
     return <div>loading...</div>;
   if (isLoading) return <div>loading...</div>;
-  console.log(data);
 
   const days = Array.from(
     new Set(
