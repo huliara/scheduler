@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, scoped_session, sessionmaker
 
 from app.env import DB_HOSTNAME, DB_NAME, DB_PASSWORD, DB_USER
+from app.models.models import Base
 
 DATABASE = "postgresql+psycopg2://%s:%s@%s:5432/%s" % (
     DB_USER,
@@ -16,10 +17,6 @@ engine = create_engine(DATABASE, echo=True)
 SessionLocal = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
-
-
-class Base(DeclarativeBase):
-    pass
 
 
 Base.query = SessionLocal.query_property()

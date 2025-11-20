@@ -7,11 +7,15 @@ from uuid import uuid4
 from sqlalchemy import ARRAY, Column, Enum, ForeignKey, String, Table
 from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-from app.database import Base
 from app.ddd.domain.permission.permission import Permission
 from app.ddd.domain.shift.shift_state import ShiftState
+
+
+class Base(DeclarativeBase):
+    pass
+
 
 experience_table = Table(
     "experience_table",
@@ -27,12 +31,13 @@ shifts_table = Table(
     Column("shift", ForeignKey("shift.id")),
 )
 
-
-
-class Shift(Base):
-    __tablename__ = "shift"
+class BaseModelMixin:
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(String(20))
+
+
+class Shift(BaseModelMixin,Base):
+    __tablename__ = "shift"
     start_time: Mapped[datetime.datetime]
     status:Mapped[ShiftState]=mapped_column(Enum(ShiftState),default=ShiftState.before_hiring)
     workers: Mapped[list[User]] = relationship(
@@ -55,10 +60,8 @@ class Shift(Base):
         return self.start_time + self.task.duration
 
 
-class Task(Base):
+class Task(BaseModelMixin,Base):
     __tablename__ = "task"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20))
     group_id:Mapped[uuid.UUID]=mapped_column(
         ForeignKey("group.id",ondelete="CASCADE")
     )
@@ -83,7 +86,7 @@ class Task(Base):
     creater_id: Mapped[None | uuid.UUID] = mapped_column(
         ForeignKey("user.id", ondelete="SET NULL")
     )
-    creater: Mapped[None | User] = relationship(back_populates="create_taskdetail")
+    creater: Mapped[None | User] = relationship(back_populates="create_tasks")
     tasktemplates: Mapped[list[TaskTemplate]] = relationship(
         back_populates="task", cascade="all,delete"
     )
@@ -127,10 +130,8 @@ class TaskTemplate(Base):
         ).time()
 
 
-class Template(Base):
+class Template(BaseModelMixin,Base):
     __tablename__ = "template"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20))
     tasktemplates: Mapped[list[TaskTemplate]] = relationship(
         back_populates="template", cascade="all,delete"
     )
@@ -139,10 +140,8 @@ class Template(Base):
     )
     group: Mapped[Group] = relationship(back_populates="templates")
     
-class Group(Base):
+class Group(BaseModelMixin,Base):
     __tablename__ = "group"
-    id:Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name:Mapped[str] = mapped_column(String(20))
     users:Mapped[list[GroupUser]] = relationship(back_populates="group",cascade="all,delete")
     tasks:Mapped[list[Task]]=relationship(back_populates='group',cascade='all,delete')
     templates:Mapped[list[Template]] = relationship(back_populates="group",cascade="all,delete")
@@ -165,7 +164,7 @@ class GroupUser(Base):
 class User(Base):
     __tablename__ = "user"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid4)
-    name: Mapped[str] = mapped_column(String(20),unique=True)
+    name: Mapped[str] = mapped_column(String(28),unique=True)
     password: Mapped[str] = mapped_column(String(400))
     room_number: Mapped[str] = mapped_column(String(10))
     groups: Mapped[list[GroupUser]] = relationship( back_populates="user",cascade="all,delete")
@@ -176,7 +175,7 @@ class User(Base):
         secondary=shifts_table, back_populates="workers"
     )
     create_shifts: Mapped[list[Shift]] = relationship(back_populates="creater")
-    create_task: Mapped[list[Task]] = relationship(back_populates="creater")
+    create_tasks: Mapped[list[Task]] = relationship(back_populates="creater")
     is_active: Mapped[bool] = mapped_column(default=True)
     is_admin: Mapped[bool] = mapped_column(default=False)
     

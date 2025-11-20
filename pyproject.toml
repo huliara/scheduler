@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.17.2",
     "bcrypt>=4.3.0",
     "deepdiff>=8.4.2",
     "discordwebhook>=1.0.3",
