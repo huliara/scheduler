@@ -5,10 +5,9 @@ from app.ddd.domain.user import IUserRepository
 
 
 class UserRelateTaskUseCase(TransactionUseCaseBase):
-    def __init__(self, db, user_repository:IUserRepository,
+    def __init__(self, user_repository:IUserRepository,
                  task_repository:ITaskRepository,
                  group_repository:IGroupRepository):
-        super().__init__(db)
         self.user_repository = user_repository
         self.task_repository = task_repository
         self.group_repository = group_repository

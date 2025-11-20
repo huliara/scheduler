@@ -43,7 +43,9 @@ class UserEntity(IEntity):
             room_number=data.room_number,
             shifts=[task.id for task in data.shifts],
             exp_tasks=[task.id for task in data.exp_tasks],
-            point=data.point
+            point=data.point,
+            is_admin=data.is_admin,
+            is_active=data.is_active,
         )
     def to_dict(self):
         return {

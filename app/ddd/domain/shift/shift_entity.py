@@ -15,7 +15,7 @@ from .shift_value_object import ShiftId
 
 
 @dataclass
-class Shift(IEntity):
+class ShiftEntity(IEntity):
     id:ShiftId|None
     name:str
     start_time:datetime.datetime
@@ -30,7 +30,7 @@ class Shift(IEntity):
     def group_id(self)->'group.GroupId':
         return self.task.group_id
     @classmethod
-    def from_model(cls, data: "models.Shift") -> 'Shift':
+    def from_model(cls, data: "models.Shift") -> 'ShiftEntity':
         return cls(
             id=data.id,
             name=data.name,

@@ -1,48 +1,35 @@
-import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
-from app.ddd.domain.shift.shift_state import ShiftState
-
-from .taskdetail import TaskDetailDisplay
+from app.ddd.domain.permission.permission import Permission
 
 
-class TaskCreate(BaseModel):
+class TaskBase(BaseModel):
     name: str = Field(max_length=20)
-    start_time: datetime.datetime
-    task_id: UUID
+    subtasks: list[str] = Field(default_factory=list)
+    max_worker: int = Field(default=1, gte=1)
+    min_worker: int = Field(default=1, gte=0)
+    exp_worker: int = Field(default=0, gte=0)
+    wage: int = Field(0, gt=0)
+    permissions: list[Permission] = Field(default_factory=list)
+    @model_validator(mode="before")
+    def validate_worker_num(cls, values):
+        if int(values["max_worker"]) < int(values["min_worker"]):
+            raise ValueError("Be sure that the max worker is greater than min worker.")
+        if int(values["exp_worker"]) > int(values["min_worker"]):
+            raise ValueError("Be sure that the exp worker is less than min worker.")
+        return values
 
-    class Config:
-        from_attributes = True
+class TaskCreate(TaskBase):
+    group_id: UUID
+    duration: int #分単位
 
-
-class TaskDeleteRequest(BaseModel):
-    slots_id: list[UUID]
-
-
-class Worker(BaseModel):
+class TaskDisplay(TaskBase):
     id: UUID
-    name: str
-
-class ResponseBase(BaseModel):
-    id: UUID
-    name: str
-
-
-    class Config:
-        from_attributes = True
-
-class TaskDisplay(BaseModel):
-    id: UUID
-    name:str
-    start_time: datetime.datetime
-    end_time: datetime.datetime
-    status:ShiftState
-    taskdetail:ResponseBase
-    workers: list[Worker] = []
-    creater_id: UUID|None=None
-    group_id:UUID
+    creater_id: UUID
+    group_id: UUID
+    duration: int
 
     class Config:
         from_attributes = True
@@ -51,24 +38,5 @@ class TaskDisplay(BaseModel):
 class TaskList(BaseModel):
     tasks: list[TaskDisplay]
 
-    class Config:
-        from_attributes = True
-
-class UserTaskList(BaseModel):
-    assign: list[TaskDisplay]
-    hiring: list[TaskDisplay]
-    end: list[TaskDisplay]
-
-    class Config:
-        from_attributes = True
-
-class TaskDelete(BaseModel):
-    tasks: list[UUID]
-
-    class Config:
-        from_attributes = True
-
-class TaskComplete(BaseModel):
-    done: bool
     class Config:
         from_attributes = True

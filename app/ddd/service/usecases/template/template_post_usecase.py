@@ -9,18 +9,16 @@ from app.schemas.template import TemplateCreate
 
 class TemplatePostUseCase(TransactionUseCaseBase):
     
-    def __init__(self, db,template_repository:ITemplateRepository,
+    def __init__(self, template_repository:ITemplateRepository,
                  group_repository:IGroupRepository,
                  task_repository:ITaskRepository):
-    
-        super().__init__(db)
         self.template_repository=template_repository
         self.group_repository=group_repository
         self.task_repository=task_repository
         
-    def execute(self,group_id:str,template:TemplateCreate):
+    def execute(self,template:TemplateCreate):
         
-        return self._transaction(group_id,template)
+        return self._transaction(template.group_id,template)
     
     def _transaction(self,group_id, template:TemplateCreate):
         try:
@@ -32,7 +30,7 @@ class TemplatePostUseCase(TransactionUseCaseBase):
         try:
             tasks=self.task_repository.find_by_ids(task_ids)
         except:
-            raise UseCaseException(f'There are invalid taskdetail_id')
+            raise UseCaseException(f'There are invalid task_id')
         
         template_entity=TemplateEntity.from_params(
             name=template.name,group_id=group.id,

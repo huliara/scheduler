@@ -6,8 +6,7 @@ from app.ddd.domain.user import UserId
 
 
 class GroupAddMemberUseCase(TransactionUseCaseBase):
-    def __init__(self, db, group_repository: IGroupRepository, member_repository:IMemberRepository):
-        super().__init__(db)
+    def __init__(self, group_repository: IGroupRepository, member_repository:IMemberRepository):
         self.group_repository = group_repository
         self.member_repository = member_repository
 

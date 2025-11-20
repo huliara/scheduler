@@ -4,8 +4,7 @@ from app.ddd.domain.group import GroupEntity, IGroupRepository
 
 
 class GroupUpdateUseCase(TransactionUseCaseBase):
-    def __init__(self, db,group_repository:IGroupRepository):
-        super().__init__(db)
+    def __init__(self, group_repository:IGroupRepository):
         self.group_repository=group_repository
         
     def execute(self,group:GroupEntity):

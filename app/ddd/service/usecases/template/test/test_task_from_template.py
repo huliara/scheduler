@@ -4,7 +4,7 @@ import uuid
 import pytest
 
 from app.ddd.domain.group import GroupEntity
-from app.ddd.domain.shift.shift_entity import Shift
+from app.ddd.domain.shift.shift_entity import ShiftEntity
 from app.ddd.domain.task.task_entity import TaskEntity
 from app.ddd.domain.template import TemplateEntity, TemplateSlot
 from app.ddd.domain.user import UserEntity
@@ -94,7 +94,7 @@ def test_task_from_template(db):
         template_id=target_entity.id,
         start_date=datetime.date(2222,2,22)
     )
-    tasks:list[Shift]=usecase.execute(params)
+    tasks:list[ShiftEntity]=usecase.execute(params)
     assert len(tasks)==1
     assert tasks[0].name=='22時22分からtest'
     assert tasks[0].task.id==slots[0]['taskdetail_id']

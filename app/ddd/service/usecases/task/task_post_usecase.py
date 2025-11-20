@@ -5,9 +5,8 @@ from app.ddd.domain.task import ITaskRepository, TaskEntity
 
 
 class TaskPostUseCase(TransactionUseCaseBase):
-    def __init__(self, db,task_repository:ITaskRepository,
+    def __init__(self, task_repository:ITaskRepository,
                  group_repository:IGroupRepository):
-        super().__init__(db)
         self.task_repository=task_repository
         self.group_repository=group_repository
     def execute(self, task:TaskEntity):

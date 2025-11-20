@@ -2,30 +2,32 @@ import datetime
 
 from sqlalchemy import delete, insert
 from sqlalchemy.future import select
+from sqlalchemy.orm import Session
 
 from app.ddd.core.exception import DomainException
-from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId, ShiftState
-from app.models.models import Task, User
+from app.ddd.domain.shift import (IShiftRepository, ShiftEntity, ShiftId,
+                                  ShiftState)
+from app.models.models import Shift, User
 
 
 class ShiftRepository(IShiftRepository):
     
-    def __init__(self, db):
+    def __init__(self, db:Session):
         self.db = db
         
     def find_by_id(self, id):
-        model=self.db.get(Task,id)
+        model=self.db.get(Shift,id)
         return self.refresh_to_entity(model)
     
     def find_all(self,group_id:str,end:bool|None=None):
         if end is not None:
             return [self.refresh_to_entity(model) 
-                    for model in self.db.scalars(select(Task).filter(Task.end_time<datetime.datetime.now())).all()]
+                    for model in self.db.scalars(select(Shift).filter(Shift.end_time<datetime.datetime.now())).all()]
         return [self.refresh_to_entity(model) 
-                for model in self.db.scalars(select(Task)).all()]
+                for model in self.db.scalars(select(Shift)).all()]
         
-    def add(self, entity: Shift):
-        model=Task(
+    def add(self, entity: ShiftEntity):
+        model=Shift(
             name=entity.name,
             start_time=entity.start_time,
             creater_id=entity.creater_id,
@@ -35,36 +37,36 @@ class ShiftRepository(IShiftRepository):
         self.db.commit()
         return self.refresh_to_entity(model)
     
-    def bulk_add(self, tasks):
+    def bulk_add(self, shifts):
         data=[{'name':entity.name,
                'start_time':entity.start_time,
                'status':entity.status,
                'creater_id':entity.creater_id,
-               'taskdetail_id':entity.task.id,
-               'group_id':entity.group_id} for entity in tasks]
-        result=self.db.scalars(insert(Task).returning(Task),data).all()
+               'task_id':entity.task.id,
+               'group_id':entity.group_id} for entity in shifts]
+        result=self.db.scalars(insert(Shift).returning(Shift),data).all()
         self.db.commit()
         for model in result:
             self.db.refresh(model)
         return [self.refresh_to_entity(model) for model in result]
     
     def bulk_remove(self, tasks):
-        self.db.execute(delete(Task).where(Task.id.in_([task.id for task in tasks])))
+        self.db.execute(delete(Shift).where(Shift.id.in_([task.id for task in tasks])))
         self.db.commit()
         return 
     
     def find_by_ids(self, ids):
-        tasks=self.db.scalars(select(Task).filter(Task.id.in_(ids))).all()
+        tasks=self.db.scalars(select(Shift).filter(Shift.id.in_(ids))).all()
         return [self.refresh_to_entity(task) for task in tasks]
     
-    def save(self, entity: Shift):
-        model=self.db.get(Task,entity.id)
+    def save(self, entity: ShiftEntity):
+        model=self.db.get(Shift,entity.id)
         if model is None:
-            raise DomainException('Task not found',404)
+            raise DomainException('Shift not found',404)
         model.name=entity.name
         model.start_time=entity.start_time
         model.creater_id=entity.creater_id
-        model.taskdetail_id=entity.task.id
+        model.task_id=entity.task.id
         model.status=entity.status
         worker_ids=[user.id for user in entity.workers]
         model.workers=[user for user in self.db.scalars(select(User).filter(User.id.in_(worker_ids))).all()]
@@ -73,12 +75,12 @@ class ShiftRepository(IShiftRepository):
         return self.refresh_to_entity(model)
 
     def remove(self, id: ShiftId):
-        model=self.db.get(Task,id)
+        model=self.db.get(Shift,id)
         if model is None:
-            raise DomainException('Task not found',404)
+            raise DomainException('Shift not found',404)
         self.db.delete(model)
         self.db.commit()
-        return Shift(
+        return ShiftEntity(
             id=model.id,
             name=model.name,
             start_time=model.start_time,
@@ -93,7 +95,7 @@ class ShiftRepository(IShiftRepository):
         if user is None:
             raise DomainException('User not found',404)
         joining_group_ids=[group.group_id for group in user.groups]
-        tasks=self.db.scalars(select(Task).filter(Task.group_id.in_(joining_group_ids))).all()
+        tasks=self.db.scalars(select(Shift).filter(Shift.group_id.in_(joining_group_ids))).all()
 
         return{
             "assign": [self.refresh_to_entity(task) for task in tasks 
@@ -105,6 +107,6 @@ class ShiftRepository(IShiftRepository):
         }
     
     
-    def refresh_to_entity(self, model: Task) -> Shift:
-        entity=Shift.from_model(model)
+    def refresh_to_entity(self, model: Shift) -> ShiftEntity:
+        entity=ShiftEntity.from_model(model)
         return entity

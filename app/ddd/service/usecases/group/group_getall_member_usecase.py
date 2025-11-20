@@ -5,9 +5,7 @@ from app.ddd.domain.user import IUserRepository, UserEntity
 
 
 class GroupGetAllMemberUseCase(TransactionUseCaseBase):
-    def __init__(self, db, member_repository:IMemberRepository,user_repository:IUserRepository):
-    
-        super().__init__(db)
+    def __init__(self,  member_repository:IMemberRepository,user_repository:IUserRepository):
         self.member_repository = member_repository
         self.user_repository = user_repository
 

@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Session
 
 from app.ddd.core.i_entity import IEntity
 from app.ddd.core.i_repository import IRepository
@@ -7,8 +6,7 @@ from app.ddd.domain.group import GroupId
 
 
 class GetAllUseCase[T:IEntity,U:IRepository](TransactionUseCaseBase):
-    def __init__(self,db:Session,repository:U):
-        super().__init__(db)
+    def __init__(self,repository:U):
         self.repository=repository
         
     def execute(self,group_id:GroupId|None)->list[T]:

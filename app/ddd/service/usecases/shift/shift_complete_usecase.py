@@ -2,30 +2,26 @@ from app.ddd.core.exception import UseCaseException
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from app.ddd.domain.group import GroupId, IGroupRepository
 from app.ddd.domain.member import IMemberRepository
-from app.ddd.domain.shift import IShiftRepository, Shift, ShiftId, ShiftState
+from app.ddd.domain.shift import (IShiftRepository, ShiftEntity, ShiftId,
+                                  ShiftState)
 from app.ddd.domain.user import IUserRepository, UserId
 
 
 class ShiftCompleteUseCase(TransactionUseCaseBase):
-    def __init__(self, db,
+    def __init__(self, 
                  shift_repository:IShiftRepository,
                  user_repository:IUserRepository,
                  group_repository:IGroupRepository,
                  member_repository:IMemberRepository):
-        super().__init__(db)
         self.shift_repository=shift_repository
         self.user_repository=user_repository
         self.group_repository=group_repository 
         self.member_repository=member_repository
         
-    def execute(self,group_id:GroupId,shift_id:ShiftId,user_id:UserId)->Shift:
-        return self._transaction(group_id,shift_id,user_id)
+    def execute(self,shift_id:ShiftId,user_id:UserId)->ShiftEntity:
+        return self._transaction(shift_id,user_id)
     
-    def _transaction(self,group_id, shift_id,user_id)->Shift:
-        try:
-            group=self.group_repository.find_by_id(group_id)
-        except:
-            raise UseCaseException(f'group_id:{group_id} not found')
+    def _transaction(self, shift_id,user_id)->ShiftEntity:
         try:
             target_shift=self.shift_repository.find_by_id(shift_id)
         except:
@@ -38,6 +34,7 @@ class ShiftCompleteUseCase(TransactionUseCaseBase):
         shift=target_shift.complete(user)
         member_list=[]
         user_list=[]
+        group_id=shift.task.group_id
         for worker in shift.workers:
             try:
                 member=self.member_repository.find_by_id(group_id,worker.id)

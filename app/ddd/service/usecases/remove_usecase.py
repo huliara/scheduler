@@ -1,12 +1,11 @@
 from app.ddd.core.exception import UseCaseException
 from app.ddd.core.i_entity import IEntity
 from app.ddd.core.i_repository import IRepository
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from app.ddd.core.usecase_base import UseCaseBase
 
 
-class RemoveUseCase[ID,T:IEntity,U:IRepository](TransactionUseCaseBase):
-    def __init__(self, db,repository:U):
-        super().__init__(db)
+class RemoveUseCase[ID,T:IEntity,U:IRepository](UseCaseBase):
+    def __init__(self,repository:U):
         self.repository=repository
         
     def execute(self,entity_id:ID):

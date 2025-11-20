@@ -1,15 +1,24 @@
+from dataclasses import dataclass
+
 from mip import BINARY, Model, minimize, xsum
-from sqlalchemy.orm import Session
 
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.shift import IShiftRepository, Shift
-from app.ddd.domain.user import IUserRepository, UserEntity
+from app.ddd.domain.shift import IShiftRepository, ShiftEntity
+from app.ddd.domain.user import IUserRepository
+
+
+@dataclass
+class AllocWorkerDTO:
+    id:str
+    point:int
+    exp_tasks:list[str]
 
 
 class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
-    def __init__(self):
-        pass
-    async def execute(self, shifts:list[Shift],users:list[UserEntity])->list[Shift]:
+    def __init__(self,user_repository:IUserRepository,shift_repository:IShiftRepository):
+        self.user_repository=user_repository
+        self.shift_repository=shift_repository
+    async def execute(self, shifts:list[ShiftEntity],users:list[AllocWorkerDTO])->list[ShiftEntity]:
         if len(shifts)==0:
             return []
         if len(users)==0:
@@ -19,14 +28,19 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         if len(users)>500:
             raise ValueError("user_ids must be less than 500")
         
-        result=await self.shift_calculate(users,shifts)
-        
-        return result
-    def _transaction(self)->list[Shift]:
+        result=await self.shift_calculate(users,shifts,self.user_repository)
+        response=[]
+        for shift in result:
+            shift=self.shift_repository.save(shift)
+            response.append(shift)
+            
+        return response
+    def _transaction(self)->list[ShiftEntity]:
         pass
     
     #experimental
-    async def shift_calculate(users:list[UserEntity],shifts:list[Shift])->list[Shift]:
+    async def shift_calculate(users:list[AllocWorkerDTO],shifts:list[ShiftEntity],
+                              user_repository:IUserRepository)->list[ShiftEntity]:
         m=Model()
         Var=m.add_var_tensor((len(shifts),len(users)),var_type=BINARY)
         shifts=[shift for shift in shifts if len(shift.workers)>0]
@@ -48,7 +62,7 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
                                   +C_less_than_max_woker*x_max[i]
                                   +C_more_expert_than_need*x_exp[i]
                                   +C_add_new_worker*x_new[i] for i in range(len(shifts)))
-                             +C_point_equality*x_point)
+                                  +C_point_equality*x_point)
         
         expert_metrics=[[0 for i in range(len(users))] for j in range(len(shifts))]
         for i in range(len(shifts)):
@@ -78,7 +92,8 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
             for j in range(len(users)):
                 if result[i][j]==1:
                     try:
-                        shifts[i].add(users[j])
+                        user_entity=user_repository.find_by_id(users[j].id)
+                        shifts[i].add(user_entity)
                     except:
                         pass
         return shifts

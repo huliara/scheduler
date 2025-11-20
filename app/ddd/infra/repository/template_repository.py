@@ -13,6 +13,9 @@ class TemplateRepository(ITemplateRepository):
         return self._refresh_to_entity(model)
     
     def find_all(self,group_id):
+        if group_id is None:
+            return [self._refresh_to_entity(model) 
+                    for model in self.db.scalars(select(Template)).all()]
         return [self._refresh_to_entity(model) 
                 for model in self.db.scalars(select(Template).filter(Template.group_id==group_id)).all()]
     

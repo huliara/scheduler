@@ -7,8 +7,7 @@ from app.schemas.template import TemplateSlotBase
 
 class TemplateUpdateSlotUseCase(TransactionUseCaseBase):
     
-    def __init__(self, db,template_repository:ITemplateRepository):
-        super().__init__(db)
+    def __init__(self,template_repository:ITemplateRepository):
         self.template_repository=template_repository
         
     def execute(self,template_id:str,prev_slot:TemplateSlotBase,slot:TemplateSlotBase)->TemplateEntity:

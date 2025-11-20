@@ -9,7 +9,7 @@ from app.ddd.core.exception import DomainException
 from app.ddd.domain.task.task_entity import TaskEntity
 from app.ddd.domain.user.user_entity import UserEntity
 
-from .shift_entity import Shift
+from .shift_entity import ShiftEntity
 from .shift_state import ShiftState
 
 
@@ -32,7 +32,7 @@ def test_task_add_user():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
@@ -62,7 +62,7 @@ def test_task_add_exp_user():
         exp_tasks=[task_detail.id],
         point=0
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
@@ -99,7 +99,7 @@ def test_task_add_beginner_with_expert():
         exp_tasks=[task_detail.id],
         point=0
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
@@ -129,7 +129,7 @@ def test_task_add_nonexpert():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
@@ -170,7 +170,7 @@ def test_task_add_user_over_max():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
@@ -201,7 +201,7 @@ def test_task_add_only_beginner():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
@@ -233,7 +233,7 @@ def test_task_add_user_after_end():
         creater_id=uuid.uuid4()
         
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()-datetime.timedelta(hours=2),
@@ -264,7 +264,7 @@ def test_task_add_double_booking():
         group_id=uuid.uuid4(),
         creater_id=uuid.uuid4()
     )
-    task=Shift(
+    task=ShiftEntity(
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),

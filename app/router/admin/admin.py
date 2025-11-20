@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from app.cruds.auth import get_admin_user
+from app.ddd.infra.auth import get_admin_user
 from app.cruds.response import (group_display, response_base,
                                 user_detail_display, user_display)
 from app.cruds.user import create_user

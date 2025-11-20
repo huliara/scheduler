@@ -10,3 +10,4 @@ class ShiftFromTemplateParams:
     creater_id:UserId
     template_id:TemplateId
     start_date:datetime.date
+    

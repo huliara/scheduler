@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Session
 
 from app.ddd.core.exception import UseCaseException
 from app.ddd.core.i_entity import IEntity
@@ -7,8 +6,7 @@ from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 
 
 class GetUseCase[ID,T:IEntity,U:IRepository](TransactionUseCaseBase):
-    def __init__(self,db:Session,repository:U):
-        super().__init__(db)
+    def __init__(self,repository:U):
         self.repository=repository
         
     def execute(self,id:ID)->T:

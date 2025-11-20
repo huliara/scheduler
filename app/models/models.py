@@ -158,6 +158,9 @@ class GroupUser(Base):
     )
     user: Mapped[User] = relationship(back_populates="groups")
     point: Mapped[float] = mapped_column(default=0)
+    @hybrid_property
+    def exp_tasks(self)->list[Task]:
+        return self.user.exp_tasks
 
 class User(Base):
     __tablename__ = "user"
