@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { TaskResponse, TaskDetailResponse } from "@/types/ResponseType";
+import { ShiftResponse, TaskResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { TaskForm } from "@/components/form/TaskForm";
 
@@ -14,7 +14,7 @@ export default function SlotEdit({
 }: {
   params: { groupId: string; taskId: string };
 }) {
-  const { data, error, isLoading } = useSWR<TaskResponse>(
+  const { data, error, isLoading } = useSWR<ShiftResponse>(
     `/${params.groupId}/tasks/${params.taskId}`,
     fetcher
   );
@@ -23,14 +23,14 @@ export default function SlotEdit({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<{ tasks: TaskDetailResponse[] }>(
+  } = useSWR<{ tasks: TaskResponse[] }>(
     `/${params.groupId}/task_details/`,
     fetcher
   );
 
   React.useEffect(() => {
     if (!data) return;
-    setData(data.taskdetail.id);
+    setData(data.task.id);
   }, [data]);
   if (error | taskError) return <div>error</div>;
   if (isLoading || taskIsLoading) return <div>loading...</div>;

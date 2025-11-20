@@ -2,7 +2,7 @@
 import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
 import {
-  TaskDetailResponse,
+  TaskResponse,
   TemplateTask,
   TemplateTaskResponse,
 } from "@/types/ResponseType";
@@ -31,7 +31,7 @@ export default function TemplateCreate({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<TaskDetailResponse>(`/${params.groupId}/task_details/`, fetcher);
+  } = useSWR<TaskResponse>(`/${params.groupId}/task_details/`, fetcher);
   const [data, setTasks] = React.useState<TemplateTask[]>([]);
   const [name, setName] = React.useState("");
   const [stateField, setTemplateTask] = React.useState<

@@ -57,7 +57,7 @@ export type UserDetailResponse = ResponseBase & {
   is_admin: boolean;
 };
 
-export type TaskDetailResponse = ResponseBase & {
+export type TaskResponse = ResponseBase & {
   subtasks: string[];
   max_worker: number;
   min_worker: number;
@@ -69,24 +69,24 @@ export type TaskDetailResponse = ResponseBase & {
   group_id: string;
 };
 
-export type TaskDetailsResponse = {
-  tasks: TaskDetailResponse[];
+export type TasksResponse = {
+  tasks: TaskResponse[];
 };
 
-export type TaskResponse = ResponseBase & {
+export type ShiftResponse = ResponseBase & {
   start_time: string;
   end_time: string;
   status: number;
-  taskdetail: TaskDetailResponse;
+  task: TaskResponse;
   workers: ResponseBase[];
   creater_id: string;
   group_id: string;
 };
 
-export type UserTaskRespose = {
-  assign: TaskResponse[];
-  hiring: TaskResponse[];
-  end: TaskResponse[];
+export type UserShiftRespose = {
+  assign: ShiftResponse[];
+  hiring: ShiftResponse[];
+  end: ShiftResponse[];
 };
 
 export type TemplateTask = ResponseBase & {
@@ -95,7 +95,7 @@ export type TemplateTask = ResponseBase & {
 };
 
 export type TemplateTaskResponse = TemplateTask & {
-  taskdetail_id: string;
+  task_id: string;
 };
 
 export type TemplateResponse = ResponseBase & {

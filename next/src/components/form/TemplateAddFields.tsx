@@ -16,7 +16,7 @@ export const TemplateAddTaskFields = ({
   >;
 }) => {
   const setTaskId = (id: string) => {
-    setTemplateTask({ ...templateTask, taskdetail_id: id });
+    setTemplateTask({ ...templateTask, task_id: id });
   };
   return (
     <Grid container spacing={2}>
@@ -58,7 +58,7 @@ export const TemplateAddTaskFields = ({
         <SelectField
           data={tasks}
           title="仕事内容"
-          id={templateTask.taskdetail_id}
+          id={templateTask.task_id}
           setData={setTaskId}
         />
       </Grid>

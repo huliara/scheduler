@@ -1,8 +1,8 @@
 "use client";
 import {
   ResponseBase,
+  ShiftResponse,
   TaskResponse,
-  TaskDetailResponse,
 } from "@/types/ResponseType";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";
@@ -12,7 +12,7 @@ export default function TaskDetail({
 }: {
   params: { groupId: string; taskId: string };
 }) {
-  const { data, error, isLoading } = useSWR<TaskDetailResponse>(
+  const { data, error, isLoading } = useSWR<TaskResponse>(
     `/${params.groupId}/task_details/${params.taskId}`,
     fetcher
   );

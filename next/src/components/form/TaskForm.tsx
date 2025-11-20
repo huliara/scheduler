@@ -1,4 +1,4 @@
-import { ResponseBase, TaskResponse } from "@/types/ResponseType";
+import { ResponseBase, ShiftResponse } from "@/types/ResponseType";
 import { Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";

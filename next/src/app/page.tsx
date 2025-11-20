@@ -19,13 +19,13 @@ import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
-import { UserTaskRespose } from "@/types/ResponseType";
+import { UserShiftRespose } from "@/types/ResponseType";
 import { useSession } from "next-auth/react";
 import { LogoutButton } from "@/components/button/logoutButton";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { data, error, mutate, isLoading } = useSWR<UserTaskRespose>(
+  const { data, error, mutate, isLoading } = useSWR<UserShiftRespose>(
     `/user/tasks`,
     fetcher
   );

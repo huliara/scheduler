@@ -1,4 +1,4 @@
-import { TaskResponse } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ResponseType";
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -36,7 +36,7 @@ export const SlotDisplayCardBase = ({
   children,
   style,
 }: {
-  slot: TaskResponse;
+  slot: ShiftResponse;
   children: React.ReactNode;
   style: React.CSSProperties;
 }) => {

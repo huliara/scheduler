@@ -2,8 +2,8 @@
 import useSWR from "swr";
 import {
   ResponseBase,
+  ShiftResponse,
   TaskResponse,
-  TaskDetailResponse,
   UserResponse,
 } from "@/types/ResponseType";
 import {

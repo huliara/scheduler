@@ -57,7 +57,7 @@ export default function TemplateEdit({
       .patch(`/${params.groupId}/templates/${params.templateId}/slots`, {
         date_from_start: Number(selectTemplateTask.date_from_start),
         start_time: selectTemplateTask.start_time,
-        taskdetail_id: selectTemplateTask.taskdetail_id,
+        taskdetail_id: selectTemplateTask.task_id,
       })
       .then((response) => {
         mutate();
@@ -84,7 +84,7 @@ export default function TemplateEdit({
           id: "",
           date_from_start: 0,
           start_time: "08:00",
-          taskdetail_id: "",
+          task_id: "",
           name: "",
         }}
         buttonTitle="新規追加"
@@ -132,7 +132,7 @@ export default function TemplateEdit({
                             <Button
                               onClick={() => {
                                 handleTaskRemove(
-                                  slot.taskdetail_id,
+                                  slot.task_id,
                                   slot.date_from_start,
                                   slot.start_time
                                 );

@@ -1,4 +1,4 @@
-import { TaskDetailResponse } from "@/types/ResponseType";
+import { TaskResponse } from "@/types/ResponseType";
 import {
   Grid,
   List,
@@ -16,7 +16,7 @@ export const TaskDetailForm = ({
   subtasks,
   setSubtasks,
 }: {
-  data: TaskDetailResponse;
+  data: TaskResponse;
   subtasks: string[];
   setSubtasks: Dispatch<SetStateAction<string[]>>;
 }) => {

@@ -1,5 +1,5 @@
 "use client";
-import { TaskResponse } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";
@@ -9,7 +9,7 @@ export default function SlotDetail({
 }: {
   params: { groupId: string; taskId: string };
 }) {
-  const { data, error, isLoading } = useSWR<TaskResponse>(
+  const { data, error, isLoading } = useSWR<ShiftResponse>(
     `/${params.groupId}/tasks/${params.taskId}`,
     fetcher
   );
@@ -36,8 +36,8 @@ export default function SlotDetail({
       </Typography>
       <Typography variant="body1">
         仕事内容:
-        <Link href={`/${params.groupId}/task_details/${data.taskdetail.id}`}>
-          {data.taskdetail.name}
+        <Link href={`/${params.groupId}/task_details/${data.task.id}`}>
+          {data.task.name}
         </Link>
       </Typography>
       <Typography variant="body1">

@@ -2,7 +2,7 @@
 import useSWR from "swr";
 import { Box } from "@mui/system";
 import { TemplateAddTaskFields } from "./TemplateAddFields";
-import { TemplateTaskResponse, TaskDetailResponse } from "@/types/ResponseType";
+import { TemplateTaskResponse, TaskResponse } from "@/types/ResponseType";
 import { useEffect, useState } from "react";
 import { fetcher } from "@/axios";
 export const TemplateEditTaskForm = ({
@@ -20,7 +20,7 @@ export const TemplateEditTaskForm = ({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<TaskDetailResponse>(`/${groupId}/task_details/`, fetcher);
+  } = useSWR<TaskResponse>(`/${groupId}/task_details/`, fetcher);
   const [formData, setTemplateTask] = useState<TemplateTaskResponse>();
   let prev_slot = templateTask;
   useEffect(() => {

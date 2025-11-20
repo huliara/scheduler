@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { TaskDetailResponse } from "@/types/ResponseType";
+import { TaskResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { TaskDetailForm } from "@/components/form/TaskDetailForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
@@ -18,7 +18,7 @@ export default function TaskEdit({
 }) {
   const { showSnackbar } = useSnackbarContext();
   const [subtasks, setSubtasks] = React.useState<string[]>([]);
-  const { data, error, isLoading, mutate } = useSWR<TaskDetailResponse>(
+  const { data, error, isLoading, mutate } = useSWR<TaskResponse>(
     `/${params.groupId}/task_details/${params.taskId}`,
     fetcher
   );

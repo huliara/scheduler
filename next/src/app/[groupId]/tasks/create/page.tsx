@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { TaskResponse, TaskDetailResponse } from "@/types/ResponseType";
+import { ShiftResponse, TaskResponse } from "@/types/ResponseType";
 import useSWR from "swr";
 import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
@@ -20,7 +20,7 @@ export default function SlotCreate({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<TaskDetailResponse>(`/${params.groupId}/task_details/`, fetcher);
+  } = useSWR<TaskResponse>(`/${params.groupId}/task_details/`, fetcher);
   if (taskError) return <div>error</div>;
   if (taskIsLoading) return <div>loading...</div>;
   if (!taskData) return <div>no data</div>;
