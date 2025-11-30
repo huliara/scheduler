@@ -1,17 +1,18 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from mip import BINARY, Model, minimize, xsum
 
 from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from app.ddd.domain.shift import IShiftRepository, ShiftEntity
-from app.ddd.domain.user import IUserRepository
+from app.ddd.domain.task import TaskId
+from app.ddd.domain.user import IUserRepository, UserId
 
 
 @dataclass
 class AllocWorkerDTO:
-    id:str
+    id:UserId
     point:int
-    exp_tasks:list[str]
+    exp_tasks:list[TaskId]=field(default_factory=list)
 
 
 class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
@@ -56,13 +57,13 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         x_max=m.add_var_tensor((len(shifts),))
         x_exp=m.add_var_tensor((len(shifts),))
         x_new=m.add_var_tensor((len(shifts),))
-        x_point=m.add_var()
+        x_maxpoint=m.add_var()
         
         m.objective=minimize(xsum(C_more_than_min_worker*x_min[i]
                                   +C_less_than_max_woker*x_max[i]
                                   +C_more_expert_than_need*x_exp[i]
                                   +C_add_new_worker*x_new[i] for i in range(len(shifts)))
-                                  +C_point_equality*x_point)
+                                  +C_point_equality*x_maxpoint)
         
         expert_metrics=[[0 for i in range(len(users))] for j in range(len(shifts))]
         for i in range(len(shifts)):
@@ -83,7 +84,7 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
             m+=xsum(Var[i,j]*(1-expert_metrics[i][j]) for j in range(len(users)))+x_new[i]>=slot_info_metrics[i][1]-slot_info_metrics[i][2]
         
         for j in range(len(users)):
-            m+=xsum(Var[i,j]*slot_info_metrics[i][3] for i in range(len(shifts)))+users[j].point<=x_point
+            m+=xsum(Var[i,j]*slot_info_metrics[i][3] for i in range(len(shifts)))+users[j].point<=x_maxpoint
 
         m.optimize()
         
