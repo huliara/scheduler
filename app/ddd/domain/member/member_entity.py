@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 
-import app.ddd.domain.group as group
-import app.models.models as models
-from app.ddd.domain.task.task_value_object import TaskId
-from app.ddd.domain.user.user_value_object import UserId
+import ddd.domain.group as group
+import models.models as models
+from ddd.domain.task.task_value_object import TaskId
+from ddd.domain.user.user_value_object import UserId
 
 
 @dataclass

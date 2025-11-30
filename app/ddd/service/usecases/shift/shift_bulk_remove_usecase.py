@@ -1,6 +1,6 @@
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import GroupId
-from app.ddd.domain.shift import IShiftRepository, ShiftId
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import GroupId
+from ddd.domain.shift import IShiftRepository, ShiftId
 
 
 class ShiftBulkRemoveUseCase(TransactionUseCaseBase):

@@ -1,5 +1,5 @@
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.shift import IShiftRepository
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.shift import IShiftRepository
 
 
 class ShiftGetUserRelevantUseCase(TransactionUseCaseBase):

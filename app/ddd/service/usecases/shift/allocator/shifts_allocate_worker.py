@@ -2,10 +2,10 @@ from dataclasses import dataclass, field
 
 from mip import BINARY, Model, minimize, xsum
 
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.shift import IShiftRepository, ShiftEntity
-from app.ddd.domain.task import TaskId
-from app.ddd.domain.user import IUserRepository, UserId
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.shift import IShiftRepository, ShiftEntity
+from ddd.domain.task import TaskId
+from ddd.domain.user import IUserRepository, UserId
 
 
 @dataclass

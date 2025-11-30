@@ -1,8 +1,8 @@
 from abc import abstractmethod
 
-import app.models.models as models
-from app.ddd.core.i_repository import IRepository
-from app.ddd.domain.user.user_value_object import UserId
+import models.models as models
+from ddd.core.i_repository import IRepository
+from ddd.domain.user.user_value_object import UserId
 
 from .group_entity import GroupEntity, MemberEntity
 from .group_value_object import GroupId

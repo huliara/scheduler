@@ -1,7 +1,7 @@
 
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import IGroupRepository
-from app.ddd.domain.shift import IShiftRepository, ShiftId
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import IGroupRepository
+from ddd.domain.shift import IShiftRepository, ShiftId
 
 from .shifts_allocate_worker import (AllocWorkerDTO,
                                      ShiftAllocationWorkerUseCase)

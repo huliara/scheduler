@@ -1,12 +1,11 @@
+from database import get_db
+from ddd.domain.user import UserEntity
+from ddd.infra.auth import get_current_active_user
+from ddd.infra.repository import UserRepository
+from ddd.service.usecases.user import UserUpdatePasswordUseCase
 from fastapi import APIRouter, Depends
+from schemas.users import UserUpdatePassword
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.domain.user import UserEntity
-from app.ddd.infra.auth import get_current_active_user
-from app.ddd.infra.repository import UserRepository
-from app.ddd.service.usecases.user import UserUpdatePasswordUseCase
-from app.schemas.users import UserUpdatePassword
 
 router=APIRouter()
 

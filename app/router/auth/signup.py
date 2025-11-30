@@ -1,12 +1,11 @@
+from database import get_db
+from ddd.domain.user import UserEntity
+from ddd.infra.repository import UserRepository
+from ddd.service.usecases.user import UserPostUseCase
 from fastapi import APIRouter, Depends
+from schemas.auth import Token
+from schemas.users import UserCreate
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.domain.user import UserEntity
-from app.ddd.infra.repository import UserRepository
-from app.ddd.service.usecases.user import UserPostUseCase
-from app.schemas.auth import Token
-from app.schemas.users import UserCreate
 
 router = APIRouter()
 

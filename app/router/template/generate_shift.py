@@ -1,14 +1,13 @@
+from database import get_db
+from ddd.infra.auth import get_current_active_user
+from ddd.infra.repository import (GroupRepository, ShiftRepository,
+                                  TaskRepository, TemplateRepository)
+from ddd.service.usecases.shift import ShiftAllocationByGroup
+from ddd.service.usecases.template import (ShiftFromTemplateParams,
+                                           ShiftFromTemplateUseCase)
 from fastapi import APIRouter, Depends
+from schemas.template import TaskFromTemplate
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.auth import get_current_active_user
-from app.ddd.infra.repository import (GroupRepository, ShiftRepository,
-                                      TaskRepository, TemplateRepository)
-from app.ddd.service.usecases.shift import ShiftAllocationByGroup
-from app.ddd.service.usecases.template import (ShiftFromTemplateParams,
-                                               ShiftFromTemplateUseCase)
-from app.schemas.template import TaskFromTemplate
 
 router = APIRouter()
 

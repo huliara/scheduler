@@ -1,10 +1,10 @@
 from abc import abstractmethod
 
-import app.models.models as models
-from app.ddd.core.i_repository import IRepository
+import models.models as models
+from ddd.core.i_repository import IRepository
 
-from .task_value_object import TaskId
 from .task_entity import TaskEntity
+from .task_value_object import TaskId
 
 
 class ITaskRepository(IRepository[TaskEntity,TaskId]):

@@ -1,11 +1,11 @@
 import datetime
 from abc import abstractmethod
 
-import app.ddd.domain.group as group
-import app.ddd.domain.user as user
-import app.models.models as models
-from app.ddd.core.i_repository import IRepository
-from app.ddd.domain.task import TaskId
+import models.models as models
+from ddd.core.i_repository import IRepository
+from ddd.domain.group import GroupId
+from ddd.domain.task import TaskId
+from ddd.domain.user import UserId
 
 from .shift_entity import ShiftEntity
 from .shift_value_object import ShiftId
@@ -13,7 +13,7 @@ from .shift_value_object import ShiftId
 
 class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
     @abstractmethod
-    def add(self,name:str,start_time:datetime.datetime,creater_id:'user.UserId',task_id:TaskId)->ShiftEntity:
+    def add(self,name:str,start_time:datetime.datetime,creater_id:UserId,task_id:TaskId)->ShiftEntity:
         pass
     
     @abstractmethod
@@ -21,7 +21,7 @@ class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
         pass
     
     @abstractmethod
-    def find_all(self,group_id:'group.GroupId',end:bool|None)->list[ShiftEntity]:
+    def find_all(self,group_id:GroupId,end:bool|None)->list[ShiftEntity]:
         pass
 
     @abstractmethod
@@ -41,5 +41,5 @@ class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
         pass
     
     @abstractmethod
-    def find_by_user(self,user_id:'user.UserId'):
+    def find_by_user(self,user_id:UserId):
         pass

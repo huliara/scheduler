@@ -1,17 +1,16 @@
 from datetime import datetime, timedelta, timezone
 from typing import Union
 
+from database import get_db
+from ddd.domain.user import UserEntity
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from models.models import GroupUser, User
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.domain.user import UserEntity
-from app.models.models import GroupUser, User
 
 # to get a string like this run:
 # openssl rand -hex 32

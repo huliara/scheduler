@@ -1,7 +1,7 @@
+import ddd.infra.message as message
+from database import get_db
 from fastapi import APIRouter, Depends
-from app.database import get_db
 from sqlalchemy.orm import Session
-import app.ddd.infra.message as message
 
 router = APIRouter()
 

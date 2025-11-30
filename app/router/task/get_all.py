@@ -1,10 +1,9 @@
+from database import get_db
+from ddd.infra.repository import TaskRepository
+from ddd.service.usecases.task import TaskGetAllUseCase
 from fastapi import APIRouter, Depends
+from schemas.task import TaskList
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.repository import TaskRepository
-from app.ddd.service.usecases.task import TaskGetAllUseCase
-from app.schemas.task import TaskList
 
 router = APIRouter()
 

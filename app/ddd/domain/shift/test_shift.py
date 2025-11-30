@@ -3,11 +3,10 @@ import uuid
 from http import HTTPStatus as status
 
 import pytest
+from ddd.core.exception import DomainException
+from ddd.domain.task.task_entity import TaskEntity
+from ddd.domain.user.user_entity import UserEntity
 from deepdiff import DeepDiff
-
-from app.ddd.core.exception import DomainException
-from app.ddd.domain.task.task_entity import TaskEntity
-from app.ddd.domain.user.user_entity import UserEntity
 
 from .shift_entity import ShiftEntity
 from .shift_state import ShiftState

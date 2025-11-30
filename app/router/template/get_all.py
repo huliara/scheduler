@@ -1,10 +1,9 @@
+from database import get_db
+from ddd.infra.repository import TemplateRepository
+from ddd.service.usecases.template import TemplateGetAllUseCase
 from fastapi import APIRouter, Depends
+from schemas.template import TemplateList
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.repository import TemplateRepository
-from app.ddd.service.usecases.template import TemplateGetAllUseCase
-from app.schemas.template import TemplateList
 
 router = APIRouter()
 

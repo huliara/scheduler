@@ -1,9 +1,9 @@
 from abc import abstractmethod
 
-import app.ddd.domain.group as group
-import app.models.models as models
-from app.ddd.core.i_repository import IRepository
-from app.ddd.domain.user.user_entity import UserEntity, UserId
+import ddd.domain.group as group
+import models.models as models
+from ddd.core.i_repository import IRepository
+from ddd.domain.user.user_entity import UserEntity, UserId
 
 
 class IUserRepository(IRepository[UserEntity,UserId]):

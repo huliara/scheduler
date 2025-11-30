@@ -1,9 +1,8 @@
+from database import get_db
+from ddd.infra.repository import UserRepository
+from ddd.service.usecases.user import AdminUserAdminateUseCase
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.repository import UserRepository
-from app.ddd.service.usecases.user import AdminUserAdminateUseCase
 
 router = APIRouter()
 

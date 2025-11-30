@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 
+import ddd.domain.group as group
+from ddd.domain.member import MemberEntity
+from ddd.domain.user import UserId
 from sqlalchemy.orm import Session
-
-import app.ddd.domain.group as group
-from app.ddd.domain.member import MemberEntity
-from app.ddd.domain.user import UserId
 
 
 class IMemberRepository(ABC):

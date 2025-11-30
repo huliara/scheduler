@@ -1,7 +1,7 @@
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import IGroupRepository
-from app.ddd.domain.task import ITaskRepository, TaskEntity
-from app.ddd.domain.user import IUserRepository
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import IGroupRepository
+from ddd.domain.task import ITaskRepository, TaskEntity
+from ddd.domain.user import IUserRepository
 
 
 class UserRelateTaskUseCase(TransactionUseCaseBase):

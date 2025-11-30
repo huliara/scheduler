@@ -1,7 +1,7 @@
-from app.ddd.core.exception import UseCaseException
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import IGroupRepository
-from app.ddd.domain.task import ITaskRepository, TaskEntity
+from ddd.core.exception import UseCaseException
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import IGroupRepository
+from ddd.domain.task import ITaskRepository, TaskEntity
 
 
 class TaskUpdateUseCase(TransactionUseCaseBase):

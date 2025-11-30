@@ -1,10 +1,9 @@
 from datetime import date, datetime
 
 from discordwebhook import Discord
+from models.models import Shift
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
-
-from app.models.models import Shift
 
 Discord_URL = "https://discordapp.com/api/webhooks/1087558350109163520/jly9YybhouXEbu3NB5H5Juwf336SO_1N8kcwmbqVWitlmaG4ETswsaJk0-c5uzgHBLKp"
 

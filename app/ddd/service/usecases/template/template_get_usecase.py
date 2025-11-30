@@ -1,4 +1,4 @@
-from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
+from ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateId)
 
 from ..get_usecase import GetUseCase

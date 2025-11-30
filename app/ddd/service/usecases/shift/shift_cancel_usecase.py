@@ -1,7 +1,7 @@
-from app.ddd.core.exception import UseCaseException
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId
-from app.ddd.domain.user import IUserRepository, UserId
+from ddd.core.exception import UseCaseException
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId
+from ddd.domain.user import IUserRepository, UserId
 
 
 class ShiftCancelUseCase(TransactionUseCaseBase):

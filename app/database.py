@@ -1,8 +1,7 @@
+from env import DB_HOSTNAME, DB_NAME, DB_PASSWORD, DB_USER
+from models import Base
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, scoped_session, sessionmaker
-
-from app.env import DB_HOSTNAME, DB_NAME, DB_PASSWORD, DB_USER
-from app.models.models import Base
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 DATABASE = "postgresql+psycopg2://%s:%s@%s:5432/%s" % (
     DB_USER,

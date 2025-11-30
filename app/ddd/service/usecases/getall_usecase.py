@@ -1,8 +1,8 @@
 
-from app.ddd.core.i_entity import IEntity
-from app.ddd.core.i_repository import IRepository
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import GroupId
+from ddd.core.i_entity import IEntity
+from ddd.core.i_repository import IRepository
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import GroupId
 
 
 class GetAllUseCase[T:IEntity,U:IRepository](TransactionUseCaseBase):

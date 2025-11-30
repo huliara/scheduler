@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.database import get_db
-from app.ddd.infra.repository import MemberRepository, UserRepository
-from app.ddd.service.usecases.group import GroupGetAllMemberUseCase
+from database import get_db
+from ddd.infra.repository import MemberRepository, UserRepository
+from ddd.service.usecases.group import GroupGetAllMemberUseCase
 
 router = APIRouter()
 

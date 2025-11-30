@@ -1,10 +1,10 @@
 
 from dataclasses import dataclass, field
 
-import app.models.models as models
-from app.ddd.core.i_entity import IEntity
-from app.ddd.domain.shift.shift_value_object import ShiftId
-from app.ddd.domain.task.task_value_object import TaskId
+import models.models as models
+from ddd.core.i_entity import IEntity
+from ddd.domain.shift.shift_value_object import ShiftId
+from ddd.domain.task.task_value_object import TaskId
 
 from .user_value_object import UserId
 

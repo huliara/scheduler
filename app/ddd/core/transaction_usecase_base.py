@@ -1,10 +1,8 @@
 from abc import abstractmethod
 from typing import Any
 
-from sqlalchemy.orm import Session
-
-from app.database import Base
-from app.ddd.core.usecase_base import UseCaseBase
+from database import Base
+from ddd.core.usecase_base import UseCaseBase
 
 
 class TransactionUseCaseBase(UseCaseBase):

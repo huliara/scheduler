@@ -1,9 +1,9 @@
 from sqlalchemy.future import select
 
-from app.ddd.infra.auth import get_password_hash
-from app.ddd.core.exception import DomainException
-from app.ddd.domain.user import IUserRepository, UserEntity
-from app.models.models import GroupUser, Task, User
+from ddd.infra.auth import get_password_hash
+from ddd.core.exception import DomainException
+from ddd.domain.user import IUserRepository, UserEntity
+from models.models import GroupUser, Task, User
 
 
 class UserRepository(IUserRepository):

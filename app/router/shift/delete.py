@@ -1,12 +1,11 @@
 from uuid import UUID
 
+from database import get_db
+from ddd.infra.repository import ShiftRepository
+from ddd.service.usecases.shift import ShiftRemoveUseCase
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.repository import ShiftRepository
-from app.ddd.service.usecases.shift import ShiftRemoveUseCase
 
 router = APIRouter()
 

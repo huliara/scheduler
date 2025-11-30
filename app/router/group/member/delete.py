@@ -1,10 +1,9 @@
+from database import get_db
+from ddd.infra.repository import GroupRepository, MemberRepository
+from ddd.service.usecases.group import GroupRemoveMemberUseCase
 from fastapi import APIRouter, Depends
+from schemas.users import GroupUsers
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.repository import GroupRepository, MemberRepository
-from app.ddd.service.usecases.group import GroupRemoveMemberUseCase
-from app.schemas.users import GroupUsers
 
 router = APIRouter()
 

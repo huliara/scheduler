@@ -2,19 +2,18 @@ import datetime
 import uuid
 
 import pytest
-
-from app.ddd.domain.group import GroupEntity
-from app.ddd.domain.shift.shift_entity import ShiftEntity
-from app.ddd.domain.task.task_entity import TaskEntity
-from app.ddd.domain.template import TemplateEntity, TemplateSlot
-from app.ddd.domain.user import UserEntity
-from app.ddd.infra.repository import (GroupRepository, ShiftRepository,
-                                      TaskRepository, TemplateRepository,
-                                      UserRepository)
-from app.ddd.service.usecases.template.schema import ShiftFromTemplateParams
-from app.ddd.service.usecases.template.shift_from_template import \
+from ddd.domain.group import GroupEntity
+from ddd.domain.shift.shift_entity import ShiftEntity
+from ddd.domain.task.task_entity import TaskEntity
+from ddd.domain.template import TemplateEntity, TemplateSlot
+from ddd.domain.user import UserEntity
+from ddd.infra.repository import (GroupRepository, ShiftRepository,
+                                  TaskRepository, TemplateRepository,
+                                  UserRepository)
+from ddd.service.usecases.template.schema import ShiftFromTemplateParams
+from ddd.service.usecases.template.shift_from_template import \
     ShiftFromTemplateUseCase
-from app.mock_database import SessionLocal
+from mock_database import SessionLocal
 
 
 @pytest.fixture

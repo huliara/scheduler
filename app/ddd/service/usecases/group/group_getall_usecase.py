@@ -1,5 +1,5 @@
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import GroupEntity, IGroupRepository
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import GroupEntity, IGroupRepository
 
 
 class GroupGetAllUseCase(TransactionUseCaseBase):

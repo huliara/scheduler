@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from sqlalchemy.orm import Session
 
-from app.ddd.core.i_entity import IEntity
+from ddd.core.i_entity import IEntity
 
 
 class IRepository[T:IEntity,ID](ABC):

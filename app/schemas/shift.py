@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-from app.ddd.domain.shift.shift_state import ShiftState
+from ddd.domain.shift.shift_state import ShiftState
 
 from .task import TaskDisplay
 

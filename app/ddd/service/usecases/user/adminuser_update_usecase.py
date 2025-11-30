@@ -1,6 +1,6 @@
-from app.ddd.core.exception import UseCaseException
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.user import IUserRepository, UserEntity
+from ddd.core.exception import UseCaseException
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.user import IUserRepository, UserEntity
 
 
 class AdminUserUpdateUseCase(TransactionUseCaseBase):

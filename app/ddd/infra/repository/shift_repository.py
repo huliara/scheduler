@@ -1,13 +1,11 @@
 import datetime
 
+from ddd.core.exception import DomainException
+from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId, ShiftState
+from models.models import Shift, User
 from sqlalchemy import delete, insert
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
-
-from app.ddd.core.exception import DomainException
-from app.ddd.domain.shift import (IShiftRepository, ShiftEntity, ShiftId,
-                                  ShiftState)
-from app.models.models import Shift, User
 
 
 class ShiftRepository(IShiftRepository):

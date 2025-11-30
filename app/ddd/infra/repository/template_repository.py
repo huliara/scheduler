@@ -1,8 +1,8 @@
 from sqlalchemy.future import select
 
-from app.ddd.core.exception import DomainException
-from app.ddd.domain.template import ITemplateRepository, TemplateEntity
-from app.models.models import TaskTemplate, Template
+from ddd.core.exception import DomainException
+from ddd.domain.template import ITemplateRepository, TemplateEntity
+from models.models import TaskTemplate, Template
 
 
 class TemplateRepository(ITemplateRepository):

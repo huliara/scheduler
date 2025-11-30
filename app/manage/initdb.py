@@ -1,5 +1,6 @@
-from app.database import engine
-from app.models.models import Base
+from database import engine
+from models.models import Base
+
 
 def initdb():
     Base.metadata.drop_all(bind=engine)

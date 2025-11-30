@@ -1,9 +1,9 @@
-from app.ddd.core.exception import UseCaseException
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.task import ITaskRepository
-from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
-                                     TemplateSlot)
-from app.schemas.template import TemplateSlotBase
+from ddd.core.exception import UseCaseException
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.task import ITaskRepository
+from ddd.domain.template import (ITemplateRepository, TemplateEntity,
+                                 TemplateSlot)
+from schemas.template import TemplateSlotBase
 
 
 class TemplateDeleteSlotUseCase(TransactionUseCaseBase):

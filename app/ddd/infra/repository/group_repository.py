@@ -1,9 +1,8 @@
+from ddd.core.exception import DomainException
+from ddd.domain.group import (GroupEntity, GroupId, IGroupRepository,
+                              MemberEntity)
+from models.models import Group, GroupUser
 from sqlalchemy.future import select
-
-from app.ddd.core.exception import DomainException
-from app.ddd.domain.group import (GroupEntity, GroupId, IGroupRepository,
-                                  MemberEntity)
-from app.models.models import Group, GroupUser
 
 
 class GroupRepository(IGroupRepository):

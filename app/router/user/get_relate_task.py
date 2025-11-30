@@ -1,12 +1,11 @@
+from database import get_db
+from ddd.infra.auth import get_current_active_user
+from ddd.infra.repository import (GroupRepository, TaskRepository,
+                                  UserRepository)
+from ddd.service.usecases.user import UserRelateTaskUseCase
 from fastapi import APIRouter, Depends
+from models.models import User
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.auth import get_current_active_user
-from app.ddd.infra.repository import (GroupRepository, TaskRepository,
-                                      UserRepository)
-from app.ddd.service.usecases.user import UserRelateTaskUseCase
-from app.models.models import User
 
 router=APIRouter()
 

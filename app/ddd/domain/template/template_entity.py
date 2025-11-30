@@ -1,9 +1,8 @@
-import datetime
 from dataclasses import dataclass
 
-import app.models.models as models
-from app.ddd.core.i_entity import IEntity
-from app.ddd.domain.group.group_value_object import GroupId
+import models.models as models
+from ddd.core.i_entity import IEntity
+from ddd.domain.group.group_value_object import GroupId
 
 from .template_value_object import TemplateId, TemplateSlot
 

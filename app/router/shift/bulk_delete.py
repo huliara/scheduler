@@ -1,10 +1,9 @@
+from database import get_db
+from ddd.infra.repository import ShiftRepository
+from ddd.service.usecases.shift import ShiftBulkRemoveUseCase
 from fastapi import APIRouter, Depends
+from schemas.shift import ShiftDelete, ShiftDisplay
 from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.ddd.infra.repository import ShiftRepository
-from app.ddd.service.usecases.shift import ShiftBulkRemoveUseCase
-from app.schemas.shift import ShiftDelete, ShiftDisplay
 
 router = APIRouter()
 

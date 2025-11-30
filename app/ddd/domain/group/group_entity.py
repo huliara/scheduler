@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-import app.models.models as models
-from app.ddd.core.i_entity import IEntity
-from app.ddd.domain.member.member_entity import MemberEntity
-from app.ddd.domain.task.task_entity import TaskId
-from app.ddd.domain.template.template_entity import TemplateId
+import models.models as models
+from ddd.core.i_entity import IEntity
+from ddd.domain.member.member_entity import MemberEntity
+from ddd.domain.task.task_entity import TaskId
+from ddd.domain.template.template_entity import TemplateId
 
 from .group_value_object import GroupId
 

@@ -1,4 +1,4 @@
-from app.ddd.domain.group import GroupEntity, GroupId, IGroupRepository
+from ddd.domain.group import GroupEntity, GroupId, IGroupRepository
 
 from ..get_usecase import GetUseCase
 

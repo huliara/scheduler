@@ -1,8 +1,8 @@
-from app.ddd.core.exception import UseCaseException
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import GroupId, IGroupRepository
-from app.ddd.domain.member import IMemberRepository, MemberEntity
-from app.ddd.domain.user import UserId
+from ddd.core.exception import UseCaseException
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import GroupId, IGroupRepository
+from ddd.domain.member import IMemberRepository, MemberEntity
+from ddd.domain.user import UserId
 
 
 class GroupAddMemberUseCase(TransactionUseCaseBase):

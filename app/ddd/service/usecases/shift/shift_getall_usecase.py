@@ -1,7 +1,7 @@
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import GroupId
-from app.ddd.domain.shift import IShiftRepository, ShiftEntity
-from app.ddd.domain.user import UserEntity
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import GroupId
+from ddd.domain.shift import IShiftRepository, ShiftEntity
+from ddd.domain.user import UserEntity
 
 
 class ShiftGetAllUseCase(TransactionUseCaseBase):

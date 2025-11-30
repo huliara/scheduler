@@ -2,12 +2,12 @@ import datetime
 
 from sqlalchemy.orm import Session
 
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftState
-from app.ddd.domain.task import ITaskRepository
-from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftState
+from ddd.domain.task import ITaskRepository
+from ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateId)
-from app.ddd.domain.user import UserId
+from ddd.domain.user import UserId
 
 from .schema import ShiftFromTemplateParams
 

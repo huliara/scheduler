@@ -2,13 +2,13 @@ import datetime
 from dataclasses import dataclass, field
 from http import HTTPStatus as status
 
-import app.ddd.domain.group as group
-import app.ddd.domain.user.user_entity as user
-import app.models.models as models
-from app.ddd.core.exception import DomainException
-from app.ddd.core.i_entity import IEntity
-from app.ddd.domain.task.task_entity import TaskEntity
-from app.ddd.domain.user import UserEntity, UserId
+import ddd.domain.group as group
+import ddd.domain.user.user_entity as user
+import models.models as models
+from ddd.core.exception import DomainException
+from ddd.core.i_entity import IEntity
+from ddd.domain.task.task_entity import TaskEntity
+from ddd.domain.user import UserEntity, UserId
 
 from .shift_state import ShiftState
 from .shift_value_object import ShiftId

@@ -1,10 +1,10 @@
-from app.ddd.core.exception import UseCaseException
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from app.ddd.domain.group import IGroupRepository
-from app.ddd.domain.task import ITaskRepository
-from app.ddd.domain.template import (ITemplateRepository, TemplateEntity,
+from ddd.core.exception import UseCaseException
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.domain.group import IGroupRepository
+from ddd.domain.task import ITaskRepository
+from ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateSlot)
-from app.schemas.template import TemplateCreate
+from schemas.template import TemplateCreate
 
 
 class TemplatePostUseCase(TransactionUseCaseBase):

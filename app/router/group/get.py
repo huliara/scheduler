@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database import get_db
-from app.ddd.infra.repository import GroupRepository
-from app.ddd.service.usecases.group import GroupGetUseCase
-from app.schemas.groups import GroupDisplay
+from database import get_db
+from ddd.infra.repository import GroupRepository
+from ddd.service.usecases.group import GroupGetUseCase
+from schemas.groups import GroupDisplay
 
 router=APIRouter()
 

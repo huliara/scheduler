@@ -1,8 +1,8 @@
 from collections.abc import Callable
 from typing import Any
 
-from app.ddd.core.exception import DomainException, UseCaseException
-from app.ddd.core.transaction_usecase_base import TransactionUseCaseBase
+from ddd.core.exception import DomainException, UseCaseException
+from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 
 
 def transaction(func: Callable[..., Any]) -> Callable[..., Any]:

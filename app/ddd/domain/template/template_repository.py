@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
-from app.ddd.core.i_repository import IRepository
-import app.models.models as models
+from ddd.core.i_repository import IRepository
+import models.models as models
 
 from .template_entity import TemplateEntity
 from .template_value_object import TemplateId

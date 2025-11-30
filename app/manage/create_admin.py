@@ -1,6 +1,6 @@
-from app.ddd.infra.auth import get_password_hash
-from app.database import SessionLocal
-from app.models.models import User
+from database import SessionLocal
+from ddd.infra.auth import get_password_hash
+from models.models import User
 
 
 def create_admin(name: str, password: str, room_number: str):

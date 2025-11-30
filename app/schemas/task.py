@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, model_validator
 
-from app.ddd.domain.permission.permission import Permission
+from ddd.domain.permission.permission import Permission
 
 
 class TaskBase(BaseModel):

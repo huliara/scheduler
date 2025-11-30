@@ -1,11 +1,11 @@
 import datetime
 from dataclasses import dataclass, field
 
-import app.models.models as models
-from app.ddd.core.i_entity import IEntity
-from app.ddd.domain.group.group_value_object import GroupId
-from app.ddd.domain.permission.permission import Permission
-from app.ddd.domain.user.user_value_object import UserId
+import models.models as models
+from ddd.core.i_entity import IEntity
+from ddd.domain.group.group_value_object import GroupId
+from ddd.domain.permission.permission import Permission
+from ddd.domain.user.user_value_object import UserId
 
 from .task_value_object import TaskId
 
