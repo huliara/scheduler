@@ -12,6 +12,6 @@
   "editor.formatOnSave": true,
   "python.analysis.extraPaths": [
     "/home/taira/.local/lib/python3.10/site-packages",
-    "/Users/huliara/repository/domitory/scheduler/app/.venv/lib/python3.12/site-packages"
+    "/Users/huliara/repository/domitory/scheduler/api/.venv/lib/python3.12/site-packages"
   ]
 }
