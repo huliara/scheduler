@@ -36,7 +36,7 @@ services:
       - scheduler-front
       - scheduler-back
     volumes:
-      - ./app:/usr/src/app/app:cached
+      - ./api:/usr/src/app/api:cached
       - ./db:/usr/src/app/db:cached
       - ./scripts:/usr/src/app/scripts:cached
     working_dir: /usr/src/app/scripts
@@ -50,7 +50,7 @@ services:
     image: "scheduler_db"
     container_name: "scheduler_db"
     build:
-      context: ./docker/test-db
+      context: ./docker/db
       dockerfile: Dockerfile
     restart: always
     tty: true
