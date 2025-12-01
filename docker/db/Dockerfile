@@ -1,1 +1,1 @@
-FROM postgres:18-alpine
+FROM postgres:18.1-bookworm
