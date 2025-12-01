@@ -7,20 +7,14 @@ RUN apt update \
     && apt clean
 
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONBUFFERED=1
+
+COPY ./api /usr/src/app
 
 WORKDIR /usr/src/app
 
-
 RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project
-
-ADD /app /usr/src/app/
-ADD pyproject.toml /usr/src/app/
-ADD uv.lock /usr/src/app/
-
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen
+--mount=type=bind,source=./api/uv.lock,target=uv.lock \
+--mount=type=bind,source=./api/pyproject.toml,target=pyproject.toml \
+uv sync --frozen --no-install-project

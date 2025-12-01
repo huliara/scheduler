@@ -12,7 +12,7 @@ services:
     environment:
       - NODE_ENV=development
     volumes:
-      - node_modules:/usr/src/next/node_modules
+      - node_modules:/usr/src/next/node_modules:cached
       - ./next:/usr/src/next
       - ./scripts:/usr/src/scripts
     ports:
@@ -36,7 +36,7 @@ services:
       - scheduler-front
       - scheduler-back
     volumes:
-      - ./app:/usr/src/app/app:cached
+      - ./api/migrations:/usr/src/app/migrations:cached
       - ./db:/usr/src/app/db:cached
       - ./scripts:/usr/src/app/scripts:cached
     working_dir: /usr/src/app/scripts
@@ -44,13 +44,14 @@ services:
     environment:
       APP_ENV: "development"
       TZ: "Asia/Tokyo"
+      POSTGRES_DB: "POSTGRES_DB"
     env_file:
       - .env.dev
   db:
     image: "scheduler_db"
     container_name: "scheduler_db"
     build:
-      context: ./docker/test-db
+      context: ./docker/db
       dockerfile: Dockerfile
     restart: always
     tty: true
@@ -59,16 +60,17 @@ services:
     networks:
       - scheduler-back
     volumes:
-      - postgres_volume:/var/lib/postgresql/data
+      - postgres_volume:/var/lib/postgresql
     environment:
       APP_ENV: "development"
       TZ: "Asia/Tokyo"
+      POSTGRES_DB: "POSTGRES_DB"
     env_file:
       - .env.dev
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
-      timeout: 5s
+      timeout: 10s
       retries: 5
 
 volumes:

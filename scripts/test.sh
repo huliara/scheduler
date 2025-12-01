@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd /usr/src/app/app && python initdb.py  
+cd /usr/src/app/api && python initdb.py  
