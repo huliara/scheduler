@@ -9,4 +9,5 @@ class Permission(Enum):
     edit_shift='edit_shift'
     generate_shift_from_template='generate_shift_from_template'
     edit_point='edit_point'
+    edit_group='edit_group'
     

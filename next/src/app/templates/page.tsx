@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { TemplateResponse } from "@/types/ResponseType";
+import { TemplateResponse } from "@/types/TemplateType";
 import {
   Button,
   Table,
@@ -60,7 +60,13 @@ export default function TemplateList({
                 </Link>
               </TableCell>
               <TableCell>
-                <Button onClick={() => {handleOnClick(template.id)}}>削除</Button>
+                <Button
+                  onClick={() => {
+                    handleOnClick(template.id);
+                  }}
+                >
+                  削除
+                </Button>
               </TableCell>
             </TableRow>
           ))}

@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { GroupUserResponse } from "@/types/ResponseType";
+import { GroupUserResponse } from "@/types/GroupUser";
 import {
   Button,
   Table,

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
-import { UserDetailResponse } from "@/types/ResponseType";
+import { UserDetailResponse } from "@/types/UserType";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Hiking from "@mui/icons-material/Hiking";
 import Link from "next/link";

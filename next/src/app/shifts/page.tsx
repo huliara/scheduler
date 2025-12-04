@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { ShiftResponse } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ShiftType";
 import {
   Button,
   Table,

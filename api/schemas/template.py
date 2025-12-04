@@ -42,8 +42,6 @@ class TemplateList(BaseModel):
         from_attributes = True
 
 
-
-    
 class TemplatePatchSlot(BaseModel):
     src:TemplateSlotBase
     dst:TemplateSlotBase

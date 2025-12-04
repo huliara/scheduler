@@ -1,6 +1,7 @@
 import { Button, Grid, TextField } from "@mui/material";
 import SelectField from "./SelectField";
-import { ResponseBase, TemplateTaskResponse } from "@/types/ResponseType";
+import { ResponseBase } from "@/types/ResponseType";
+import { TemplateSlotResponse } from "@/types/TemplateType";
 
 export const TemplateAddTaskFields = ({
   templateTask,
@@ -8,11 +9,11 @@ export const TemplateAddTaskFields = ({
   tasks,
   setTemplateTask,
 }: {
-  templateTask: TemplateTaskResponse;
+  templateTask: TemplateSlotResponse;
   buttonLabel: string;
   tasks: ResponseBase[];
   setTemplateTask: React.Dispatch<
-    React.SetStateAction<TemplateTaskResponse | undefined>
+    React.SetStateAction<TemplateSlotResponse | undefined>
   >;
 }) => {
   const setTaskId = (id: string) => {

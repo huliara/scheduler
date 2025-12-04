@@ -1,7 +1,8 @@
 "use client";
 import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
-import { TemplateResponse, TemplateTaskResponse } from "@/types/ResponseType";
+import { TemplateResponse } from "@/types/TemplateType";
+import { TemplateSlotResponse } from "@/types/TemplateType";
 import {
   Box,
   Button,
@@ -52,7 +53,7 @@ export default function TemplateEdit({
       .catch((err) => {});
   };
 
-  const handleTaskAdd = (selectTemplateTask: TemplateTaskResponse) => {
+  const handleTaskAdd = (selectTemplateTask: TemplateSlotResponse) => {
     axios
       .patch(`/${params.groupId}/templates/${params.templateId}/slots`, {
         date_from_start: Number(selectTemplateTask.date_from_start),

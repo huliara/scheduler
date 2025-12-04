@@ -1,4 +1,5 @@
-import { ResponseBase, ShiftResponse } from "@/types/ResponseType";
+import { ResponseBase } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ShiftType";
 import { Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";

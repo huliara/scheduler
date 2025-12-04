@@ -1,11 +1,8 @@
 import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field
-
 from ddd.domain.shift.shift_state import ShiftState
-
-from .task import TaskDisplay
+from pydantic import BaseModel, Field
 
 
 class ShiftCreate(BaseModel):
@@ -39,7 +36,7 @@ class ShiftDisplay(BaseModel):
     start_time: datetime.datetime
     end_time: datetime.datetime
     status:ShiftState
-    taskdetail:ResponseBase
+    task:ResponseBase
     workers: list[Worker] = []
     creater_id: UUID|None=None
     group_id:UUID

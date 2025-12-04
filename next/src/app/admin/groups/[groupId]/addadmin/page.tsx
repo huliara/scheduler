@@ -1,7 +1,7 @@
 "use client";
 import useSWR from "swr";
 import axios, { fetcher } from "@/axios";
-import { GroupUsersResponse } from "@/types/ResponseType";
+import { GroupUsersResponse } from "@/types/GroupUser";
 import {
   Table,
   TableHead,

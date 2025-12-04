@@ -1,5 +1,5 @@
 "use client";
-import { ShiftResponse } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ShiftType";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";

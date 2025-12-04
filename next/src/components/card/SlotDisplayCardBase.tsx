@@ -1,4 +1,4 @@
-import { ShiftResponse } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ShiftType";
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";

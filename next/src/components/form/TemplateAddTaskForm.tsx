@@ -2,7 +2,8 @@
 import useSWR from "swr";
 import { Box } from "@mui/system";
 import { TemplateAddTaskFields } from "./TemplateAddFields";
-import { TemplateTaskResponse, TaskResponse } from "@/types/ResponseType";
+import { TemplateSlotResponse } from "@/types/TemplateType";
+import { TaskResponse } from "@/types/TaskType";
 import { useEffect, useState } from "react";
 import { fetcher } from "@/axios";
 export const TemplateAddTaskForm = ({
@@ -12,8 +13,8 @@ export const TemplateAddTaskForm = ({
   buttonTitle,
 }: {
   groupId: string;
-  handleSubmit: (data: TemplateTaskResponse) => void;
-  templateTask: TemplateTaskResponse;
+  handleSubmit: (data: TemplateSlotResponse) => void;
+  templateTask: TemplateSlotResponse;
   buttonTitle: string;
 }) => {
   const {
@@ -21,7 +22,7 @@ export const TemplateAddTaskForm = ({
     error: taskError,
     isLoading: taskIsLoading,
   } = useSWR<TaskResponse>(`/${groupId}/task_details/`, fetcher);
-  const [formData, setTemplateTask] = useState<TemplateTaskResponse>();
+  const [formData, setTemplateTask] = useState<TemplateSlotResponse>();
   useEffect(() => {
     setTemplateTask(templateTask);
   }, [templateTask]);

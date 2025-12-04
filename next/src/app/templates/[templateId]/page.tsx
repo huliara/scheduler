@@ -1,7 +1,7 @@
 "use client";
 import { fetcher } from "@/axios";
 import useSWR from "swr";
-import { TemplateResponse } from "@/types/ResponseType";
+import { TemplateResponse } from "@/types/TemplateType";
 import {
   Grid,
   Link,

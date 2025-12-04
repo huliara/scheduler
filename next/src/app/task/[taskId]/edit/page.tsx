@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { TaskResponse } from "@/types/ResponseType";
+import { TaskResponse } from "@/types/TaskType";
 import useSWR from "swr";
 import { TaskDetailForm } from "@/components/form/TaskDetailForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";

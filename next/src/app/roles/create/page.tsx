@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { RoleForm } from "@/components/form/RoleForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import { useState } from "react";
-import { Permission } from "@/types/ResponseType";
+import { Permission } from "@/types/PermissionType";
 export default function RoleCreateForm({
   params,
 }: {

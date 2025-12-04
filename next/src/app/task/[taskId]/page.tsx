@@ -1,9 +1,7 @@
 "use client";
-import {
-  ResponseBase,
-  ShiftResponse,
-  TaskResponse,
-} from "@/types/ResponseType";
+import { ResponseBase } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ShiftType";
+import { TaskResponse } from "@/types/TaskType";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";
 import useSWR from "swr";

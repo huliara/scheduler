@@ -12,7 +12,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
-import { UserDetailResponse } from "@/types/ResponseType";
+import { UserDetailResponse } from "@/types/UserType";
 export default function AdminUserEdit({
   params,
 }: {

@@ -1,11 +1,9 @@
 "use client";
 import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
-import {
-  TaskResponse,
-  TemplateTask,
-  TemplateTaskResponse,
-} from "@/types/ResponseType";
+import { TemplateSlotResponse } from "@/types/TemplateType";
+import { TemplateSlot } from "@/types/TemplateType";
+import { TaskResponse } from "@/types/TaskType";
 import {
   Box,
   Button,
@@ -32,10 +30,10 @@ export default function TemplateCreate({
     error: taskError,
     isLoading: taskIsLoading,
   } = useSWR<TaskResponse>(`/${params.groupId}/task_details/`, fetcher);
-  const [data, setTasks] = React.useState<TemplateTask[]>([]);
+  const [data, setTasks] = React.useState<TemplateSlot[]>([]);
   const [name, setName] = React.useState("");
   const [stateField, setTemplateTask] = React.useState<
-    TemplateTaskResponse | undefined
+    TemplateSlotResponse | undefined
   >({
     id: "",
     date_from_start: 0,
@@ -49,7 +47,7 @@ export default function TemplateCreate({
   if (taskIsLoading) return <div>loading...</div>;
   if (!taskData) return <div>no data</div>;
 
-  const handleTaskRemove = (slot: TemplateTask) => {
+  const handleTaskRemove = (slot: TemplateSlot) => {
     setTasks(data.filter((s) => s !== slot));
   };
 

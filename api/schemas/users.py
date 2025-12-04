@@ -37,7 +37,7 @@ class UserDisplay(UserBase):
     point: float
     is_active: bool
     exp_tasks: list[UUID]
-    tasks: list[UUID]
+    shifts: list[UUID]
 
 class UsersDisplay(BaseModel):
     users: list[UserDisplay]

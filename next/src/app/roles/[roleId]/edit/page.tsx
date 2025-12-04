@@ -4,10 +4,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { Permission, RoleResponse } from "@/types/ResponseType";
+import { RoleResponse } from "@/types/ResponseType";
+import { Permission } from "@/types/PermissionType";
 import useSWR from "swr";
 import { RoleForm } from "@/components/form/RoleForm";
-
 
 export default function RoleEdit({
   params,

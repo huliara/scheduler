@@ -5,7 +5,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
-import { ShiftResponse, TaskResponse } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ShiftType";
+import { TaskResponse } from "@/types/TaskType";
 import useSWR from "swr";
 import { TaskForm } from "@/components/form/TaskForm";
 

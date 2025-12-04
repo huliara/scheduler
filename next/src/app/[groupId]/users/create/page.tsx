@@ -1,6 +1,6 @@
 "use client";
 import axios from "@/axios";
-import { UserResponse } from "@/types/ResponseType";
+import { UserResponse } from "@/types/UserType";
 import { useEffect, useState } from "react";
 import {
   Button,

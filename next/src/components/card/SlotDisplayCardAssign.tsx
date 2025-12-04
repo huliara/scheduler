@@ -1,5 +1,6 @@
 import { useParams } from "next/navigation";
-import { UserShiftRespose, ShiftResponse } from "@/types/ResponseType";
+import { UserShiftRespose } from "@/types/ResponseType";
+import { ShiftResponse } from "@/types/ShiftType";
 import * as React from "react";
 import { SlotDisplayCardBase } from "./SlotDisplayCardBase";
 import { Button } from "@mui/material";

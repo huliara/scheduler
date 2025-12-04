@@ -1,4 +1,4 @@
-import { TaskResponse } from "@/types/ResponseType";
+import { TaskResponse } from "@/types/TaskType";
 import {
   Grid,
   List,
