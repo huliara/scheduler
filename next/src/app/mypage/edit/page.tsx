@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useState } from "react";
 import axios, { fetcher } from "@/axios";
-import { MultiSelect } from "@/components/form/MultiSelect";
+import { MultiSelectField } from "@/components/form/MultiSelectField";
 import useSWR from "swr";
 import { UserDetailResponse } from "@/types/UserType";
 import { TaskResponse } from "@/types/TaskType";
@@ -81,10 +81,10 @@ export default function ProfileEdit() {
               />
             </Grid>
             <Grid item xs={12}>
-              <MultiSelect
-                task={tasks}
+              <MultiSelectField
+                options={tasks}
                 title="経験した仕事"
-                exp_task={exp_task}
+                defaultValue={exp_task}
                 setData={setExpTask}
               />
             </Grid>

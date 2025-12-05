@@ -98,3 +98,16 @@ export const isPositive = (key: RequestFieldKeys): boolean => {
     key === "duration"
   );
 };
+
+export const selectFieldURL = (key: RequestFieldKeys): string => {
+  switch (key) {
+    case "task_id":
+      return "/api/tasks";
+    case "group_id":
+      return "/api/groups";
+    case "exp_tasks":
+      return "/api/tasks";
+    default:
+      return "";
+  }
+};
