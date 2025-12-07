@@ -1,58 +1,29 @@
-import { ResponseBase } from "@/types/ResponseType";
-import { ShiftResponse } from "@/types/ShiftType";
+import { TaskRequest } from "@/types/TaskType";
 import { Grid } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import SelectField from "./SelectField";
+import { Dispatch, SetStateAction, useState } from "react";
+import { SchedulerForm } from "./Form";
+import { MultiTextField } from "./MultiTextField";
 
-type SlotRequest = {
-  name: string;
-  start_time: string;
-  task_id: string;
-};
 export const TaskForm = ({
   data,
-  tasks,
-  task_id,
-  setData,
+  subtasks,
+  setSubtasks,
 }: {
-  data: SlotRequest;
-  tasks: ResponseBase[];
-  task_id: string;
-  setData: React.Dispatch<React.SetStateAction<string>>;
+  data: TaskRequest;
+  subtasks: string[];
+  setSubtasks: Dispatch<SetStateAction<string[]>>;
 }) => {
+  const onAdd = (text: string) => {
+    setSubtasks([...subtasks, text]);
+  };
+  const onDelete = (index: number) => {
+    setSubtasks(subtasks.filter((_, i) => i !== index));
+  };
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <TextField
-          autoComplete="given-name"
-          name="name"
-          required
-          id="name"
-          label="名前"
-          autoFocus
-          defaultValue={data.name}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          fullWidth
-          required
-          id="start_time"
-          label="開始時刻"
-          name="start_time"
-          type="datetime-local"
-          defaultValue={data.start_time.slice(0, 16)}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <SelectField
-          data={tasks}
-          title="仕事内容"
-          id={task_id}
-          setData={setData}
-        />
-      </Grid>
+    <Grid>
+      <SchedulerForm data={data} />
+      <MultiTextField state={subtasks} onAdd={onAdd} onDelete={onDelete} />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         保存
       </Button>

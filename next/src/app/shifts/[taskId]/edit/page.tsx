@@ -8,7 +8,7 @@ import axios, { fetcher } from "@/axios";
 import { ShiftResponse } from "@/types/ShiftType";
 import { TaskResponse } from "@/types/TaskType";
 import useSWR from "swr";
-import { TaskForm } from "@/components/form/TaskForm";
+import { TaskForm } from "@/components/form/ShiftForm";
 
 export default function SlotEdit({
   params,
@@ -24,10 +24,7 @@ export default function SlotEdit({
     data: taskData,
     error: taskError,
     isLoading: taskIsLoading,
-  } = useSWR<{ tasks: TaskResponse[] }>(
-    `/${params.groupId}/task_details/`,
-    fetcher
-  );
+  } = useSWR<{ tasks: TaskResponse[] }>(`/${params.groupId}/tasks/`, fetcher);
 
   React.useEffect(() => {
     if (!data) return;

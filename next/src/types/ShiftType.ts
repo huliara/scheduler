@@ -1,6 +1,7 @@
 import { Base } from "./Base";
 
 export type ShiftBase = {
+  name: string;
   start_time: string;
   task_id: string;
 };

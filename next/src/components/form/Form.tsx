@@ -1,4 +1,4 @@
-import { Base, RequestType } from "@/types/Base";
+import { RequestType } from "@/types/Base";
 import {
   Field,
   fieldType,
@@ -6,8 +6,6 @@ import {
   isPositive,
   RequestFieldKeys,
 } from "@/utils/types";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Grid from "@mui/material/Grid";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -130,7 +128,7 @@ export const SchedulerForm = <T extends RequestType>(
   props: React.PropsWithChildren<Props<T>>
 ): ReactElement<any, any> => {
   return (
-    <Grid container spacing={3}>
+    <>
       {(Object.keys(props.data) as RequestFieldKeys[]).map((key) => {
         const value = (props.data as any)[key];
         if (fieldType(key) === Field.MULTI_TEXT) {
@@ -145,6 +143,6 @@ export const SchedulerForm = <T extends RequestType>(
           </FormGrid>
         );
       })}
-    </Grid>
+    </>
   );
 };

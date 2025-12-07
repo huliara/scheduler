@@ -7,7 +7,7 @@ import axios, { fetcher } from "@/axios";
 import { ShiftResponse } from "@/types/ShiftType";
 import { TaskResponse } from "@/types/TaskType";
 import useSWR from "swr";
-import { TaskForm } from "@/components/form/TaskForm";
+import { TaskForm } from "@/components/form/ShiftForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 
 export default function SlotCreate({

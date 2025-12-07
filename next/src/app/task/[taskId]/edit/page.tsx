@@ -6,10 +6,9 @@ import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
 import { TaskResponse } from "@/types/TaskType";
 import useSWR from "swr";
-import { TaskDetailForm } from "@/components/form/TaskDetailForm";
+import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
-import { permission } from "process";
 
 export default function TaskEdit({
   params,
@@ -61,11 +60,7 @@ export default function TaskEdit({
         <Typography component="h1" variant="h5">
           仕事を編集
         </Typography>
-        <TaskDetailForm
-          data={data}
-          subtasks={subtasks}
-          setSubtasks={setSubtasks}
-        />
+        <TaskForm data={data} subtasks={subtasks} setSubtasks={setSubtasks} />
       </Box>
       <Link href={`/${params.groupId}/task_details`}>一覧へ戻る</Link>
     </Container>

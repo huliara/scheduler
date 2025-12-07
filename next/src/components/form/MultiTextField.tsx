@@ -1,10 +1,8 @@
 import { useState } from "react";
 import {
-  Button,
   IconButton,
   List,
   ListItem,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   TextField,
@@ -53,6 +51,7 @@ const AddTextField = ({ onAdd }: { onAdd: (newValue: string) => void }) => {
         <IconButton
           onClick={() => {
             onAdd(text);
+            setText("");
           }}
         >
           <AddIcon />
