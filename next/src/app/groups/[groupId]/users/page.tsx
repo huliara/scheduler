@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { GroupUserResponse } from "@/types/GroupUser";
 import {
   Button,
+  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -19,6 +20,17 @@ export default function UserList({ params }: { params: { groupId: string } }) {
   if (error) return <div>error</div>;
   if (!data) return <div>no data</div>;
   if (isLoading) return <div>loading...</div>;
+
+  const handleUserActivate = (userId: string, activate: boolean) => {
+    axios
+      .post(
+        `/${params.groupId}/members/${userId}/activate&activate=${activate}`
+      )
+      .then((res) => {
+        mutate();
+      })
+      .catch((error) => {});
+  };
 
   const handleUserRemove = (userId: string) => {
     axios
@@ -40,6 +52,7 @@ export default function UserList({ params }: { params: { groupId: string } }) {
             <TableCell>ユーザー名</TableCell>
             <TableCell>部屋番号</TableCell>
             <TableCell>ポイント</TableCell>
+            <TableCell>承認</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
@@ -52,6 +65,14 @@ export default function UserList({ params }: { params: { groupId: string } }) {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.room_number}</TableCell>
                   <TableCell>{user.point}</TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={user.is_active}
+                      onClick={() =>
+                        handleUserActivate(user.id, !user.is_active)
+                      }
+                    />
+                  </TableCell>
                   <TableCell>
                     <Button
                       onClick={() => {

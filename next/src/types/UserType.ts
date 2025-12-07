@@ -17,6 +17,7 @@ export type UserDetailResponse = UserResponse & {
   point: number;
   exp_tasks: Base[];
   shifts: Base[];
+  groups: Base[];
   is_active: boolean;
 };
 

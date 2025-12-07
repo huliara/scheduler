@@ -20,6 +20,8 @@ const signIn = async (
     })
     .then((response) => {
       localStorage.setItem("accessToken", response.data.access_token);
+      localStorage.setItem("id", response.data.id);
+      localStorage.setItem("name", response.data.name);
       return { success: "success login" };
     })
     .catch(() => {

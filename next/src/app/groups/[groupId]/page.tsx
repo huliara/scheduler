@@ -1,14 +1,8 @@
 "use client";
-import {
-  Container,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { List, ListItem, ListItemButton } from "@mui/material";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
-import { GroupResponse } from "@/types/ResponseType";
+import { GroupResponse } from "@/types/GroupType";
 import { useRouter } from "next/navigation";
 export default function GroupHome({ params }: { params: { groupId: string } }) {
   const { data, error, isLoading } = useSWR<GroupResponse>(
@@ -26,7 +20,7 @@ export default function GroupHome({ params }: { params: { groupId: string } }) {
         <ListItem>
           <ListItemButton
             onClick={() => {
-              router.push(`/${params.groupId}/tasks`);
+              router.push(`/${params.groupId}/shifts`);
             }}
           >
             仕事
@@ -35,7 +29,7 @@ export default function GroupHome({ params }: { params: { groupId: string } }) {
         <ListItem>
           <ListItemButton
             onClick={() => {
-              router.push(`/${params.groupId}/task_details`);
+              router.push(`/${params.groupId}/tasks`);
             }}
           >
             マニュアルなど

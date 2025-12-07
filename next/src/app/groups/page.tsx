@@ -1,5 +1,4 @@
 "use client";
-import { GroupResponse } from "@/types/ResponseType";
 import {
   Container,
   Divider,
@@ -13,26 +12,33 @@ import axios, { fetcher } from "@/axios";
 import React from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
-import NextAuthProvider from "@/components/provider/NextAuth";
+import { GroupResponse } from "@/types/GroupType";
+import AddIcon from "@mui/icons-material/Add";
 
-export default function Top() {
-  return (
-    <NextAuthProvider>
-      <GroupList />
-    </NextAuthProvider>
-  );
-}
-
-const GroupList = () => {
+export default function GroupList() {
   const { data, error, isLoading } = useSWR<{
     groups: GroupResponse[];
   }>("/groups", fetcher);
   const router = useRouter();
   if (error) return <div>Error</div>;
   if (isLoading) return <div>Loading...</div>;
-  const joined_groups = data?.groups;
+  if (!data) return <div>No Data</div>;
+  const joined_groups = data.groups.filter((group) =>
+    group.users
+      .map((user) => user.id)
+      .includes(localStorage.getItem("id") || "")
+  );
 
-  const irrelevant_groups = data?.groups;
+  const irrelevant_groups = Array.from(
+    new Set(data.groups).difference(new Set(joined_groups))
+  );
+
+  const onClickJoin = (group_id: string) => {
+    axios
+      .post(`/groups/${group_id}/members/join`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -59,10 +65,17 @@ const GroupList = () => {
           {irrelevant_groups?.map((group) => (
             <ListItem key={group.id}>
               <ListItemText primary={group.name} />
+              <ListItemButton
+                onClick={() => {
+                  onClickJoin(group.id);
+                }}
+              >
+                <AddIcon />
+              </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Container>
     </>
   );
-};
+}

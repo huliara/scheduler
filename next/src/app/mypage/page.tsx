@@ -59,14 +59,6 @@ export default function MyPage() {
         </ListItem>
         <Divider component="li" />
         <ListItem>
-          {user?.is_admin ? (
-            <>
-              <PersonAddIcon />
-              <Typography>管理者</Typography>
-            </>
-          ) : (
-            <></>
-          )}
           {user?.is_active ? (
             <></>
           ) : (
