@@ -12,18 +12,17 @@ import {
 import { fetcher } from "@/axios";
 import Link from "next/link";
 import axios from "@/axios";
-export default function TaskList({ params }: { params: { groupId: string } }) {
-  const { data, error, mutate, isLoading } = useSWR<{ tasks: ShiftResponse[] }>(
-    `/${params.groupId}/tasks`,
-    fetcher
-  );
-  if (error) return <div>error</div>;
-  if (!data) return <div>no data</div>;
-  if (isLoading) return <div>loading...</div>;
-  console.log(data);
-  const handleOnClick = (slot_id: string) => {
+import { LoadingPage } from "@/components/pages/LoadingPage";
+import { ErrorPage } from "@/components/pages/ErrorPage";
+export default function ShiftList() {
+  const { data, error, mutate, isLoading } = useSWR<{
+    shifts: ShiftResponse[];
+  }>(`/shifts`, fetcher);
+  if (error) return <ErrorPage />;
+  if (!data || isLoading) return <LoadingPage />;
+  const handleOnClick = (shift_id: string) => {
     axios
-      .delete(`/${params.groupId}/tasks/${slot_id}`)
+      .delete(`/shifts/${shift_id}`)
       .then((res) => {
         mutate();
       })
@@ -31,7 +30,7 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
   };
   const handleOnDeletePrune = () => {
     axios
-      .delete(`/${params.groupId}/tasks`, {
+      .delete(`/shifts`, {
         params: {
           expired: true,
         },
@@ -61,11 +60,11 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.tasks.map((slot) => {
-            const start_time = new Date(slot.start_time);
+          {data.shifts.map((shift) => {
+            const start_time = new Date(shift.start_time);
             return (
-              <TableRow key={slot.id}>
-                <TableCell>{slot.name}</TableCell>
+              <TableRow key={shift.id}>
+                <TableCell>{shift.name}</TableCell>
                 <TableCell>
                   {start_time.getMonth() + 1}月{start_time.getDate()}日{" "}
                   {start_time.toLocaleTimeString("ja-JP", {
@@ -75,15 +74,15 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
                   })}
                 </TableCell>
                 <TableCell>
-                  <Link href={`tasks/${slot.id}`}>詳細</Link>
+                  <Link href={`shifts/${shift.id}`}>詳細</Link>
                 </TableCell>
                 <TableCell>
-                  <Link href={`tasks/${slot.id}/edit`}>編集</Link>
+                  <Link href={`shifts/${shift.id}/edit`}>編集</Link>
                 </TableCell>
                 <TableCell>
                   <Button
                     onClick={() => {
-                      handleOnClick(slot.id);
+                      handleOnClick(shift.id);
                     }}
                   >
                     削除
@@ -94,7 +93,7 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
           })}
         </TableBody>
       </Table>
-      <Link href={`/${params.groupId}/slots/create`}>新規作成</Link>
+      <Link href={`/shifts/create`}>新規作成</Link>
     </>
   );
 }

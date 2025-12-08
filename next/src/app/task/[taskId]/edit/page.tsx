@@ -10,18 +10,13 @@ import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
 
-export default function TaskEdit({
-  params,
-}: {
-  params: { groupId: string; taskId: string };
-}) {
+export default function TaskEdit({ params }: { params: { taskId: string } }) {
   const { showSnackbar } = useSnackbarContext();
   const [subtasks, setSubtasks] = React.useState<string[]>([]);
   const { data, error, isLoading, mutate } = useSWR<TaskResponse>(
-    `/${params.groupId}/task_details/${params.taskId}`,
+    `/tasks/${params.taskId}`,
     fetcher
   );
-  console.log(data);
   React.useEffect(() => {
     if (!data) return;
     setSubtasks(data.subtasks);
@@ -35,15 +30,16 @@ export default function TaskEdit({
     const data = new FormData(event.currentTarget);
 
     axios
-      .patch(`${params.groupId}/task_details/${params.taskId}`, {
+      .patch(`/tasks/${params.taskId}`, {
         name: data.get("name"),
         subtasks: subtasks,
-        max_worker: data.get("max_worker_num"),
-        min_worker: data.get("min_worker_num"),
-        exp_worker: data.get("exp_worker_num"),
+        max_worker: data.get("max_worker"),
+        min_worker: data.get("min_worker"),
+        exp_worker: data.get("exp_worker"),
         wage: data.get("point"),
-        duration: parseInt(data.get("duration") as string) * 60,
+        duration: parseInt(data.get("duration") as string),
         permission: [],
+        group_id: data.get("group_id"),
       })
       .then((response) => {
         mutate();
@@ -62,7 +58,7 @@ export default function TaskEdit({
         </Typography>
         <TaskForm data={data} subtasks={subtasks} setSubtasks={setSubtasks} />
       </Box>
-      <Link href={`/${params.groupId}/task_details`}>一覧へ戻る</Link>
+      <Link href={`/tasks`}>一覧へ戻る</Link>
     </Container>
   );
 }

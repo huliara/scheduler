@@ -14,6 +14,7 @@ export type TaskBase = {
 export type TaskResponse = Base &
   TaskBase & {
     creater_id: string;
+    creater_name: string;
   };
 export type TasksResponse = {
   tasks: TaskResponse[];

@@ -1,10 +1,9 @@
 "use client";
 import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
-import { TemplateResponse } from "@/types/TemplateType";
+import { TemplateResponse, TemplateSlot } from "@/types/TemplateType";
 import { TemplateSlotResponse } from "@/types/TemplateType";
 import {
-  Box,
   Button,
   Grid,
   Paper,
@@ -16,17 +15,17 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { TemplateAddTaskForm } from "@/components/form/TemplateAddTaskForm";
+import { TemplateSlotForm } from "@/components/form/TemplateAddSlotForm";
 import { TemplateNameForm } from "@/components/form/TemplateNameForm";
 import Link from "next/link";
 
 export default function TemplateEdit({
   params,
 }: {
-  params: { groupId: string; templateId: string };
+  params: { templateId: string };
 }) {
   const { data, error, isLoading, mutate } = useSWR<TemplateResponse>(
-    `/${params.groupId}/templates/${params.templateId}`,
+    `/templates/${params.templateId}`,
     fetcher
   );
 
@@ -35,14 +34,14 @@ export default function TemplateEdit({
   if (isLoading) return <div>loading...</div>;
 
   const handleTaskRemove = (
-    taskdetail_id: string,
+    task_id: string,
     date_from_start: number,
     start_time: string
   ) => {
     axios
-      .delete(`/${params.groupId}/templates/${params.templateId}/slots`, {
+      .delete(`/templates/${params.templateId}/slots`, {
         data: {
-          taskdetail_id: taskdetail_id,
+          task_id: task_id,
           date_from_start: date_from_start,
           start_time: start_time,
         },
@@ -53,12 +52,12 @@ export default function TemplateEdit({
       .catch((err) => {});
   };
 
-  const handleTaskAdd = (selectTemplateTask: TemplateSlotResponse) => {
+  const handleTaskAdd = (templateSlot: TemplateSlot) => {
     axios
-      .patch(`/${params.groupId}/templates/${params.templateId}/slots`, {
-        date_from_start: Number(selectTemplateTask.date_from_start),
-        start_time: selectTemplateTask.start_time,
-        taskdetail_id: selectTemplateTask.task_id,
+      .patch(`/templates/${params.templateId}/slots`, {
+        date_from_start: Number(templateSlot.date_from_start),
+        start_time: templateSlot.start_time,
+        task_id: templateSlot.task_id,
       })
       .then((response) => {
         mutate();
@@ -71,24 +70,21 @@ export default function TemplateEdit({
       <Typography variant="h4" component="h1" gutterBottom>
         テンプレートを編集
       </Typography>
-      <Link href={`/${params.groupId}/templates`}>一覧へ戻る</Link>
+      <Link href={`/templates`}>一覧へ戻る</Link>
       <TemplateNameForm
-        groupId={params.groupId}
+        groupId={data.group_id}
         templateId={params.templateId}
         defaultName={data.name}
       />
 
-      <TemplateAddTaskForm
-        groupId={params.groupId}
+      <TemplateSlotForm
+        groupId={data.group_id}
         handleSubmit={handleTaskAdd}
-        templateTask={{
-          id: "",
+        defaultValue={{
           date_from_start: 0,
           start_time: "08:00",
           task_id: "",
-          name: "",
         }}
-        buttonTitle="新規追加"
       />
 
       <Grid container spacing={2}>
@@ -101,7 +97,7 @@ export default function TemplateEdit({
         )
           .fill(0)
           .map((_, i) => (
-            <Grid item xs={12} key={i}>
+            <Grid key={i}>
               <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                 <Typography
                   component="h2"

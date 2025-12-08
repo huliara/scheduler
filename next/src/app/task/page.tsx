@@ -3,7 +3,6 @@ import useSWR from "swr";
 import { TasksResponse } from "@/types/TaskType";
 import {
   Button,
-  Tab,
   Table,
   TableBody,
   TableCell,
@@ -12,17 +11,18 @@ import {
 } from "@mui/material";
 import axios, { fetcher } from "@/axios";
 import Link from "next/link";
-export default function TaskList({ params }: { params: { groupId: string } }) {
+import { LoadingPage } from "@/components/pages/LoadingPage";
+import { ErrorPage } from "@/components/pages/ErrorPage";
+export default function TaskList() {
   const { data, error, mutate, isLoading } = useSWR<TasksResponse>(
-    `/${params.groupId}/task_details`,
+    `/tasks`,
     fetcher
   );
-  if (error) return <div>error</div>;
-  if (!data) return <div>no data</div>;
-  if (isLoading) return <div>loading...</div>;
+  if (error) return <ErrorPage />;
+  if (!data || isLoading) return <LoadingPage />;
   const handleOnClick = (task_id: string) => {
     axios
-      .delete(`/${params.groupId}/task_details/${task_id}`)
+      .delete(`/tasks/${task_id}`)
       .then((res) => {
         mutate();
       })
@@ -49,14 +49,10 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
               <TableCell>{task.wage}</TableCell>
               <TableCell>{task.duration}</TableCell>
               <TableCell>
-                <Link href={`/${params.groupId}/task_details/${task.id}`}>
-                  詳細
-                </Link>
+                <Link href={`/tasks/${task.id}`}>詳細</Link>
               </TableCell>
               <TableCell>
-                <Link href={`/${params.groupId}/task_details/${task.id}/edit`}>
-                  編集
-                </Link>
+                <Link href={`/tasks/${task.id}/edit`}>編集</Link>
               </TableCell>
               <TableCell>
                 <Button
@@ -71,7 +67,7 @@ export default function TaskList({ params }: { params: { groupId: string } }) {
           ))}
         </TableBody>
       </Table>
-      <Link href={`/${params.groupId}/task_details/create`}>新規作成</Link>
+      <Link href={`/tasks/create`}>新規作成</Link>
     </>
   );
 }

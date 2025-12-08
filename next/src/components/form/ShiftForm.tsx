@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import { SchedulerForm } from "./Form";
 import { ShiftRequest } from "@/types/ShiftType";
 
-export const TaskForm = ({ data }: { data: ShiftRequest }) => {
+export const ShiftForm = ({ data }: { data: ShiftRequest }) => {
   return (
     <Grid container spacing={2}>
       <SchedulerForm data={data} />

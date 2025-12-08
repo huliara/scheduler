@@ -9,7 +9,7 @@ const signIn = async (
   formData: { email: string; password: string }
 ) => {
   await axios
-    .post("http://localhost:8888/login", {
+    .post("/login", {
       headers: {
         "Content-Type": "application/json",
       },

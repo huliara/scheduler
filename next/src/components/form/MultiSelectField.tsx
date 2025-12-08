@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import { Base } from "@/types/Base";
-import { formFieldJA, RequestFieldKeys, selectFieldURL } from "@/utils/types";
+import { getFieldJA, RequestFieldKeys, _fieldURL } from "@/utils/types";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
 const ITEM_HEIGHT = 48;
@@ -40,7 +40,7 @@ export const MultiSelectField = ({
 }) => {
   const theme = useTheme();
   const { data, error, isLoading } = useSWR<Base[]>(
-    selectFieldURL(fieldKey),
+    _fieldURL(fieldKey),
     fetcher
   );
 
@@ -51,13 +51,13 @@ export const MultiSelectField = ({
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id={fieldKey}>{formFieldJA(fieldKey)}</InputLabel>
+        <InputLabel id={fieldKey}>{getFieldJA(fieldKey)}</InputLabel>
         <Select
           labelId={fieldKey}
           id={fieldKey}
           multiple
           defaultValue={defaultValue}
-          input={<OutlinedInput id={fieldKey} label={formFieldJA(fieldKey)} />}
+          input={<OutlinedInput id={fieldKey} label={getFieldJA(fieldKey)} />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => {

@@ -1,5 +1,6 @@
 import { ShiftRequest } from "@/types/ShiftType";
 import { TaskRequest } from "@/types/TaskType";
+import { TemplateSlot } from "@/types/TemplateType";
 import { UserRequest } from "@/types/UserType";
 export type Text = string;
 export type Password = string;
@@ -24,11 +25,13 @@ export const Field = {
 
 export type FieldType = (typeof Field)[keyof typeof Field];
 
-type RequestAllFieldType = UserRequest & ShiftRequest & TaskRequest;
-
+type RequestAllFieldType = UserRequest &
+  ShiftRequest &
+  TaskRequest &
+  TemplateSlot;
 export type RequestFieldKeys = keyof RequestAllFieldType;
 
-export const fieldType = (key: RequestFieldKeys): FieldType => {
+export const getFieldType = (key: RequestFieldKeys): FieldType => {
   switch (key) {
     case "name":
     case "room_number":
@@ -45,6 +48,7 @@ export const fieldType = (key: RequestFieldKeys): FieldType => {
     case "exp_worker":
     case "wage":
     case "duration":
+    case "date_from_start":
       return Field.NUMBER;
     case "permissions":
       return Field.MULTI_TEXT;
@@ -55,7 +59,7 @@ export const fieldType = (key: RequestFieldKeys): FieldType => {
   }
 };
 
-export const formFieldJA = (key: RequestFieldKeys): string => {
+export const getFieldJA = (key: RequestFieldKeys): string => {
   switch (key) {
     case "name":
       return "名前";
@@ -99,10 +103,10 @@ export const isPositive = (key: RequestFieldKeys): boolean => {
   );
 };
 
-export const selectFieldURL = (key: RequestFieldKeys): string => {
+export const _fieldURL = (key: RequestFieldKeys): string => {
   switch (key) {
     case "task_id":
-      return "/api/tasks";
+      return "/tasks";
     case "group_id":
       return "/api/groups";
     case "exp_tasks":
@@ -110,4 +114,13 @@ export const selectFieldURL = (key: RequestFieldKeys): string => {
     default:
       return "";
   }
+};
+
+export const getFieldURL = (
+  key: RequestFieldKeys,
+  query: string | null | undefined
+): string => {
+  const baseURL = _fieldURL(key);
+  const _query = query ? `&${query}` : "";
+  return baseURL + _query;
 };

@@ -1,4 +1,4 @@
-import { ID, TimeString } from "@/utils/types";
+import { ID, Text, TimeString } from "@/utils/types";
 import { Base } from "./Base";
 
 export type TemplateSlot = {
@@ -14,4 +14,9 @@ export type TemplateSlotResponse = TemplateSlot & {
 export type TemplateResponse = Base & {
   group_id: ID;
   slots: TemplateSlotResponse[];
+};
+export type TemplateRequest = {
+  name: Text;
+  slots: TemplateSlot[];
+  group_id: ID;
 };

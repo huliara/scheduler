@@ -1,8 +1,9 @@
 import { RequestType } from "@/types/Base";
 import {
   Field,
-  fieldType,
-  formFieldJA,
+  FieldType,
+  getFieldType,
+  getFieldJA,
   isPositive,
   RequestFieldKeys,
 } from "@/utils/types";
@@ -25,15 +26,16 @@ type Props<T extends RequestType> = {
   data: T;
 };
 
-const FormField = ({
+export const FormField = ({
   fieldKey,
+  fieldType,
   defaultValue,
 }: {
   fieldKey: RequestFieldKeys;
+  fieldType: FieldType;
   defaultValue: number | string | string[];
 }) => {
-  const field = fieldType(fieldKey);
-  switch (field) {
+  switch (fieldType) {
     case Field.TEXT:
       return (
         <OutlinedInput
@@ -80,7 +82,7 @@ const FormField = ({
     case Field.TIME:
       return (
         <TimePicker
-          label={formFieldJA(fieldKey)}
+          label={getFieldJA(fieldKey)}
           ampm={false}
           defaultValue={
             typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
@@ -91,7 +93,7 @@ const FormField = ({
     case Field.DATE:
       return (
         <DatePicker
-          label={formFieldJA(fieldKey)}
+          label={getFieldJA(fieldKey)}
           defaultValue={
             typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
           }
@@ -101,7 +103,7 @@ const FormField = ({
     case Field.DATETIME:
       return (
         <DateTimePicker
-          label={formFieldJA(fieldKey)}
+          label={getFieldJA(fieldKey)}
           defaultValue={
             typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
           }
@@ -131,15 +133,21 @@ export const SchedulerForm = <T extends RequestType>(
     <>
       {(Object.keys(props.data) as RequestFieldKeys[]).map((key) => {
         const value = (props.data as any)[key];
-        if (fieldType(key) === Field.MULTI_TEXT) {
+        const fieldType = getFieldType(key);
+        const fieldJA = getFieldJA(key);
+        if (fieldType === Field.MULTI_TEXT) {
           return null;
         }
         return (
           <FormGrid size={{ xs: 12, md: 6 }}>
             <FormLabel htmlFor={key} required>
-              {formFieldJA(key)}
+              {fieldJA}
             </FormLabel>
-            <FormField fieldKey={key} defaultValue={value} />
+            <FormField
+              fieldKey={key}
+              fieldType={fieldType}
+              defaultValue={value}
+            />
           </FormGrid>
         );
       })}

@@ -3,7 +3,12 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { formFieldJA, RequestFieldKeys, selectFieldURL } from "@/utils/types";
+import {
+  getFieldJA,
+  RequestFieldKeys,
+  _fieldURL,
+  getFieldURL,
+} from "@/utils/types";
 import useSWR from "swr";
 import { Base } from "@/types/Base";
 import { fetcher } from "@/axios";
@@ -11,12 +16,14 @@ import { fetcher } from "@/axios";
 export const SelectField = ({
   fieldKey,
   defaultValue,
+  params,
 }: {
   fieldKey: RequestFieldKeys;
   defaultValue: string;
+  params?: string | null;
 }) => {
   const { data, error, isLoading } = useSWR<Base[]>(
-    selectFieldURL(fieldKey),
+    getFieldURL(fieldKey, params),
     fetcher
   );
 
@@ -26,12 +33,12 @@ export const SelectField = ({
   return (
     <div>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id={fieldKey}>{formFieldJA(fieldKey)}</InputLabel>
+        <InputLabel id={fieldKey}>{getFieldJA(fieldKey)}</InputLabel>
         <Select
           labelId={fieldKey}
           id={fieldKey}
           defaultValue={defaultValue}
-          label={formFieldJA(fieldKey)}
+          label={getFieldJA(fieldKey)}
         >
           {data.map((data) => (
             <MenuItem key={data.id} value={data.id}>

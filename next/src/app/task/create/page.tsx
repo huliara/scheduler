@@ -12,17 +12,17 @@ export default function TaskCreateForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get("duration"));
     axios
-      .post(`/tasks/`, {
+      .post(`/tasks`, {
         name: data.get("name"),
         subtasks: subtasks,
-        max_worker: data.get("max_worker_num"),
-        min_worker: data.get("min_worker_num"),
-        exp_worker: data.get("exp_worker_num"),
+        max_worker: data.get("max_worker"),
+        min_worker: data.get("min_worker"),
+        exp_worker: data.get("exp_worker"),
         wage: data.get("point"),
         duration: parseInt(data.get("duration") as string),
         permission: [],
+        group_id: data.get("group_id"),
       })
       .then((response) => {
         showSnackbar("success", "作成しました");
@@ -56,7 +56,7 @@ export default function TaskCreateForm() {
           setSubtasks={setSubtasks}
         />
       </Box>
-      <Link href={`/${params.groupId}/task_details`}>一覧へ戻る</Link>
+      <Link href={`/tasks`}>一覧へ戻る</Link>
     </Container>
   );
 }

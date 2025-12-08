@@ -1,22 +1,23 @@
-"use client";
 import { ShiftResponse } from "@/types/ShiftType";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";
 import Link from "next/link";
+import { LoadingPage } from "@/components/pages/LoadingPage";
+import { ErrorPage } from "@/components/pages/ErrorPage";
+
 export default function SlotDetail({
   params,
 }: {
-  params: { groupId: string; taskId: string };
+  params: { shiftId: string };
 }) {
   const { data, error, isLoading } = useSWR<ShiftResponse>(
-    `/${params.groupId}/tasks/${params.taskId}`,
+    `/shifts/${params.shiftId}`,
     fetcher
   );
 
-  if (error) return <div>error</div>;
-  if (!data) return <div>no data</div>;
-  if (isLoading) return <div>loading...</div>;
+  if (error) return <ErrorPage />;
+  if (!data || isLoading) return <LoadingPage />;
 
   const start_time = new Date(data.start_time);
   const end_time = new Date(data.end_time);
@@ -36,9 +37,7 @@ export default function SlotDetail({
       </Typography>
       <Typography variant="body1">
         仕事内容:
-        <Link href={`/${params.groupId}/task_details/${data.task.id}`}>
-          {data.task.name}
-        </Link>
+        <Link href={`/tasks/${data.task.id}`}>{data.task.name}</Link>
       </Typography>
       <Typography variant="body1">
         参加者:{data.workers.map((assignee) => assignee.name).join(", ")}

@@ -1,40 +1,43 @@
+"use client";
 import * as React from "react";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import axios from "@/axios";
+import axios, { fetcher } from "@/axios";
+import { ShiftResponse } from "@/types/ShiftType";
+import useSWR from "swr";
 import { ShiftForm } from "@/components/form/ShiftForm";
-import { useSnackbarContext } from "@/components/provider/SnackBar";
 
-export default function ShiftCreate() {
-  const { showSnackbar } = useSnackbarContext();
+export default function ShiftEdit({ params }: { params: { shiftId: string } }) {
+  const { data, error, isLoading } = useSWR<ShiftResponse>(
+    `/shifts/${params.shiftId}`,
+    fetcher
+  );
 
-  const defaultData = {
-    id: "",
-    name: "",
-    start_time: new Date().toISOString(),
-    creater_id: "",
-    creater_name: "",
-    assignees: [],
-    task_id: "",
-    task_name: "",
+  if (error) return <div>error</div>;
+  if (!data || isLoading) return <div>no data</div>;
+
+  const defaultValue = {
+    name: data.name,
+    start_time: data.start_time,
+    task_id: data.task.id,
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .post(`/shifts`, {
+      .patch(`/shifts/${params.shiftId}`, {
         name: data.get("name"),
         start_time: new Date(data.get("start_time") as string).toISOString(),
-        end_time: new Date(data.get("end_time") as string).toISOString(),
         task_id: data.get("task_id"),
       })
       .then((response) => {
-        showSnackbar("success", "作成しました");
+        //mutate();
       })
       .catch((err) => {
-        showSnackbar("error", "作成に失敗しました");
+        console.log(err);
       });
   };
 
@@ -42,9 +45,9 @@ export default function ShiftCreate() {
     <Container component="main" maxWidth="xs">
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Typography component="h1" variant="h5">
-          仕事を作成
+          仕事を編集
         </Typography>
-        <ShiftForm data={defaultData} />
+        <ShiftForm data={defaultValue} />
       </Box>
     </Container>
   );
