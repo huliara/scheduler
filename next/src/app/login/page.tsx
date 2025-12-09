@@ -4,18 +4,15 @@ import axios from "@/axios";
 
 const providers = [{ id: "credentials", name: "Email and Password" }];
 
-const signIn = async (
-  provider: AuthProvider,
-  formData: { email: string; password: string }
-) => {
+const signIn = async (provider: AuthProvider, formData: FormData) => {
   await axios
     .post("/login", {
       headers: {
         "Content-Type": "application/json",
       },
       body: {
-        user_name: formData.email,
-        password: formData.password,
+        user_name: formData.get("email"),
+        password: formData.get("password"),
       },
     })
     .then((response) => {

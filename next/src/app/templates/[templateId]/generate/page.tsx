@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import axios from "@/axios";
 import {
   Box,
@@ -19,7 +19,7 @@ export default function GenerateFromTemplateForm({
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .post(`/${params.groupId}/templates/${params.templateId}/generate`, {
+      .post(`/templates/${params.templateId}/generate`, {
         start_day: data.get("start_day"),
       })
       .then((res) => {})
@@ -41,7 +41,7 @@ export default function GenerateFromTemplateForm({
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid>
               <TextField
                 fullWidth
                 required

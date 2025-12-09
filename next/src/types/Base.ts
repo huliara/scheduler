@@ -2,7 +2,7 @@ import { ID, Text } from "@/utils/types";
 import { ShiftRequest } from "./ShiftType";
 import { TaskRequest } from "./TaskType";
 import { UserRequest } from "./UserType";
-import { TemplateSlotBase } from "./TemplateType";
+import { TemplateSlot } from "./TemplateType";
 
 export type Base = {
   id: ID;
@@ -13,4 +13,4 @@ export type RequestType =
   | UserRequest
   | ShiftRequest
   | TaskRequest
-  | TemplateSlotBase;
+  | TemplateSlot;

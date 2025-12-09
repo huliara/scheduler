@@ -41,5 +41,5 @@ class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
         pass
     
     @abstractmethod
-    def find_by_user(self,user_id:UserId):
+    def find_by_user(self,user_id:UserId)->list[ShiftEntity]:
         pass

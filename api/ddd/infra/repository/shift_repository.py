@@ -93,16 +93,9 @@ class ShiftRepository(IShiftRepository):
         if user is None:
             raise DomainException('User not found',404)
         joining_group_ids=[group.group_id for group in user.groups]
-        tasks=self.db.scalars(select(Shift).filter(Shift.group_id.in_(joining_group_ids))).all()
+        shifts=self.db.scalars(select(Shift).filter(Shift.group_id.in_(joining_group_ids))).all()
 
-        return{
-            "assign": [self.refresh_to_entity(task) for task in tasks 
-                       if user in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
-            "hiring":[self.refresh_to_entity(task) for task in tasks 
-                      if user not in task.workers and task.end_time>datetime.datetime.now() and (task.status!=0 or task.status!=3)],
-            "end":[self.refresh_to_entity(task) for task in tasks 
-                   if user in task.workers and task.end_time<datetime.datetime.now() and task.status!=ShiftState.archive],
-        }
+        return [self.refresh_to_entity(shift) for shift in shifts]
     
     
     def refresh_to_entity(self, model: Shift) -> ShiftEntity:

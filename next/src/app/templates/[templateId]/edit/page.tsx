@@ -2,7 +2,6 @@
 import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
 import { TemplateResponse, TemplateSlot } from "@/types/TemplateType";
-import { TemplateSlotResponse } from "@/types/TemplateType";
 import {
   Button,
   Grid,

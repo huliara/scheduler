@@ -43,27 +43,19 @@ export default function TemplateDetail({
         {data.name}
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <Link
-            href={`/${params.groupId}/templates/${params.templateId}/generate`}
-          >
+        <Grid>
+          <Link href={`/templates/${params.templateId}/generate`}>
             シフトを募集
           </Link>
         </Grid>
-        <Grid item xs={3}>
-          <Link href={`/${params.groupId}/templates/${params.templateId}/edit`}>
-            編集
-          </Link>
+        <Grid>
+          <Link href={`/templates/${params.templateId}/edit`}>編集</Link>
         </Grid>
-        <Grid item xs={3}>
-          <Link
-            href={`/${params.groupId}/templates/${params.templateId}/delete`}
-          >
-            削除
-          </Link>
+        <Grid>
+          <Link href={`/templates/${params.templateId}/delete`}>削除</Link>
         </Grid>{" "}
         {new Array(last_date).fill(0).map((_, i) => (
-          <Grid item xs={12} key={i}>
+          <Grid key={i}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
               <Typography
                 component="h2"

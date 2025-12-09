@@ -3,6 +3,7 @@ from uuid import UUID
 
 from ddd.domain.shift.shift_state import ShiftState
 from pydantic import BaseModel, Field
+from schemas.task import TaskDisplay
 
 
 class ShiftCreate(BaseModel):
@@ -36,7 +37,7 @@ class ShiftDisplay(BaseModel):
     start_time: datetime.datetime
     end_time: datetime.datetime
     status:ShiftState
-    task:ResponseBase
+    task: TaskDisplay
     workers: list[Worker] = []
     creater_id: UUID|None=None
     group_id:UUID
@@ -46,18 +47,11 @@ class ShiftDisplay(BaseModel):
 
 
 class ShiftList(BaseModel):
-    tasks: list[ShiftDisplay]
+    shifts: list[ShiftDisplay]
 
     class Config:
         from_attributes = True
 
-class UserShiftList(BaseModel):
-    assign: list[ShiftDisplay]
-    hiring: list[ShiftDisplay]
-    end: list[ShiftDisplay]
-
-    class Config:
-        from_attributes = True
 
 class ShiftDelete(BaseModel):
     shifts: list[UUID]

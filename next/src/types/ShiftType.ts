@@ -1,4 +1,5 @@
 import { Base } from "./Base";
+import { TaskResponse } from "./TaskType";
 
 export type ShiftBase = {
   name: string;
@@ -8,16 +9,15 @@ export type ShiftBase = {
 
 export type ShiftRequest = ShiftBase;
 
-export type ShiftsResponse = {
-  shifts: ShiftBase[];
-};
-
 export type ShiftResponse = Base & {
   start_time: string;
   end_time: string;
   status: number;
-  task: Base;
+  task: TaskResponse;
   workers: Base[];
   creater_id: string;
   group_id: string;
+};
+export type ShiftsResponse = {
+  shifts: ShiftResponse[];
 };

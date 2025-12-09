@@ -19,29 +19,28 @@ import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
-import { UserShiftRespose } from "@/types/ResponseType";
-import { useSession } from "next-auth/react";
 import { LogoutButton } from "@/components/button/logoutButton";
 import { useRouter } from "next/navigation";
+import { ShiftsResponse } from "@/types/ShiftType";
 
 export default function Home() {
-  const { data, error, mutate, isLoading } = useSWR<UserShiftRespose>(
-    `/user/tasks`,
+  const { data, error, mutate, isLoading } = useSWR<ShiftsResponse>(
+    `/user/shifts`,
     fetcher
   );
-  const session = useSession();
   const router = useRouter();
-  if (error || session.status === "unauthenticated")
-    return <div>Loading Failed</div>;
-  if (!data || !session.data || session.data.user === undefined)
-    return <div>loading...</div>;
-  if (isLoading) return <div>loading...</div>;
-  console.log(data);
+  const userId = localStorage.getItem("id");
+  if (error) return <div>Loading Failed</div>;
+  if (!data || isLoading || !userId) return <div>loading...</div>;
+
+  const futureShifts = data.shifts.filter(
+    (shift) => shift.start_time >= new Date().toISOString()
+  );
 
   const days = Array.from(
     new Set(
-      data.hiring.map((slot) =>
-        new Date(slot.start_time).toLocaleDateString("ja-JP", {
+      futureShifts.map((shift) =>
+        new Date(shift.start_time).toLocaleDateString("ja-JP", {
           month: "2-digit",
           day: "numeric",
         })
@@ -68,22 +67,26 @@ export default function Home() {
           <h2>入る予定のシフト</h2>
         </AccordionSummary>
         <ScrollMenu>
-          {data.assign.map((slot, index) => (
-            <SlotDisplayCardAssign slot={slot} key={index} mutate={mutate} />
-          ))}
+          {futureShifts
+            .filter((shift) =>
+              shift.workers.map((user) => user.id).includes(userId)
+            )
+            .map((slot, index) => (
+              <SlotDisplayCardAssign slot={slot} key={index} mutate={mutate} />
+            ))}
         </ScrollMenu>
       </Accordion>
 
       <h2>募集中のシフト</h2>
       <ScrollMenu>
         {days.map((day, index) => {
-          const slots = data.hiring
+          const slots = futureShifts
             .filter(
               (slot) =>
                 new Date(slot.start_time).toLocaleDateString("ja-JP", {
                   month: "2-digit",
                   day: "numeric",
-                }) == day
+                }) === day
             )
             .sort(
               (a, b) =>
@@ -93,9 +96,7 @@ export default function Home() {
           return (
             <SlotListOneDay day={day} key={index}>
               {slots.map((slot, index) =>
-                slot.workers
-                  .map((worker) => worker.id)
-                  .includes(session.data.user.id) ? (
+                slot.workers.map((worker) => worker.id).includes(userId) ? (
                   <SlotDisplayCardAssign
                     slot={slot}
                     key={index}
@@ -114,7 +115,11 @@ export default function Home() {
           <h2>過去に入ったシフト</h2>
         </AccordionSummary>
         <ScrollMenu>
-          {data.end
+          {data.shifts
+            .filter((shift) => shift.start_time < new Date().toISOString())
+            .filter((shift) =>
+              shift.workers.map((user) => user.id).includes(userId)
+            )
             .sort(
               (a, b) =>
                 new Date(a.start_time).getTime() -

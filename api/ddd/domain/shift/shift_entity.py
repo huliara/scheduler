@@ -48,7 +48,7 @@ class ShiftEntity(IEntity):
             'end_time': self.end_time,
             'status': self.status,
             'task': self.task.to_dict(),
-            'workers': [user.to_dict() for user in self.workers],
+            'workers': [{'id':user.id,'name':user.name} for user in self.workers],
             'creater_id': self.creater_id,
             'group_id': self.group_id,
         }

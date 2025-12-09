@@ -25,7 +25,7 @@ export default function TemplateList({
 
   const handleOnClick = (template_id: string) => {
     axios
-      .delete(`/${params.groupId}/templates/${template_id}`)
+      .delete(`/templates/${template_id}`)
       .then((res) => {
         mutate();
       })
@@ -48,14 +48,10 @@ export default function TemplateList({
             <TableRow key={template.id}>
               <TableCell>{template.name}</TableCell>
               <TableCell>
-                <Link href={`/${params.groupId}/templates/${template.id}`}>
-                  詳細
-                </Link>
+                <Link href={`/templates/${template.id}`}>詳細</Link>
               </TableCell>
               <TableCell>
-                <Link
-                  href={`/${params.groupId}/templates/${template.id}/generate`}
-                >
+                <Link href={`/templates/${template.id}/generate`}>
                   シフトを募集
                 </Link>
               </TableCell>
@@ -72,7 +68,7 @@ export default function TemplateList({
           ))}
         </TableBody>
       </Table>
-      <Link href={`/${params.groupId}/templates/create`}>新規作成</Link>
+      <Link href={`/templates/create`}>新規作成</Link>
     </>
   );
 }

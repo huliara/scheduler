@@ -48,7 +48,16 @@ export default function TemplateCreate({ groupId }: { groupId: string }) {
   };
 
   const handleTaskAdd = (slot: TemplateSlot) => {
-    setSlots([...slots, slot]);
+    if (
+      !slots.some(
+        (current) =>
+          current.task_id === slot.task_id &&
+          current.date_from_start === slot.date_from_start &&
+          current.start_time === slot.start_time
+      )
+    ) {
+      setSlots([...slots, slot]);
+    }
   };
 
   const handleSubmit = () => {
