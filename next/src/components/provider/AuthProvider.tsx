@@ -2,12 +2,16 @@ import axios from "@/axios";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
-const AuthGuard = ({ children }: { children: ReactNode }) => {
+const AuthProvider = ({ children }: { children: ReactNode }) => {
   const user = axios
-    .get("/user/profile")
-    .then((res) => res.data)
+    .get("/login")
+    .then((res) => {
+      localStorage.setItem("id", res.data.id);
+      localStorage.setItem("name", res.data.name);
+      localStorage.setItem("accessToken", res.data.access_token);
+    })
     .catch((err) => redirect("/login"));
   return <>{children}</>;
 };
 
-export default AuthGuard;
+export default AuthProvider;

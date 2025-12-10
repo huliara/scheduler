@@ -1,6 +1,5 @@
 "use client";
 import useSWR from "swr";
-import { ResponseBase } from "@/types/ResponseType";
 import {
   Table,
   TableBody,
@@ -10,9 +9,10 @@ import {
 } from "@mui/material";
 import { fetcher } from "@/axios";
 import Link from "next/link";
+import { Base } from "@/types/Base";
 
 export default function AdminGroupList() {
-  const { data, error, isLoading } = useSWR<{ groups: ResponseBase[] }>(
+  const { data, error, isLoading } = useSWR<{ groups: Base[] }>(
     `/groups`,
     fetcher
   );

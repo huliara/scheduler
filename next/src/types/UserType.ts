@@ -6,6 +6,11 @@ type UserBase = {
   room_number: Text;
 };
 
+export type LoginRequest = {
+  name: Text;
+  password: Password;
+};
+
 export type UserResponse = Base & {
   room_number: Text;
   is_active: boolean;

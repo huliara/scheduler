@@ -1,6 +1,5 @@
 import { useParams } from "next/navigation";
-import { UserShiftRespose } from "@/types/ResponseType";
-import { ShiftResponse } from "@/types/ShiftType";
+import { ShiftResponse, ShiftsResponse } from "@/types/ShiftType";
 import * as React from "react";
 import { SlotDisplayCardBase } from "./SlotDisplayCardBase";
 import { Button } from "@mui/material";
@@ -12,7 +11,7 @@ export const SlotDisplayCardAssign = ({
   mutate,
 }: {
   slot: ShiftResponse;
-  mutate: KeyedMutator<UserShiftRespose>;
+  mutate: KeyedMutator<ShiftsResponse>;
 }) => {
   const groupId = useParams().groupId;
   const handleCancel = (slot_id: string) => {

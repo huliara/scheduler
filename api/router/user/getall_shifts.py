@@ -4,7 +4,7 @@ from ddd.infra.auth import get_current_active_user
 from ddd.infra.repository import ShiftRepository
 from ddd.service.usecases.shift import ShiftGetUserRelevantUseCase
 from fastapi import APIRouter, Depends
-from schemas.shift import UserShiftList
+from schemas.shift import ShiftList
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -14,7 +14,7 @@ def __usecase_di(db:Session=Depends(get_db)):
 
 
 
-@router.get("/shifts", response_model=UserShiftList)
+@router.get("/shifts", response_model=ShiftList)
 async def get_shifts_relevant_user(user:UserEntity=Depends(get_current_active_user),
                                  usecase:ShiftGetUserRelevantUseCase=Depends(__usecase_di)):
     shifts=usecase.execute(user.id)

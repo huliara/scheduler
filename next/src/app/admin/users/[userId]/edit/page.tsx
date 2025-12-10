@@ -34,7 +34,6 @@ export default function AdminUserEdit({
         name: data.get("name"),
         room_number: data.get("room_number"),
         is_active: data.get("is_active") ? false : true,
-        is_admin: data.get("is_admin") ? true : false,
       })
       .then((response) => {})
       .catch((err) => {});
@@ -56,7 +55,7 @@ export default function AdminUserEdit({
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid>
               <TextField
                 autoComplete="given-name"
                 name="name"
@@ -68,7 +67,7 @@ export default function AdminUserEdit({
                 defaultValue={data.name}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid>
               <TextField
                 required
                 fullWidth
@@ -79,7 +78,7 @@ export default function AdminUserEdit({
                 defaultValue={data.room_number}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -90,19 +89,6 @@ export default function AdminUserEdit({
                   />
                 }
                 label="休寮中"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    id="is_admin"
-                    name="is_admin"
-                    defaultChecked={data.is_admin}
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
-                }
-                label="管理者にする"
               />
             </Grid>
           </Grid>

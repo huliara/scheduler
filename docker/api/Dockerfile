@@ -10,9 +10,7 @@ RUN apt update \
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONBUFFERED=1
 
-COPY ./api /usr/src/app
-
-WORKDIR /usr/src/app
+WORKDIR /usr/src/api
 
 RUN --mount=type=cache,target=/root/.cache/uv \
 --mount=type=bind,source=./api/uv.lock,target=uv.lock \

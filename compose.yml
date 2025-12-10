@@ -12,8 +12,8 @@ services:
     environment:
       - NODE_ENV=development
     volumes:
-      - node_modules:/usr/src/next/node_modules:cached
       - ./next:/usr/src/next
+      - node_modules:/usr/src/next/node_modules
       - ./scripts:/usr/src/scripts
     ports:
       - 3000:3000
@@ -36,10 +36,10 @@ services:
       - scheduler-front
       - scheduler-back
     volumes:
-      - ./api/migrations:/usr/src/app/migrations:cached
-      - ./db:/usr/src/app/db:cached
-      - ./scripts:/usr/src/app/scripts:cached
-    working_dir: /usr/src/app/scripts
+      - ./api:/usr/src/api:cached
+      - ./db:/usr/src/db:cached
+      - ./scripts:/usr/src/scripts:cached
+    working_dir: /usr/src/scripts
     command: bash -c "./run.sh"
     environment:
       APP_ENV: "development"

@@ -22,6 +22,7 @@ import { fetcher } from "@/axios";
 import { LogoutButton } from "@/components/button/logoutButton";
 import { useRouter } from "next/navigation";
 import { ShiftsResponse } from "@/types/ShiftType";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { data, error, mutate, isLoading } = useSWR<ShiftsResponse>(
@@ -29,9 +30,13 @@ export default function Home() {
     fetcher
   );
   const router = useRouter();
-  const userId = localStorage.getItem("id");
+  const [userId, setUserId] = useState<string | null>();
   if (error) return <div>Loading Failed</div>;
   if (!data || isLoading || !userId) return <div>loading...</div>;
+
+  useEffect(() => {
+    setUserId(localStorage.getItem("id"));
+  }, []);
 
   const futureShifts = data.shifts.filter(
     (shift) => shift.start_time >= new Date().toISOString()

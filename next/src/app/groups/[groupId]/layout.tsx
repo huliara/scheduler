@@ -5,19 +5,20 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { MyDrawer } from "@/components/list/Drawer";
 import { LogoutButton } from "@/components/button/logoutButton";
-export default function TemporaryDrawer({
+export default async function TemporaryDrawer({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { groupId: string };
+  params: Promise<{ groupId: string }>;
 }) {
+  const groupId = (await params).groupId;
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            <MyDrawer groupId={params.groupId} />
+            <MyDrawer groupId={groupId} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Scheduler
             </Typography>

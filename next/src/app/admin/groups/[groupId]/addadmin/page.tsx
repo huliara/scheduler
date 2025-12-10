@@ -50,7 +50,6 @@ export default function AdminAddSuperUser({
             <TableRow>
               <TableCell>ユーザー名</TableCell>
               <TableCell>部屋番号</TableCell>
-              <TableCell>権限</TableCell>
               <TableCell> </TableCell>
             </TableRow>
           </TableHead>
@@ -60,7 +59,6 @@ export default function AdminAddSuperUser({
                 <TableRow key={user.id}>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.room_number}</TableCell>
-                  <TableCell>{user.is_owner ? "管理者" : "一般"}</TableCell>
                   <TableCell>
                     <FormControlLabel
                       control={
@@ -68,7 +66,7 @@ export default function AdminAddSuperUser({
                           id="addUser"
                           name="addUser"
                           value={user.id}
-                          defaultChecked={user.is_owner}
+                          defaultChecked={false}
                           inputProps={{ "aria-label": "controlled" }}
                         />
                       }

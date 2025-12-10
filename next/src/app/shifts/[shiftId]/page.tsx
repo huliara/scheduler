@@ -1,3 +1,4 @@
+"use client";
 import { ShiftResponse } from "@/types/ShiftType";
 import useSWR from "swr";
 import { fetcher } from "@/axios";

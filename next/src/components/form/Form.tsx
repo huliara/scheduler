@@ -1,3 +1,4 @@
+"use client";
 import { RequestType } from "@/types/Base";
 import {
   Field,
@@ -12,11 +13,11 @@ import Grid from "@mui/material/Grid";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { styled } from "@mui/material/styles";
 import { ReactElement } from "react";
-import { NumberField } from "@base-ui-components/react/number-field";
-import { DateTimePicker, TimePicker, DatePicker } from "@mui/x-date-pickers";
+import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { SelectField } from "./SelectField";
 import { MultiSelectField } from "./MultiSelectField";
+import { MuiProvider } from "../provider/MUIProvider";
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
   flexDirection: "column",
@@ -63,51 +64,49 @@ export const FormField = ({
 
     case Field.NUMBER:
       return (
-        <NumberField.Root
+        <input
+          type="number"
           id={fieldKey}
           name={fieldKey}
           min={isPositive(fieldKey) ? 0 : undefined}
           defaultValue={typeof defaultValue == "number" ? defaultValue : 0}
-        >
-          <NumberField.ScrubArea>
-            <NumberField.ScrubAreaCursor />
-          </NumberField.ScrubArea>
-          <NumberField.Group>
-            <NumberField.Decrement />
-            <NumberField.Input />
-            <NumberField.Increment />
-          </NumberField.Group>
-        </NumberField.Root>
+        />
       );
     case Field.TIME:
       return (
-        <TimePicker
-          label={getFieldJA(fieldKey)}
-          ampm={false}
-          defaultValue={
-            typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
-          }
-          views={["hours", "minutes"]}
-        />
+        <MuiProvider>
+          <TimePicker
+            label={getFieldJA(fieldKey)}
+            ampm={false}
+            defaultValue={
+              typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
+            }
+            views={["hours", "minutes"]}
+          />
+        </MuiProvider>
       );
     case Field.DATE:
       return (
-        <DatePicker
-          label={getFieldJA(fieldKey)}
-          defaultValue={
-            typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
-          }
-          views={["year", "month", "day"]}
-        />
+        <MuiProvider>
+          <DatePicker
+            label={getFieldJA(fieldKey)}
+            defaultValue={
+              typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
+            }
+            views={["year", "month", "day"]}
+          />
+        </MuiProvider>
       );
     case Field.DATETIME:
       return (
-        <DateTimePicker
-          label={getFieldJA(fieldKey)}
-          defaultValue={
-            typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
-          }
-        />
+        <MuiProvider>
+          <DateTimePicker
+            label={getFieldJA(fieldKey)}
+            defaultValue={
+              typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
+            }
+          />
+        </MuiProvider>
       );
     case Field.ID:
       return (

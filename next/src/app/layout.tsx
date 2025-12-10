@@ -1,12 +1,13 @@
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 import { Theme } from "@/components/provider/Theme";
 import { SnackbarProvider } from "@/components/provider/SnackBar";
-import AuthGuard from "@/components/provider/AuthProvider";
+import AuthProvider from "@/components/provider/AuthProvider";
+
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "scheduler",
   description: "Task management system for kumano domitory",
 };
@@ -20,11 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <AuthGuard>
+          <AuthProvider>
             <Theme>
               <SnackbarProvider>{children}</SnackbarProvider>
-            </Theme>
-          </AuthGuard>
+              </Theme>
+          </AuthProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
