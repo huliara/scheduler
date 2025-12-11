@@ -1,13 +1,18 @@
-'use client';
-import axios from "@/axios";
-import { redirect } from "next/navigation";
-import { ReactNode } from "react";
+"use client"
+import { useRouter } from "next/navigation";
+
+import { ReactNode, useEffect } from "react";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const user = axios
-    .get("/user/profile")
-    .then((res) => res.data)
-    .catch((err) => redirect("/login"));
+  const router = useRouter()
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      router.push("/login");
+    }
+  },[])
+
+
   return <>{children}</>;
 };
 

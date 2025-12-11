@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 import { Theme } from "@/components/provider/Theme";
 import { SnackbarProvider } from "@/components/provider/SnackBar";
-import AuthProvider from "@/components/provider/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,11 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <AuthProvider>
             <Theme>
               <SnackbarProvider>{children}</SnackbarProvider>
             </Theme>
-            </AuthProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

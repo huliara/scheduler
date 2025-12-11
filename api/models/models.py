@@ -64,7 +64,7 @@ class Task(BaseModelMixin,Base):
     group_id:Mapped[uuid.UUID]=mapped_column(
         ForeignKey("group.id",ondelete="CASCADE")
     )
-    group:Mapped[Group]=relationship(back_populates="task")
+    group:Mapped[Group]=relationship(back_populates="tasks")
     subtask: Mapped[list[SubTask]] = relationship(
         back_populates="task", cascade="all,delete-orphan"
     )

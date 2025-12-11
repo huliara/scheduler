@@ -13,11 +13,11 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .post("/user", {
+      .post("/signup", {
         name: data.get("name"),
         password: data.get("password"),
         room_number: data.get("room_number"),
-        exp_tasks: data.get("exp_tasks"),
+        exp_tasks: [],
       })
       .then((response) => {})
       .catch((err) => {});
@@ -26,7 +26,6 @@ export default function SignUp() {
     name: "",
     password: "",
     room_number: "",
-    exp_tasks: [],
   };
 
   return (
