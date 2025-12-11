@@ -7,8 +7,10 @@ import Container from "@mui/material/Container";
 import axios from "@/axios";
 import { Button, Grid } from "@mui/material";
 import { SchedulerForm } from "@/components/form/Form";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const router=useRouter();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -19,7 +21,7 @@ export default function SignUp() {
         room_number: data.get("room_number"),
         exp_tasks: [],
       })
-      .then((response) => {})
+      .then((response) => {router.push("/login");})
       .catch((err) => {});
   };
   const defaultData = {
