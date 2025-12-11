@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 # openssl rand -hex 32
 SECRET_KEY = "9343174155ee7db2d9ad9985aac201fec735c0a56a298e0ad4296e9ea91c2243"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 
 class TokenData(BaseModel):

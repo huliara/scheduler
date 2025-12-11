@@ -138,7 +138,7 @@ export const SchedulerForm = <T extends RequestType>(
           return null;
         }
         return (
-          <FormGrid size={{ xs: 12, md: 6 }}>
+          <FormGrid size={{ xs: 12, md: 6 }} key={key}>
             <FormLabel htmlFor={key} required>
               {fieldJA}
             </FormLabel>

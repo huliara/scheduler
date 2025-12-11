@@ -196,9 +196,9 @@
   integrity sha512-rEFOE1MYIsBmoMJtQbl32PGHHXuG2hDxvEd7rUHE0vCBoFQVSDqaVs9hkZEtHCxRoY+CljXKFCOuJ8uxqw1LcA==
 
 "@better-fetch/fetch@^1.1.4":
-  version "1.1.19"
-  resolved "https://registry.yarnpkg.com/@better-fetch/fetch/-/fetch-1.1.19.tgz#219d7acdfd8329c3780eabe23ce56952e8c30a6a"
-  integrity sha512-cYVhTzWEus0D8bHPsmg9Hkc3XK0c2jkxYwsJGU3JK884paZ2c0QkUbLAfI1kmQSEN4uvk/YnUDWTqS4CFS3/Pw==
+  version "1.1.21"
+  resolved "https://registry.yarnpkg.com/@better-fetch/fetch/-/fetch-1.1.21.tgz#2b4990e73c46b0ae5e66b247083610ff8c37bddc"
+  integrity sha512-/ImESw0sskqlVR94jB+5+Pxjf+xBwDZF/N5+y2/q4EqD7IARUTSpPfIo8uf39SYpCxyOCtbyYpUrZ3F/k0zT4A==
 
 "@emnapi/core@^1.4.3":
   version "1.7.1"
@@ -3053,9 +3053,9 @@ reusify@^1.0.4:
   integrity sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==
 
 rou3@^0.7.10:
-  version "0.7.10"
-  resolved "https://registry.yarnpkg.com/rou3/-/rou3-0.7.10.tgz#89a397523482ccbb77f3a9693a5b932d52930b2f"
-  integrity sha512-aoFj6f7MJZ5muJ+Of79nrhs9N3oLGqi2VEMe94Zbkjb6Wupha46EuoYgpWSOZlXww3bbd8ojgXTAA2mzimX5Ww==
+  version "0.7.11"
+  resolved "https://registry.yarnpkg.com/rou3/-/rou3-0.7.11.tgz#1877d5909ecac2cb0004aff134677cee49380016"
+  integrity sha512-ELguG3ENDw5NKNmWHO3OGEjcgdxkCNvnMR22gKHEgRXuwiriap5RIYdummOaOiqUNcC5yU5txGCHWNm7KlHuAA==
 
 run-parallel@^1.1.9:
   version "1.2.0"
