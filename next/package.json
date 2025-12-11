@@ -19,7 +19,6 @@
     "@mui/system": "^7.3.6",
     "@mui/x-date-pickers": "^8.21.0",
     "axios": "^1.13.2",
-    "better-auth": "^1.4.6",
     "dayjs": "^1.11.19",
     "next": "^16.0.8",
     "react": "^19.2.0",

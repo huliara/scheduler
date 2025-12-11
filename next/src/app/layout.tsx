@@ -21,9 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AppRouterCacheProvider>
+          <AuthProvider>
             <Theme>
               <SnackbarProvider>{children}</SnackbarProvider>
-              </Theme>
+            </Theme>
+            </AuthProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

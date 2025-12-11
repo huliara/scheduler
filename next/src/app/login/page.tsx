@@ -2,6 +2,7 @@
 import axios from "@/axios";
 import { SchedulerForm } from "@/components/form/Form";
 import { Box, Button, Grid, Typography } from "@mui/material";
+import { Container } from "@mui/system";
 import { FormEvent } from "react";
 
 export default function Login() {
@@ -35,20 +36,31 @@ export default function Login() {
   };
   return (
     <Box component="form" noValidate onSubmit={signIn}>
-      <Typography component="h1" variant="h5">
-        ログイン
-      </Typography>
-      <Grid>
-        <SchedulerForm data={data} />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
+      <Container
+        component="main"
+        maxWidth="xs"
+        sx={{
+          mt: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h1" variant="h5">
           ログイン
-        </Button>
-      </Grid>
+        </Typography>
+        <Grid container spacing={2}>
+          <SchedulerForm data={data} />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            ログイン
+          </Button>
+        </Grid>
+      </Container>
     </Box>
   );
 }
