@@ -30,6 +30,7 @@ class TaskCreate(TaskBase):
 class TaskDisplay(TaskBase):
     id: UUID
     creater_id: UUID
+    group_name: str
     class Config:
         from_attributes = True
 

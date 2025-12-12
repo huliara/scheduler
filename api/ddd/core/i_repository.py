@@ -1,14 +1,10 @@
 from abc import ABC, abstractmethod
-
-from sqlalchemy.orm import Session
-
 from ddd.core.i_entity import IEntity
-
 
 class IRepository[T:IEntity,ID](ABC):
     
     @abstractmethod
-    def __init__(self, db: Session) -> None:
+    def __init__(self, db) -> None:
         self.db=db
     
     @abstractmethod

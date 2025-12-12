@@ -13,15 +13,12 @@ export default function Login() {
   const signIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const params = new URLSearchParams();
+    params.append("username", String(formData.get("name")));
+    params.append("password", String(formData.get("password")));
     await axios
-      .post("/login", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          user_name: formData.get("name"),
-          password: formData.get("password"),
-        },
+      .post("/login", params, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((response) => {
         localStorage.setItem("accessToken", response.data.access_token);

@@ -23,6 +23,9 @@ import { LogoutButton } from "@/components/button/logoutButton";
 import { useRouter } from "next/navigation";
 import { ShiftsResponse } from "@/types/ShiftType";
 import { useEffect, useState } from "react";
+import { ErrorPage } from "@/components/pages/ErrorPage";
+import { LoadingPage } from "@/components/pages/LoadingPage";
+import { MyDrawer } from "@/components/list/Drawer";
 
 export default function Home() {
   const { data, error, mutate, isLoading } = useSWR<ShiftsResponse>(
@@ -31,12 +34,12 @@ export default function Home() {
   );
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>();
-  if (error) return <div>Loading Failed</div>;
-  if (!data || isLoading || !userId) return <div>loading...</div>;
-
   useEffect(() => {
+    console.log(localStorage.getItem("id"));
     setUserId(localStorage.getItem("id"));
   }, []);
+  if (error) return <ErrorPage />;
+  if (!data || isLoading || !userId) return <LoadingPage />;
 
   const futureShifts = data.shifts.filter(
     (shift) => shift.start_time >= new Date().toISOString()
@@ -54,19 +57,6 @@ export default function Home() {
   ).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Scheduler
-            </Typography>
-            <Button color="inherit" onClick={() => router.push("/groups")}>
-              グループ一覧
-            </Button>
-            <LogoutButton />
-          </Toolbar>
-        </AppBar>
-      </Box>
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <h2>入る予定のシフト</h2>

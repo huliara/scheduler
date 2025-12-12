@@ -1,4 +1,3 @@
-
 from ddd.core.i_entity import IEntity
 from ddd.core.i_repository import IRepository
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase

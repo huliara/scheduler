@@ -1,6 +1,6 @@
 import { ShiftRequest } from "@/types/ShiftType";
 import { TaskRequest } from "@/types/TaskType";
-import { TemplateSlot } from "@/types/TemplateType";
+import { TemplateResponse, TemplateSlot } from "@/types/TemplateType";
 import { UserRequest } from "@/types/UserType";
 export type Text = string;
 export type Password = string;
@@ -30,6 +30,10 @@ type RequestAllFieldType = UserRequest &
   TaskRequest &
   TemplateSlot;
 export type RequestFieldKeys = keyof RequestAllFieldType;
+export type ResponseFieldKeys = keyof (UserRequest &
+  ShiftRequest &
+  TaskRequest &
+  TemplateResponse);
 
 export const getFieldType = (key: RequestFieldKeys): FieldType => {
   switch (key) {
@@ -59,7 +63,9 @@ export const getFieldType = (key: RequestFieldKeys): FieldType => {
   }
 };
 
-export const getFieldJA = (key: RequestFieldKeys): string => {
+export const getFieldJA = (
+  key: RequestFieldKeys | ResponseFieldKeys
+): string => {
   switch (key) {
     case "name":
       return "名前";

@@ -1,8 +1,8 @@
 import { ID, Text } from "@/utils/types";
-import { ShiftRequest } from "./ShiftType";
-import { TaskRequest } from "./TaskType";
-import { LoginRequest, UserRequest } from "./UserType";
-import { TemplateSlot } from "./TemplateType";
+import { ShiftRequest, ShiftResponse } from "./ShiftType";
+import { TaskRequest, TaskResponse } from "./TaskType";
+import { LoginRequest, UserRequest, UserResponse } from "./UserType";
+import { TemplateResponse, TemplateSlot } from "./TemplateType";
 
 export type Base = {
   id: ID;
@@ -15,3 +15,9 @@ export type RequestType =
   | TaskRequest
   | TemplateSlot
   | LoginRequest;
+
+export type ResponseType =
+  | ShiftResponse
+  | TaskResponse
+  | TemplateResponse
+  | UserResponse;
