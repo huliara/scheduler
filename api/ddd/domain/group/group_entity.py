@@ -14,7 +14,7 @@ class GroupEntity(IEntity):
     id:GroupId|None
     name:str
     users:list[MemberEntity]=field(default_factory=list)
-    task:list[TaskId]=field(default_factory=list)
+    tasks:list[TaskId]=field(default_factory=list)
     template:list[TemplateId]=field(default_factory=list)
     @classmethod
     def from_model(cls, data: "models.Group") -> 'GroupEntity':
@@ -30,6 +30,6 @@ class GroupEntity(IEntity):
             'id': self.id,
             'name': self.name,
             'users': [{'id':user.user_id,'point':user.point} for user in self.users],
-            'task': self.task,
+            'task': self.tasks,
             'template': self.template
         }

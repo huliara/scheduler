@@ -16,5 +16,9 @@ class IUserRepository(IRepository[UserEntity,UserId]):
     def update_password(self, user_id: UserId, password: str):
         pass
     
+    @abstractmethod
+    def find_by_ids(self, ids: list[UserId]) -> list[UserEntity]:
+        pass
+    
     
     

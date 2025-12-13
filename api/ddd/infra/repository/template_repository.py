@@ -1,13 +1,12 @@
-from sqlalchemy.future import select
-
 from ddd.core.exception import DomainException
 from ddd.domain.template import ITemplateRepository, TemplateEntity
+from ddd.infra.repository import SQLAlchemyBaseRepository
 from models.models import TaskTemplate, Template
+from sqlalchemy.future import select
 
 
-class TemplateRepository(ITemplateRepository):
-    def __init__(self, db):
-        super().__init__(db)        
+class TemplateRepository(SQLAlchemyBaseRepository,ITemplateRepository):
+
     def find_by_id(self, id):
         model=self.db.get(Template,id)
         return self._refresh_to_entity(model)
@@ -29,7 +28,6 @@ class TemplateRepository(ITemplateRepository):
                                                     date_from_start=slot.date_from_start,
                                                     start_time=slot.start_time)
             model.tasktemplates.append(model_slot)
-        
         self.db.add(model)
         self.db.commit()
         self.db.refresh(model)

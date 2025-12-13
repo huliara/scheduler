@@ -11,10 +11,7 @@ class IRepository[T:IEntity,ID](ABC):
     def find_by_id(self, id: ID) -> T:
         pass
     
-    @abstractmethod
-    def find_by_ids(self, ids: list[ID]) -> list[T]:
-        pass
-    
+
     @abstractmethod
     def find_all(self,group_id) -> list[T]:
         pass

@@ -18,7 +18,7 @@ def test_template_from_params():
     template_entity=TemplateEntity.from_params('name', group_id, slots)
     assert template_entity.name=='name'
     assert template_entity.group_id==group_id
-    assert list(template_entity.slots)==[TemplateSlot(same_detail,0,datetime.time(hour=12) )]
+    assert list(template_entity.slots)==[TemplateSlot(same_detail,name,0,datetime.time(hour=12) )]
 
 def test_template_negative_date_from_start():
     with pytest.raises(ValueError) as e:

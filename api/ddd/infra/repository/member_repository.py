@@ -2,16 +2,14 @@ from ddd.core.exception import DomainException
 from ddd.domain.group import GroupId
 from ddd.domain.member import IMemberRepository, MemberEntity
 from ddd.domain.user import UserId
+from ddd.infra.repository import SQLAlchemyBaseRepository
 from models.models import Group, GroupUser, User
 from sqlalchemy import insert
 from sqlalchemy.future import select
-from sqlalchemy.orm import Session
 
 
-class MemberRepository(IMemberRepository):
-    def __init__(self, db:Session) -> None:
-        self.db = db
-
+class MemberRepository(SQLAlchemyBaseRepository,IMemberRepository):
+    
     def find_by_id(self, group_id:GroupId, user_id:UserId):
         member=self.db.scalars(select(GroupUser).filter_by(group_id=group_id, user_id=user_id)).first()
         if member is None:

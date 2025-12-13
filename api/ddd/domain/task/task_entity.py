@@ -27,6 +27,7 @@ class TaskEntity(IEntity):
     
     @classmethod
     def from_model(cls,data:"models.Task") -> 'TaskEntity':
+        group_name = data.group.name if data.group else None
         return cls(
             id=TaskId(data.id),
             name=data.name,
@@ -37,7 +38,7 @@ class TaskEntity(IEntity):
             wage=data.wage,
             duration=data.duration,
             group_id=data.group_id,
-            group_name=data.group.name,
+            group_name=group_name,
             creater_id=data.creater_id,
             permissions=[permission for permission in data.permissions]
         )

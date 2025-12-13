@@ -4,10 +4,10 @@ from ddd.domain.group import (GroupEntity, GroupId, IGroupRepository,
 from models.models import Group, GroupUser
 from sqlalchemy.future import select
 
+from .base_repository import SQLAlchemyBaseRepository
 
-class GroupRepository(IGroupRepository):
-    def __init__(self, db):
-        super().__init__(db)
+
+class GroupRepository(SQLAlchemyBaseRepository,IGroupRepository):
     
     def find_by_id(self, id):
         model=self.db.get(Group,id)
@@ -16,8 +16,6 @@ class GroupRepository(IGroupRepository):
     def find_by_user_id(self, id):
         models=self.db.scalars(select(Group).join(GroupUser).filter(GroupUser.user_id==id)).all()
         return [{'id':model.id,'name':model.name} for model in models]
-    
-    
     
     def find_all(self):
         return [self._refresh_to_entity(model) 

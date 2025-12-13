@@ -25,7 +25,7 @@ class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
         pass
 
     @abstractmethod
-    def refresh_to_entity(self, model:"models.Shift") -> ShiftEntity:
+    def _refresh_to_entity(self, model:"models.Shift") -> ShiftEntity:
         pass
     
     @abstractmethod

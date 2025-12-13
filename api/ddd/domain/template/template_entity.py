@@ -25,7 +25,7 @@ class TemplateEntity(IEntity):
             name=data.name,
             slots=set([
                 TemplateSlot(task_id=slot.task_id,
-                             task_name=slot.task.name,
+                             task_name=slot.task.name if slot.task else "",
                              date_from_start=slot.date_from_start,
                              start_time=slot.start_time) 
                 for slot in data.tasktemplates]),
