@@ -1,5 +1,4 @@
 import datetime
-import uuid
 
 import pytest
 from ddd.domain.group import GroupEntity

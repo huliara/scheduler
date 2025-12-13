@@ -5,10 +5,14 @@ class IRepository[T:IEntity,ID](ABC):
     
     @abstractmethod
     def __init__(self, db) -> None:
-        self.db=db
+        pass
     
     @abstractmethod
     def find_by_id(self, id: ID) -> T:
+        pass
+    
+    @abstractmethod
+    def find_by_ids(self, ids: list[ID]) -> list[T]:
         pass
     
     @abstractmethod
@@ -27,4 +31,7 @@ class IRepository[T:IEntity,ID](ABC):
     def remove(self, id: ID) -> T:
         pass
     
+    @abstractmethod
+    def _refresh_to_entity(self, model) -> T:
+        pass
     

@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 import models.models as models
 from ddd.core.i_repository import IRepository
-from ddd.domain.group import GroupId
+from ddd.domain.group.group_value_object import GroupId
 from ddd.domain.task import TaskId
 from ddd.domain.user import UserId
 
