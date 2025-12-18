@@ -7,6 +7,7 @@ import { ErrorPage } from "@/components/pages/ErrorPage";
 import { SchedulerList } from "@/components/list/List";
 import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
+import Link from "next/link";
 const TaskList = () => {
   const router = useRouter();
   const { data, error, mutate, isLoading } = useSWR<TasksResponse>(
@@ -16,7 +17,7 @@ const TaskList = () => {
   if (error) return <ErrorPage />;
   if (!data || isLoading) return <LoadingPage />;
 
-  const groupIds = Array.from(new Set(data.tasks.map((task) => task.group_id)));
+  const groupIds = Array.from(new Set(data.map((task) => task.group_id)));
 
   const handleOnClick = (task_id: string) => {
     axios
@@ -36,11 +37,11 @@ const TaskList = () => {
   return (
     <>
       {groupIds.map((groupId) => {
-        const groupName = data.tasks.find(
+        const groupName = data.find(
           (task) => task.group_id === groupId
         )?.group_name;
 
-        const values = data.tasks
+        const values = data
           .filter((task) => task.group_id === groupId)
           .map((task) => {
             return {
@@ -58,6 +59,7 @@ const TaskList = () => {
           </>
         );
       })}
+      <Link href={`/tasks/create`}>新規作成</Link>
     </>
   );
 };

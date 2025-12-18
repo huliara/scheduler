@@ -114,9 +114,9 @@ export const _fieldURL = (key: RequestFieldKeys): string => {
     case "task_id":
       return "/tasks";
     case "group_id":
-      return "/api/groups";
+      return "/groups";
     case "exp_tasks":
-      return "/api/tasks";
+      return "/tasks";
     default:
       return "";
   }

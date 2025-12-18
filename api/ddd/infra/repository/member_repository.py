@@ -4,11 +4,10 @@ from ddd.domain.member import IMemberRepository, MemberEntity
 from ddd.domain.user import UserId
 from ddd.infra.repository import SQLAlchemyBaseRepository
 from models.models import Group, GroupUser, User
-from sqlalchemy import insert
 from sqlalchemy.future import select
 
 
-class MemberRepository(SQLAlchemyBaseRepository,IMemberRepository):
+class MemberRepository(SQLAlchemyBaseRepository[MemberEntity],IMemberRepository):
     
     def find_by_id(self, group_id:GroupId, user_id:UserId):
         member=self.db.scalars(select(GroupUser).filter_by(group_id=group_id, user_id=user_id)).first()
@@ -65,12 +64,12 @@ class MemberRepository(SQLAlchemyBaseRepository,IMemberRepository):
                                                          GroupUser.user_id.in_([entity.user_id for entity in entities]))).all()
         if len(target)>0:
             raise DomainException(f'member_id is already in group_id')
-        data=[entity.to_dict() for entity in entities]
-        result=self.db.scalars(insert(GroupUser).returning(GroupUser),data).all()
+        data=[GroupUser(user_id=entity.user_id,group_id=entity.group_id) for entity in entities]
+        self.db.add_all(data)
         self.db.commit()
-        for model in result:
+        for model in data:
             self.db.refresh(model)
-        return [self._refresh_to_entity(model) for model in result]
+        return [self._refresh_to_entity(model) for model in data]
 
     def save(self, entity):
         model=self.db.get(GroupUser,(entity.group_id,entity.user_id))

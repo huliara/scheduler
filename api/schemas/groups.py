@@ -12,11 +12,10 @@ class GroupDisplay(BaseModel):
     id: UUID
     name: str
     users: list[Member]
-    task_details: list[UUID]
+    task: list[UUID]
     template: list[UUID]
 
-class GroupsDisplay(BaseModel):
-    groups: list[GroupDisplay]
+
 
     class Config:
         from_attributes=True

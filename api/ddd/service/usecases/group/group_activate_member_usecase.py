@@ -18,5 +18,5 @@ class GroupActivateMemberUseCase(TransactionUseCaseBase):
         except:
             raise UseCaseException(f'group_id:{group_id} not found')
         member.is_active=True
-        new_group=self.member_repository.save(member)
-        return new_group
+        member=self.member_repository.save(member)
+        return member

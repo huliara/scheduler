@@ -15,9 +15,7 @@ export type UserResponse = Base & {
   room_number: Text;
   is_active: boolean;
 };
-export type UsersResponse = {
-  users: UserResponse[];
-};
+export type UsersResponse = UserResponse[];
 export type UserDetailResponse = UserResponse & {
   point: number;
   exp_tasks: Base[];

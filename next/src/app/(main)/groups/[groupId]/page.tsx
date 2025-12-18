@@ -1,59 +1,98 @@
 "use client";
-import { List, ListItem, ListItemButton } from "@mui/material";
 import useSWR from "swr";
-import { fetcher } from "@/axios";
-import { GroupResponse } from "@/types/GroupType";
-import { useRouter } from "next/navigation";
-export default function GroupHome({ params }: { params: { groupId: string } }) {
-  const { data, error, isLoading } = useSWR<GroupResponse>(
-    `/groups/${params.groupId}`,
-    fetcher
-  );
+import { GroupUserResponse } from "@/types/GroupUser";
+import {
+  Button,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import axios, { fetcher } from "@/axios";
+import { use } from "react";
 
-  const router = useRouter();
-  if (error) return <div>Error</div>;
-  if (isLoading) return <div>Loading...</div>;
+export default function MemberList({
+  params,
+}: {
+  params: Promise<{ groupId: string }>;
+}) {
+  const groupId = use(params).groupId;
+  const { data, error, isLoading, mutate } = useSWR<{
+    users: GroupUserResponse[];
+  }>(`/groups/${groupId}/members`, fetcher);
+  if (error) return <div>error</div>;
+  if (!data) return <div>no data</div>;
+  if (isLoading) return <div>loading...</div>;
+
+  const handleUserActivate = (userId: string, activate: boolean) => {
+    axios
+      .post(
+        `/groups/${groupId}/members/${userId}/activate&activate=${activate}`
+      )
+      .then((res) => {
+        mutate();
+      })
+      .catch((error) => {});
+  };
+
+  const handleUserRemove = (userId: string) => {
+    axios
+      .delete(`/groups/${groupId}/members/${userId}`)
+      .then((res) => {
+        mutate();
+      })
+      .catch((error) => {});
+  };
+
   return (
     <>
-      <h1>{data?.name}</h1>
-      <List>
-        <ListItem>
-          <ListItemButton
-            onClick={() => {
-              router.push(`/${params.groupId}/shifts`);
-            }}
-          >
-            仕事
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() => {
-              router.push(`/${params.groupId}/tasks`);
-            }}
-          >
-            マニュアルなど
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() => {
-              router.push(`/${params.groupId}/templates`);
-            }}
-          >
-            募集テンプレート
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() => {
-              router.push(`/${params.groupId}/users`);
-            }}
-          >
-            ユーザー
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <Typography component="h1" variant="h5">
+        ユーザー一覧
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ユーザー名</TableCell>
+            <TableCell>部屋番号</TableCell>
+            <TableCell>ポイント</TableCell>
+            <TableCell>承認</TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.users
+            .sort((a, b) => a.point - b.point)
+            .map((user) => {
+              return (
+                <TableRow key={user.id}>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.room_number}</TableCell>
+                  <TableCell>{user.point}</TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={user.is_active}
+                      onClick={() =>
+                        handleUserActivate(user.id, !user.is_active)
+                      }
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => {
+                        handleUserRemove(user.id);
+                      }}
+                    >
+                      除外
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+        </TableBody>
+      </Table>
     </>
   );
 }

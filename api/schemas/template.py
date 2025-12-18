@@ -35,13 +35,6 @@ class TemplateDisplay(BaseModel):
     slots: list[TemplateSlotDisplay]
 
 
-class TemplateList(BaseModel):
-    templates: list[TemplateDisplay]
-
-    class Config:
-        from_attributes = True
-
-
 class TemplatePatchSlot(BaseModel):
     src:TemplateSlotBase
     dst:TemplateSlotBase

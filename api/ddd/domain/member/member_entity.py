@@ -10,7 +10,7 @@ from ddd.domain.user.user_value_object import UserId
 class MemberEntity():
     user_id:UserId
     group_id:'group.GroupId'
-    is_active:bool
+    is_active:bool=False
     point:float=0.0
     exp_tasks:list[TaskId]=field(default_factory=list)
     @classmethod

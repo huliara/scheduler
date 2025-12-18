@@ -18,6 +18,4 @@ export type ShiftResponse = Base & {
   creater_id: string;
   group_id: string;
 };
-export type ShiftsResponse = {
-  shifts: ShiftResponse[];
-};
+export type ShiftsResponse = ShiftResponse[];

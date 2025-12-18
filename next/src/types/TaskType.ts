@@ -17,9 +17,7 @@ export type TaskResponse = Base &
     creater_name: string;
     group_name: string;
   };
-export type TasksResponse = {
-  tasks: TaskResponse[];
-};
+export type TasksResponse = TaskResponse[];
 export type TaskRequest = TaskBase & {
   name: string;
 };

@@ -34,9 +34,3 @@ class TaskDisplay(TaskBase):
     class Config:
         from_attributes = True
 
-
-class TaskList(BaseModel):
-    tasks: list[TaskDisplay]
-
-    class Config:
-        from_attributes = True

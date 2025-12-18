@@ -33,5 +33,5 @@ async def member_getall(group_id: str,
                         room_number:str|None=None, 
                         usecase:GroupGetAllMemberUseCase=Depends(__usecase_di)):
     members=usecase.execute(group_id,room_number)
-    return {"users":members}
+    return members
     

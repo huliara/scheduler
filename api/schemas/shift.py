@@ -46,8 +46,6 @@ class ShiftDisplay(BaseModel):
         from_attributes = True
 
 
-class ShiftList(BaseModel):
-    shifts: list[ShiftDisplay]
 
     class Config:
         from_attributes = True

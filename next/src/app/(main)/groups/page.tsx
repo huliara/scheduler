@@ -9,14 +9,14 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios, { fetcher } from "@/axios";
-import React from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import { GroupResponse } from "@/types/GroupType";
 import AddIcon from "@mui/icons-material/Add";
+import Link from "next/link";
 
 export default function GroupList() {
-  const { data, error, isLoading } = useSWR<{
+  const { data, error, mutate, isLoading } = useSWR<{
     groups: GroupResponse[];
   }>("/groups", fetcher);
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function GroupList() {
   const onClickJoin = (group_id: string) => {
     axios
       .post(`/groups/${group_id}/members/join`)
-      .then((res) => console.log(res))
+      .then((res) => mutate())
       .catch((err) => console.log(err));
   };
 
@@ -51,7 +51,7 @@ export default function GroupList() {
               <ListItemButton>
                 <ArrowForwardIcon
                   onClick={() => {
-                    router.push(`/${group.id}/`);
+                    router.push(`/groups/${group.id}`);
                   }}
                 />
               </ListItemButton>
@@ -76,6 +76,7 @@ export default function GroupList() {
           ))}
         </List>
       </Container>
+      <Link href={`/groups/create`}>新規作成</Link>
     </>
   );
 }

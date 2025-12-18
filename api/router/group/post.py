@@ -9,9 +9,9 @@ from sqlalchemy.orm import Session
 router=APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return GroupPostUseCase(db,GroupRepository(db))
+    return GroupPostUseCase(GroupRepository(db))
 
-@router.post("/groups",response_model=GroupDisplay)
+@router.post("/",response_model=GroupDisplay)
 async def group_post(request:GroupPostRequest,usecase:GroupPostUseCase=Depends(__usecase_di)):
     group=usecase.execute(request.name).to_dict()
     return group

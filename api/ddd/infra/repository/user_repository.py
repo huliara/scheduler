@@ -6,7 +6,7 @@ from models.models import GroupUser, Task, User
 from sqlalchemy.future import select
 
 
-class UserRepository(SQLAlchemyBaseRepository,IUserRepository):
+class UserRepository(SQLAlchemyBaseRepository[UserEntity],IUserRepository):
 
     def find_by_id(self, id):
         model = self.db.get(User, id)

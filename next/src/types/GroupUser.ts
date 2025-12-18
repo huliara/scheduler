@@ -5,6 +5,4 @@ export type GroupUserResponse = Base & {
   point: number;
   is_active: boolean;
 };
-export type GroupUsersResponse = {
-  users: GroupUserResponse[];
-};
+export type GroupUsersResponse = GroupUserResponse[];

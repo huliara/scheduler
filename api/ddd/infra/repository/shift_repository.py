@@ -8,7 +8,7 @@ from sqlalchemy import delete, insert
 from sqlalchemy.future import select
 
 
-class ShiftRepository(SQLAlchemyBaseRepository,IShiftRepository):
+class ShiftRepository(SQLAlchemyBaseRepository[ShiftEntity],IShiftRepository):
     
     def find_by_id(self, id):
         model=self.db.get(Shift,id)

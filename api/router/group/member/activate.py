@@ -3,7 +3,7 @@ from ddd.infra.repository import MemberRepository
 from ddd.service.usecases.group import (GroupActivateMemberUseCase,
                                         GroupDeactivateMemberUseCase)
 from fastapi import APIRouter, Depends
-from schemas.users import GroupUsers
+from schemas.users import MemberDisplay
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -14,7 +14,7 @@ def __aca_usecase_di(db:Session=Depends(get_db)):
 def __deac_usecase_di(db:Session=Depends(get_db)):
     return GroupDeactivateMemberUseCase(MemberRepository(db))
 
-@router.post("/{user_id}/activate", response_model=GroupUsers)
+@router.post("/{user_id}/activate", response_model=MemberDisplay)
 async def member_activate(group_id: str,user_id:str, 
                           activate:bool,
                         ac_usecase:GroupActivateMemberUseCase=Depends(__aca_usecase_di),
