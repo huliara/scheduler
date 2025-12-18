@@ -13,9 +13,12 @@ class GroupRepository(SQLAlchemyBaseRepository,IGroupRepository):
         model=self.db.get(Group,id)
         return self._refresh_to_entity(model)
     
-    def find_by_user_id(self, id):
+    def find_by_user(self, id):
         models=self.db.scalars(select(Group).join(GroupUser).filter(GroupUser.user_id==id)).all()
         return [{'id':model.id,'name':model.name} for model in models]
+    
+    def find_by_group(self, group_id):
+        return self.find_by_id(group_id)
     
     def find_all(self):
         return [self._refresh_to_entity(model) 
@@ -35,7 +38,7 @@ class GroupRepository(SQLAlchemyBaseRepository,IGroupRepository):
         if model is None:
             raise DomainException('Group not found',404)
         model.name=entity.name
-        model.users=[ GroupUser(group_id=model.id,user_id=user.user.id,point=user.point) for user in entity.users]
+        model.users=[ GroupUser(group_id=model.id,user_id=user.user_id,point=user.point) for user in entity.users]
         self.db.commit()
         self.db.refresh(model)
         return self._refresh_to_entity(model)

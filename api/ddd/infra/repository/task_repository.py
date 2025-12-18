@@ -2,7 +2,7 @@
 from ddd.core.exception import DomainException
 from ddd.domain.task import ITaskRepository, TaskEntity
 from ddd.infra.repository import SQLAlchemyBaseRepository
-from models.models import SubTask, Task
+from models.models import SubTask, Task,User
 from sqlalchemy.future import select
 
 
@@ -11,12 +11,26 @@ class TaskRepository(SQLAlchemyBaseRepository,ITaskRepository):
     def find_by_id(self, id):
         model=self.db.get(Task,id)
         return self._refresh_to_entity(model)
+    
+    def find_by_group(self, group_id):
+        models=self.db.scalars(select(Task).filter(Task.group_id==group_id)).all()
+        return [self._refresh_to_entity(model) for model in models]
+    
+    def find_by_user(self, user_id):
+        user=self.db.get(User,user_id)
+        if user is None:
+            raise DomainException('User not found',404)
+        joining_group_ids=[group.group_id for group in user.groups]
+        tasks=self.db.scalars(select(Task).filter(Task.group_id.in_(joining_group_ids))).all()  
+        return [self._refresh_to_entity(task) for task in tasks]
+    
     def find_all(self, group_id):
         if group_id is None:
             models=self.db.scalars(select(Task)).all()
             return [self._refresh_to_entity(model) for model in models]
         models=self.db.scalars(select(Task).filter(Task.group_id==group_id)).all()
         return [self._refresh_to_entity(model) for model in models]
+    
     def find_by_ids(self, ids):
         models=self.db.scalars(select(Task).filter(Task.id.in_(ids))).all()
         return [self._refresh_to_entity(model) for model in models]

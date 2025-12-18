@@ -60,7 +60,7 @@ async def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ):
     credentials_exception = HTTPException(
-        status_code=status.HTTP_402_PAYMENT_REQUIRED,
+        status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
@@ -81,7 +81,7 @@ async def get_current_user(
 async def get_current_active_user(current_user: UserEntity = Depends(get_current_user)):
     if current_user.is_active:
         return current_user
-    raise HTTPException(status_code=400, detail="Inactive user")
+    raise HTTPException(status_code=401, detail="Inactive user")
 
 
 async def get_admin_user(current_user: UserEntity = Depends(get_current_user)):

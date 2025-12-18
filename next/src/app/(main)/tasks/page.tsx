@@ -5,14 +5,14 @@ import axios, { fetcher } from "@/axios";
 import { LoadingPage } from "@/components/pages/LoadingPage";
 import { ErrorPage } from "@/components/pages/ErrorPage";
 import { SchedulerList } from "@/components/list/List";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
-export const GroupTaskList = () => {
+const TaskList = () => {
+  const router = useRouter();
   const { data, error, mutate, isLoading } = useSWR<TasksResponse>(
     `/tasks`,
     fetcher
   );
-  const router = useRouter();
   if (error) return <ErrorPage />;
   if (!data || isLoading) return <LoadingPage />;
 
@@ -61,3 +61,5 @@ export const GroupTaskList = () => {
     </>
   );
 };
+
+export default TaskList;

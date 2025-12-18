@@ -16,7 +16,7 @@ class MemberRepository(SQLAlchemyBaseRepository,IMemberRepository):
             return None
         return self._refresh_to_entity(member)
     
-    def find_by_group_id(self, group_id:GroupId):
+    def find_by_group(self, group_id:GroupId):
         members=self.db.scalars(select(GroupUser).filter_by(group_id=group_id)).all()
         return [{
             'id':member.user_id,
@@ -27,6 +27,15 @@ class MemberRepository(SQLAlchemyBaseRepository,IMemberRepository):
         }
             for member in members]
 
+    def find_by_user(self, user_id:UserId):
+        members=self.db.scalars(select(GroupUser).filter_by(user_id=user_id)).all()
+        return [{
+            'group_id':member.group_id,
+            'group_name':member.group.name,
+            'point':member.point,
+        }
+            for member in members]
+    
     def find_all(self, group_id:GroupId, room_number):
         if room_number is None:
             members=self.db.scalars(select(GroupUser).filter_by(group_id=group_id)).all()

@@ -10,7 +10,7 @@ from .group_value_object import GroupId
 
 class IGroupRepository(IRepository[GroupEntity,GroupId]):
     @abstractmethod
-    def find_by_user_id(self, id:UserId)->list[GroupEntity]:
+    def find_by_user(self, id:UserId)->list[GroupEntity]:
         pass
     @abstractmethod
     def _refresh_to_entity(self,model:"models.Group")->GroupEntity:

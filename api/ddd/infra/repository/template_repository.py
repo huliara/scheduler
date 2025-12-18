@@ -1,7 +1,7 @@
 from ddd.core.exception import DomainException
 from ddd.domain.template import ITemplateRepository, TemplateEntity
 from ddd.infra.repository import SQLAlchemyBaseRepository
-from models.models import TaskTemplate, Template
+from models.models import TaskTemplate, Template,User
 from sqlalchemy.future import select
 
 
@@ -11,12 +11,20 @@ class TemplateRepository(SQLAlchemyBaseRepository,ITemplateRepository):
         model=self.db.get(Template,id)
         return self._refresh_to_entity(model)
     
-    def find_all(self,group_id):
-        if group_id is None:
-            return [self._refresh_to_entity(model) 
-                    for model in self.db.scalars(select(Template)).all()]
-        return [self._refresh_to_entity(model) 
-                for model in self.db.scalars(select(Template).filter(Template.group_id==group_id)).all()]
+    def find_by_user(self, user_id):
+        user=self.db.get(User,user_id)
+        if user is None:
+            raise DomainException('User not found',404)
+        joining_group_ids=[group.group_id for group in user.groups]
+        templates=self.db.scalars(select(Template).filter(Template.group_id.in_(joining_group_ids))).all()  
+        return [self._refresh_to_entity(template) for template in templates]
+    
+    def find_by_group(self, group_id):
+        models=self.db.scalars(select(Template).filter(Template.group_id==group_id)).all()
+        return [self._refresh_to_entity(model) for model in models]
+    
+    def find_all(self):
+        return [self._refresh_to_entity(model) for model in self.db.scalars(select(Template)).all()]
     
     def add(self, entity):
         model=Template(

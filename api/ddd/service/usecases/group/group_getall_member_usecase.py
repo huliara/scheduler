@@ -13,5 +13,5 @@ class GroupGetAllMemberUseCase(TransactionUseCaseBase):
         return self._transaction(group_id,room_number)
 
     def _transaction(self,group_id:GroupId,room_number:str|None) -> list[UserEntity]:
-        member=self.member_repository.find_by_group_id(group_id)
+        member=self.member_repository.find_by_group(group_id)
         return member

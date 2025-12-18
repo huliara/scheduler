@@ -4,12 +4,15 @@ import { SchedulerForm } from "@/components/form/Form";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
   const data = {
     name: "",
     password: "",
   };
+
   const signIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -24,7 +27,7 @@ export default function Login() {
         localStorage.setItem("accessToken", response.data.access_token);
         localStorage.setItem("id", response.data.id);
         localStorage.setItem("name", response.data.name);
-        return { success: "success login" };
+        router.push("/");
       })
       .catch(() => {
         return { error: "Invalid credentials" };

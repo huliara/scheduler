@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { PropsWithChildren, ReactElement } from "react";
 import { getFieldJA, ResponseFieldKeys } from "@/utils/types";
-import { ResponseType } from "@/types/Base";
 
 type Props<T> = {
   data: T[];

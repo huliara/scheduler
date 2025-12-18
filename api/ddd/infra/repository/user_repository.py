@@ -12,13 +12,18 @@ class UserRepository(SQLAlchemyBaseRepository,IUserRepository):
         model = self.db.get(User, id)
         return self._refresh_to_entity(model)
     
+    def find_by_user(self, user_id):
+        return self.find_by_id(user_id)
+    
+    def find_by_group(self, group_id):
+        return [self._refresh_to_entity(model) 
+                for model in self.db.scalars(select(User).join(GroupUser).filter(GroupUser.group_id==group_id)).all()]
+    
     def find_by_ids(self, ids):
         models = self.db.scalars(select(User).filter(User.id.in_(ids))).all()
         return [self._refresh_to_entity(model) for model in models]
         
-    def find_all(self,group_id):
-        if group_id is not None:
-            return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).join(GroupUser).filter(GroupUser.group_id==group_id).all()]
+    def find_all(self):
         return [self._refresh_to_entity(model) for model in self.db.scalars(select(User)).all()]
     
     def add(self, entity:UserEntity, password:str)->UserEntity:

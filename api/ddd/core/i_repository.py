@@ -17,6 +17,14 @@ class IRepository[T:IEntity,ID](ABC):
         pass
     
     @abstractmethod
+    def find_by_group(self,group_id) -> list[T]:
+        pass
+    
+    @abstractmethod
+    def find_by_user(self,user_id) -> list[T]:
+        pass
+    
+    @abstractmethod
     def add(self, entity: T) -> T:
         pass
     
@@ -31,4 +39,5 @@ class IRepository[T:IEntity,ID](ABC):
     @abstractmethod
     def _refresh_to_entity(self, model) -> T:
         pass
+    
     
