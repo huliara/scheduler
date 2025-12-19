@@ -12,6 +12,7 @@ export default function TaskCreateForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    console.log(data.get("group_id"));
     axios
       .post(`/tasks`, {
         name: data.get("name"),
@@ -19,7 +20,7 @@ export default function TaskCreateForm() {
         max_worker: data.get("max_worker"),
         min_worker: data.get("min_worker"),
         exp_worker: data.get("exp_worker"),
-        wage: data.get("point"),
+        wage: data.get("wage"),
         duration: parseInt(data.get("duration") as string),
         permission: [],
         group_id: data.get("group_id"),

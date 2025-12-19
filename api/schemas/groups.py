@@ -4,9 +4,11 @@ from pydantic import BaseModel
 
 
 class Member(BaseModel):
-    id: UUID
+    name:str
+    user_id: UUID
+    group_id: UUID
     point: float
-
+    is_active: bool
 
 class GroupDisplay(BaseModel):
     id: UUID

@@ -160,6 +160,9 @@ class GroupUser(Base):
     @hybrid_property
     def exp_tasks(self)->list[Task]:
         return self.user.exp_tasks
+    @hybrid_property
+    def name(self)->str:
+        return self.user.name
 
 class User(Base):
     __tablename__ = "user"

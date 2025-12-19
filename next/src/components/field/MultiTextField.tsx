@@ -22,7 +22,7 @@ export const MultiTextField = ({
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       <AddTextField onAdd={onAdd} />
       {state.map((value, index) => {
-        const labelId = `checkbox-list-label-${value}`;
+        const labelId = `checkbox-list-label-${index}`;
         return (
           <ListItem
             key={index}
@@ -32,7 +32,7 @@ export const MultiTextField = ({
               </IconButton>
             }
           >
-            <ListItemText id={labelId} primary={value} />
+            <ListItemText id={labelId} primary={`${index + 1}. ${value}`} />
           </ListItem>
         );
       })}
@@ -58,7 +58,7 @@ const AddTextField = ({ onAdd }: { onAdd: (newValue: string) => void }) => {
         </IconButton>
       </ListItemIcon>
       <ListItemText>
-        <TextField onChange={handleChange} />
+        <TextField onChange={handleChange} fullWidth />
       </ListItemText>
     </ListItem>
   );

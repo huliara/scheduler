@@ -34,7 +34,7 @@ def test_task_from_template(db):
     group_enitity=GroupEntity(
         id=None,
         name='test',
-        users=[],
+        members=[],
         tasks=[],
         template=[]
     )

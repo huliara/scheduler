@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, model_validator
 
 
 class TaskBase(BaseModel):
-    name: str = Field(max_length=20)
+    name: str = Field(max_length=20,min_length=1)
     subtasks: list[str] = Field(default_factory=list)
     max_worker: int = Field(default=1, gte=1)
     min_worker: int = Field(default=1, gte=0)

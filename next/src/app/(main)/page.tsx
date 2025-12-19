@@ -41,7 +41,7 @@ export default function Home() {
   if (error) return <ErrorPage />;
   if (!data || isLoading || !userId) return <LoadingPage />;
 
-  const futureShifts = data.shifts.filter(
+  const futureShifts = data.filter(
     (shift) => shift.start_time >= new Date().toISOString()
   );
 
@@ -110,7 +110,7 @@ export default function Home() {
           <h2>過去に入ったシフト</h2>
         </AccordionSummary>
         <ScrollMenu>
-          {data.shifts
+          {data
             .filter((shift) => shift.start_time < new Date().toISOString())
             .filter((shift) =>
               shift.workers.map((user) => user.id).includes(userId)

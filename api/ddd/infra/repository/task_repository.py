@@ -2,7 +2,7 @@
 from ddd.core.exception import DomainException
 from ddd.domain.task import ITaskRepository, TaskEntity
 from ddd.infra.repository import SQLAlchemyBaseRepository
-from models.models import SubTask, Task,User
+from models.models import SubTask, Task
 from sqlalchemy.future import select
 
 

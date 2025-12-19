@@ -1,8 +1,7 @@
-import { Base } from "./Base";
-
-export type GroupUserResponse = Base & {
-  room_number: string;
+export type MemberResponse = {
+  user_id: string;
+  name: string;
   point: number;
   is_active: boolean;
 };
-export type GroupUsersResponse = GroupUserResponse[];
+export type MembersResponse = MemberResponse[];

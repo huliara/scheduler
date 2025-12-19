@@ -1,7 +1,7 @@
 import { Base } from "./Base";
-import { GroupUserResponse } from "./GroupUser";
+import { MemberResponse } from "./GroupUser";
 export type GroupResponse = Base & {
-  users: GroupUserResponse[];
+  users: MemberResponse[];
   task_details: Base[];
   template: Base[];
 };

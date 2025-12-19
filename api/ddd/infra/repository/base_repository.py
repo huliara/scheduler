@@ -19,7 +19,7 @@ class SQLAlchemyBaseRepository[E:IEntity]():
         if user is None:
             raise DomainException('User not found',404)
         joining_group_ids=[group.group_id for group in user.groups]
-        targets=self.db.scalars(select(self.Model).filter(self.Model.group_id.in_(joining_group_ids))).all()  
+        targets=self.db.scalars(select(self.Model).where(self.Model.group_id.in_(joining_group_ids))).all()  
         return [self._refresh_to_entity(target) for target in targets]
     
     def find_by_group(self, group_id)->list[E]:

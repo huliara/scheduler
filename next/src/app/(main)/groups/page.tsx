@@ -16,21 +16,22 @@ import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 
 export default function GroupList() {
-  const { data, error, mutate, isLoading } = useSWR<{
-    groups: GroupResponse[];
-  }>("/groups", fetcher);
+  const { data, error, mutate, isLoading } = useSWR<GroupResponse[]>(
+    "/groups",
+    fetcher
+  );
   const router = useRouter();
   if (error) return <div>Error</div>;
   if (isLoading) return <div>Loading...</div>;
   if (!data) return <div>No Data</div>;
-  const joined_groups = data.groups.filter((group) =>
+  const joined_groups = data.filter((group) =>
     group.users
-      .map((user) => user.id)
+      .map((user) => user.user_id)
       .includes(localStorage.getItem("id") || "")
   );
 
   const irrelevant_groups = Array.from(
-    new Set(data.groups).difference(new Set(joined_groups))
+    new Set(data).difference(new Set(joined_groups))
   );
 
   const onClickJoin = (group_id: string) => {

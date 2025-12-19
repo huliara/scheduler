@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { GroupUserResponse } from "@/types/GroupUser";
+import { MemberResponse } from "@/types/GroupUser";
 import {
   Button,
   Checkbox,
@@ -20,9 +20,10 @@ export default function MemberList({
   params: Promise<{ groupId: string }>;
 }) {
   const groupId = use(params).groupId;
-  const { data, error, isLoading, mutate } = useSWR<{
-    users: GroupUserResponse[];
-  }>(`/groups/${groupId}/members`, fetcher);
+  const { data, error, isLoading, mutate } = useSWR<MemberResponse[]>(
+    `/groups/${groupId}/members`,
+    fetcher
+  );
   if (error) return <div>error</div>;
   if (!data) return <div>no data</div>;
   if (isLoading) return <div>loading...</div>;
@@ -30,7 +31,9 @@ export default function MemberList({
   const handleUserActivate = (userId: string, activate: boolean) => {
     axios
       .post(
-        `/groups/${groupId}/members/${userId}/activate&activate=${activate}`
+        `/groups/${groupId}/members/${userId}/activate?activate=${
+          activate ? "True" : "False"
+        }`
       )
       .then((res) => {
         mutate();
@@ -56,33 +59,32 @@ export default function MemberList({
         <TableHead>
           <TableRow>
             <TableCell>ユーザー名</TableCell>
-            <TableCell>部屋番号</TableCell>
             <TableCell>ポイント</TableCell>
             <TableCell>承認</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.users
+          {data
             .sort((a, b) => a.point - b.point)
             .map((user) => {
+              console.log(user.is_active);
               return (
-                <TableRow key={user.id}>
+                <TableRow key={user.user_id}>
                   <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.room_number}</TableCell>
                   <TableCell>{user.point}</TableCell>
                   <TableCell>
                     <Checkbox
                       checked={user.is_active}
                       onClick={() =>
-                        handleUserActivate(user.id, !user.is_active)
+                        handleUserActivate(user.user_id, !user.is_active)
                       }
                     />
                   </TableCell>
                   <TableCell>
                     <Button
                       onClick={() => {
-                        handleUserRemove(user.id);
+                        handleUserRemove(user.user_id);
                       }}
                     >
                       除外

@@ -17,23 +17,11 @@ class MemberRepository(SQLAlchemyBaseRepository[MemberEntity],IMemberRepository)
     
     def find_by_group(self, group_id:GroupId):
         members=self.db.scalars(select(GroupUser).filter_by(group_id=group_id)).all()
-        return [{
-            'id':member.user_id,
-            'name':member.user.name,
-            'room_number':member.user.room_number,
-            'point':member.point,
-            'is_active':member.user.is_active,
-        }
-            for member in members]
+        return [self._refresh_to_entity(member) for member in members]
 
     def find_by_user(self, user_id:UserId):
         members=self.db.scalars(select(GroupUser).filter_by(user_id=user_id)).all()
-        return [{
-            'group_id':member.group_id,
-            'group_name':member.group.name,
-            'point':member.point,
-        }
-            for member in members]
+        return [self._refresh_to_entity(member) for member in members]
     
     def find_all(self, group_id:GroupId, room_number):
         if room_number is None:

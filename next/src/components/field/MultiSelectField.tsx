@@ -52,10 +52,11 @@ export const MultiSelectField = ({
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id={fieldKey}>{getFieldJA(fieldKey)}</InputLabel>
+        <InputLabel id={fieldKey + "-label"}>{getFieldJA(fieldKey)}</InputLabel>
         <Select
-          labelId={fieldKey}
+          labelId={fieldKey + "-label"}
           id={fieldKey}
+          name={fieldKey}
           multiple
           defaultValue={defaultValue}
           input={<OutlinedInput id={fieldKey} label={getFieldJA(fieldKey)} />}

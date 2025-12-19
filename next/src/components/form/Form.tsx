@@ -15,8 +15,8 @@ import { styled } from "@mui/material/styles";
 import { ReactElement } from "react";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import { SelectField } from "./SelectField";
-import { MultiSelectField } from "./MultiSelectField";
+import { SelectField } from "../field/SelectField";
+import { MultiSelectField } from "../field/MultiSelectField";
 import { MuiProvider } from "../provider/MUIProvider";
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
@@ -138,7 +138,7 @@ export const SchedulerForm = <T extends RequestType>(
           return null;
         }
         return (
-          <FormGrid size={{ xs: 12, md: 6 }} key={key}>
+          <FormGrid size={fieldType === Field.NUMBER ? 4 : 12} key={key}>
             <FormLabel htmlFor={key} required>
               {fieldJA}
             </FormLabel>

@@ -29,7 +29,7 @@ class GroupRepository(SQLAlchemyBaseRepository[GroupEntity],IGroupRepository):
         if model is None:
             raise DomainException('Group not found',404)
         model.name=entity.name
-        model.users=[ GroupUser(group_id=model.id,user_id=user.user_id,point=user.point) for user in entity.users]
+        model.users=[ GroupUser(group_id=model.id,user_id=user.user_id,point=user.point) for user in entity.members]
         self.db.commit()
         self.db.refresh(model)
         return self._refresh_to_entity(model)

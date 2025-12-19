@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { TasksResponse } from "@/types/TaskType";
+import { TaskResponse } from "@/types/TaskType";
 import axios, { fetcher } from "@/axios";
 import { LoadingPage } from "@/components/pages/LoadingPage";
 import { ErrorPage } from "@/components/pages/ErrorPage";
@@ -10,10 +10,11 @@ import { Typography } from "@mui/material";
 import Link from "next/link";
 const TaskList = () => {
   const router = useRouter();
-  const { data, error, mutate, isLoading } = useSWR<TasksResponse>(
+  const { data, error, mutate, isLoading } = useSWR<TaskResponse[]>(
     `/tasks`,
     fetcher
   );
+  console.log(data);
   if (error) return <ErrorPage />;
   if (!data || isLoading) return <LoadingPage />;
 

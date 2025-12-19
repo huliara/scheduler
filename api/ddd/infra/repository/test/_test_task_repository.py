@@ -28,7 +28,7 @@ def test_find_all_tasks(db):
     group_enitity=GroupEntity(
         id=None,
         name='test',
-        users=[],
+        members=[],
         tasks=[],
         template=[]
     )

@@ -1,7 +1,7 @@
 import { Button, Grid } from "@mui/material";
-import { FormField } from "./Form";
+import { FormField } from "../form/Form";
 import { Field } from "@/utils/types";
-import { SelectField } from "./SelectField";
+import { SelectField } from "../field/SelectField";
 import { TemplateSlot } from "@/types/TemplateType";
 
 export const TemplateAddSlotFields = ({

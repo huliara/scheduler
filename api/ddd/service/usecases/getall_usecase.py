@@ -14,5 +14,6 @@ class GetAllUseCase[T:IEntity,U:IRepository](TransactionUseCaseBase):
     def _transaction(self,group_id:GroupId|None,user_id:UserId)->list[T]:
         if group_id is None:
             result=self.repository.find_by_user(user_id)
-        result=self.repository.find_by_group(group_id)
+        else:
+            result=self.repository.find_by_group(group_id)
         return result

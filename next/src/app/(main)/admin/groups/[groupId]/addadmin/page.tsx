@@ -1,7 +1,7 @@
 "use client";
 import useSWR from "swr";
 import axios, { fetcher } from "@/axios";
-import { GroupUsersResponse } from "@/types/GroupUser";
+import { MembersResponse } from "@/types/GroupUser";
 import {
   Table,
   TableHead,
@@ -21,7 +21,7 @@ export default function AdminAddSuperUser({
 }: {
   params: { groupId: string };
 }) {
-  const { data, error, isLoading } = useSWR<GroupUsersResponse>(
+  const { data, error, isLoading } = useSWR<MembersResponse>(
     `/${params.groupId}/users`,
     fetcher
   );
