@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import { TemplateAddSlotFields } from "./TemplateAddSlotFields";
+import { TemplateAddSlotFields } from "../field/TemplateAddSlotFields";
 import { TemplateSlot } from "@/types/TemplateType";
 export const TemplateSlotForm = ({
   groupId,

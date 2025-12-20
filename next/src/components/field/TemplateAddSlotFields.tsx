@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, FormLabel, Grid } from "@mui/material";
 import { UncontrolledFormField } from "./UncontrolledFields";
 import { Field } from "@/utils/types";
 import { UncontrolledSelectField } from "./UncontrolledSelectField";
@@ -13,6 +13,9 @@ export const TemplateAddSlotFields = ({
 }) => {
   return (
     <Grid container spacing={2}>
+      <FormLabel htmlFor="date_from_start" required>
+        何日目
+      </FormLabel>
       <UncontrolledFormField
         fieldKey="date_from_start"
         fieldType={Field.NUMBER}

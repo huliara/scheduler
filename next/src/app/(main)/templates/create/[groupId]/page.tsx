@@ -23,7 +23,12 @@ import { getFieldURL } from "@/utils/types";
 import { ErrorPage } from "@/components/pages/ErrorPage";
 import { LoadingPage } from "@/components/pages/LoadingPage";
 
-export default function TemplateCreate({ groupId }: { groupId: string }) {
+export default function TemplateCreate({
+  params,
+}: {
+  params: Promise<{ groupId: string }>;
+}) {
+  const groupId = React.use(params).groupId;
   const [slots, setSlots] = React.useState<TemplateSlot[]>([]);
   const [name, setName] = React.useState("");
   const {
@@ -31,6 +36,7 @@ export default function TemplateCreate({ groupId }: { groupId: string }) {
     error,
     isLoading,
   } = useSWR<Base[]>(getFieldURL("task_id", `group_id=${groupId}`), fetcher);
+  const router = useRouter();
 
   if (error) return <ErrorPage />;
   if (isLoading || !tasks) return <LoadingPage />;
@@ -40,8 +46,6 @@ export default function TemplateCreate({ groupId }: { groupId: string }) {
     date_from_start: 0,
     start_time: "08:00",
   };
-
-  const router = useRouter();
 
   const handleTaskRemove = (slot: TemplateSlot) => {
     setSlots(slots.filter((s) => s !== slot));

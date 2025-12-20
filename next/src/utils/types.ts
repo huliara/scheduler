@@ -95,6 +95,8 @@ export const getFieldJA = (
       return "経験したタスク";
     case "password":
       return "パスワード";
+    case "date_from_start":
+      return "何日目";
     default:
       return key;
   }
@@ -127,6 +129,6 @@ export const getFieldURL = (
   query: string | null | undefined
 ): string => {
   const baseURL = _fieldURL(key);
-  const _query = query ? `&${query}` : "";
+  const _query = query ? `?${query}` : "";
   return baseURL + _query;
 };
