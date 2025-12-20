@@ -23,7 +23,6 @@ export const UncontrolledSelectField = ({
   if (error) return <div>error</div>;
   if (!data) return <div>no data</div>;
   if (isLoading) return <div>loading...</div>;
-  console.log(data);
   return (
     <TextField id={fieldKey} name={fieldKey} defaultValue={defaultValue} select>
       {data.map((data) => (

@@ -4,6 +4,7 @@ import { TemplateSlot } from "@/types/TemplateType";
 import {
   Box,
   Button,
+  Container,
   Grid,
   Paper,
   Table,
@@ -87,7 +88,7 @@ export default function TemplateCreate({
   };
 
   return (
-    <>
+    <Container component="main" maxWidth="lg">
       <Typography variant="h4" component="h1" gutterBottom>
         テンプレートを新規作成
       </Typography>
@@ -163,6 +164,6 @@ export default function TemplateCreate({
             </Grid>
           ))}
       </Grid>
-    </>
+    </Container>
   );
 }

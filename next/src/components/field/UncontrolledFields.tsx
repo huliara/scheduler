@@ -61,9 +61,14 @@ export const UncontrolledFormField = ({
         <MuiProvider>
           <TimePicker
             label="開始時刻"
+            name={fieldKey}
             ampm={false}
             defaultValue={
-              typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
+              typeof defaultValue === "string"
+                ? dayjs()
+                    .hour(Number(defaultValue.split(":")[0]))
+                    .minute(Number(defaultValue.split(":")[1]))
+                : dayjs()
             }
             views={["hours", "minutes"]}
           />

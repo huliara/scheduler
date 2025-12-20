@@ -7,14 +7,9 @@ import {
   RequestFieldKeys,
 } from "@/utils/types";
 import FormLabel from "@mui/material/FormLabel";
-import Grid from "@mui/material/Grid";
-import { styled } from "@mui/material/styles";
 import { ReactElement } from "react";
 import { UncontrolledFormField } from "../field/UncontrolledFields";
-const FormGrid = styled(Grid)(() => ({
-  display: "flex",
-  flexDirection: "column",
-}));
+import { FormGrid } from "../grid/FormGrid";
 
 type Props<T extends RequestType> = {
   data: T;
