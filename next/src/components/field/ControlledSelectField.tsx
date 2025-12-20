@@ -5,18 +5,18 @@ import useSWR from "swr";
 import { Base, RequestType } from "@/types/Base";
 import { fetcher } from "@/axios";
 import { TextField } from "@mui/material";
-
-export const ControlledSelectField = ({
+type Props<T extends RequestType> = {
+  fieldKey: RequestFieldKeys;
+  value: number | string | string[];
+  params?: string | null;
+  setFormValue: React.Dispatch<React.SetStateAction<T | undefined>>;
+};
+export const ControlledSelectField = <T extends RequestType>({
   fieldKey,
   value,
   params,
   setFormValue,
-}: {
-  fieldKey: RequestFieldKeys;
-  value: string;
-  params?: string | null;
-  setFormValue: React.Dispatch<React.SetStateAction<RequestType | undefined>>;
-}) => {
+}: React.PropsWithChildren<Props<T>>) => {
   const { data, error, isLoading } = useSWR<Base[]>(
     getFieldURL(fieldKey, params),
     fetcher
@@ -32,7 +32,7 @@ export const ControlledSelectField = ({
         ({
           ...prev,
           [fieldKey]: selectedValue,
-        } as RequestType)
+        } as T)
     );
   };
   console.log(data);

@@ -18,7 +18,7 @@ const FormGrid = styled(Grid)(() => ({
 
 type Props<T extends RequestType> = {
   data: T;
-  setFormValue: React.Dispatch<React.SetStateAction<RequestType | undefined>>;
+  setFormValue: React.Dispatch<React.SetStateAction<T | undefined>>;
 };
 
 export const ControlledForm = <T extends RequestType>(

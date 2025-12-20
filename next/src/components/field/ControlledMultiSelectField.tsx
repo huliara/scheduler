@@ -30,16 +30,16 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
         : theme.typography.fontWeightMedium,
   };
 }
-
-export const ControlledMultiSelectField = ({
+type Props<T extends RequestType> = {
+  fieldKey: RequestFieldKeys;
+  value: string[];
+  setFormValue: React.Dispatch<React.SetStateAction<T | undefined>>;
+};
+export const ControlledMultiSelectField = <T extends RequestType>({
   fieldKey,
   value,
   setFormValue,
-}: {
-  fieldKey: RequestFieldKeys;
-  value: string[];
-  setFormValue: React.Dispatch<React.SetStateAction<RequestType | undefined>>;
-}) => {
+}: React.PropsWithChildren<Props<T>>) => {
   const theme = useTheme();
   const { data, error, isLoading } = useSWR<Base[]>(
     _fieldURL(fieldKey),
@@ -55,7 +55,7 @@ export const ControlledMultiSelectField = ({
         ({
           ...prev,
           [fieldKey]: typeof value === "string" ? value.split(",") : value,
-        } as RequestType)
+        } as T)
     );
   };
 
