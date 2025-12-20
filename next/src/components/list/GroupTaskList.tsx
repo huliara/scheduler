@@ -31,7 +31,7 @@ export const GroupTaskList = ({
       .catch((err) => {});
   };
 
-  const listvalues = data.tasks.map((task) => {
+  const listvalues = data.map((task) => {
     return {
       id: task.id,
       name: task.name,

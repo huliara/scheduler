@@ -13,6 +13,7 @@ export type TemplateSlotResponse = TemplateSlot & {
 };
 export type TemplateResponse = Base & {
   group_id: ID;
+  group_name: Text | null;
   slots: TemplateSlotResponse[];
 };
 export type TemplateRequest = {

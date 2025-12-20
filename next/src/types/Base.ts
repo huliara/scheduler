@@ -21,3 +21,5 @@ export type ResponseType =
   | TaskResponse
   | TemplateResponse
   | UserResponse;
+
+export type GroupDataType = ShiftResponse | TaskResponse | TemplateResponse;

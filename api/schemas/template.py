@@ -32,6 +32,7 @@ class TemplateDisplay(BaseModel):
     id: UUID
     name: str
     group_id: UUID
+    group_name: str|None=None
     slots: list[TemplateSlotDisplay]
 
 

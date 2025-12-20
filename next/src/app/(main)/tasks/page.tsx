@@ -8,6 +8,7 @@ import { SchedulerList } from "@/components/list/List";
 import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
 import Link from "next/link";
+import { getGroupIds, handleOnClickDelete } from "@/utils/utils";
 const TaskList = () => {
   const router = useRouter();
   const { data, error, mutate, isLoading } = useSWR<TaskResponse[]>(
@@ -17,21 +18,15 @@ const TaskList = () => {
   if (error) return <ErrorPage />;
   if (!data || isLoading) return <LoadingPage />;
 
-  const groupIds = Array.from(new Set(data.map((task) => task.group_id)));
-
-  const handleOnClick = (task_id: string) => {
-    axios
-      .delete(`/tasks/${task_id}`)
-      .then((res) => {
-        mutate();
-      })
-      .catch((err) => {});
-  };
+  const groupIds = getGroupIds(data);
 
   const onClicks = [
     { action: (id: string) => router.push(`/tasks/${id}`), label: "詳細" },
     { action: (id: string) => router.push(`/tasks/${id}/edit`), label: "編集" },
-    { action: (id: string) => handleOnClick(id), label: "削除" },
+    {
+      action: (id: string) => handleOnClickDelete("tasks", id, mutate),
+      label: "削除",
+    },
   ];
 
   return (

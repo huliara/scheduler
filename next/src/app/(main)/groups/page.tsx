@@ -1,19 +1,11 @@
 "use client";
-import {
-  Container,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Container, Divider } from "@mui/material";
 import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import { GroupResponse } from "@/types/GroupType";
-import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
+import { SchedulerList } from "@/components/list/List";
 
 export default function GroupList() {
   const { data, error, mutate, isLoading } = useSWR<GroupResponse[]>(
@@ -45,37 +37,39 @@ export default function GroupList() {
     <>
       <Container>
         <Divider>参加中のグループ</Divider>
-        <List>
-          {joined_groups?.map((group) => (
-            <ListItem key={group.id}>
-              <ListItemText primary={group.name} />
-              <ListItemButton>
-                <ArrowForwardIcon
-                  onClick={() => {
-                    router.push(`/groups/${group.id}`);
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {
+          <SchedulerList
+            data={joined_groups.map((group) => {
+              return {
+                id: group.id,
+                name: group.name,
+              };
+            })}
+            onClicks={[
+              {
+                action: (id: string) => router.push(`/groups/${id}`),
+                label: "移動",
+              },
+            ]}
+          />
+        }
       </Container>
       <Container>
         <Divider>他のグループ</Divider>
-        <List>
-          {irrelevant_groups?.map((group) => (
-            <ListItem key={group.id}>
-              <ListItemText primary={group.name} />
-              <ListItemButton
-                onClick={() => {
-                  onClickJoin(group.id);
-                }}
-              >
-                <AddIcon />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <SchedulerList
+          data={irrelevant_groups.map((group) => {
+            return {
+              id: group.id,
+              name: group.name,
+            };
+          })}
+          onClicks={[
+            {
+              action: (id: string) => onClickJoin(id),
+              label: "参加",
+            },
+          ]}
+        />
       </Container>
       <Link href={`/groups/create`}>新規作成</Link>
     </>

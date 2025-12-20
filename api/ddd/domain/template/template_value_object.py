@@ -19,4 +19,12 @@ class TemplateSlot:
     def __post_init__(self):
         if self.date_from_start<0:
             raise ValueError('date_from_start must be positive')
+    def to_dict(self):
+        return {
+            'task_id': self.task_id,
+            'task_name': self.task_name,
+            'name': self.name,
+            'date_from_start': self.date_from_start,
+            'start_time': self.start_time,
+        }
  

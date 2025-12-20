@@ -41,7 +41,7 @@ class ShiftDisplay(BaseModel):
     workers: list[Worker] = []
     creater_id: UUID|None=None
     group_id:UUID
-
+    group_name:str|None=None
     class Config:
         from_attributes = True
 
