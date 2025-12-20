@@ -3,9 +3,15 @@ import { TaskResponse } from "@/types/TaskType";
 import { fetcher } from "@/axios";
 import { Typography } from "@mui/material";
 import useSWR from "swr";
-export default function TaskDetail({ params }: { params: { taskId: string } }) {
+import { use } from "react";
+export default function TaskDetail({
+  params,
+}: {
+  params: Promise<{ taskId: string }>;
+}) {
+  const taskId = use(params).taskId;
   const { data, error, isLoading } = useSWR<TaskResponse>(
-    `/tasks/${params.taskId}`,
+    `/tasks/${taskId}`,
     fetcher
   );
 

@@ -1,7 +1,7 @@
 import { Button, Grid } from "@mui/material";
-import { FormField } from "../form/Form";
+import { UncontrolledFormField } from "./UncontrolledFields";
 import { Field } from "@/utils/types";
-import { SelectField } from "../field/SelectField";
+import { UncontrolledSelectField } from "./UncontrolledSelectField";
 import { TemplateSlot } from "@/types/TemplateType";
 
 export const TemplateAddSlotFields = ({
@@ -13,18 +13,18 @@ export const TemplateAddSlotFields = ({
 }) => {
   return (
     <Grid container spacing={2}>
-      <FormField
+      <UncontrolledFormField
         fieldKey="date_from_start"
         fieldType={Field.NUMBER}
         defaultValue={defaultValue.date_from_start}
       />
-      <FormField
+      <UncontrolledFormField
         fieldKey="start_time"
         fieldType={Field.TIME}
         defaultValue={defaultValue.start_time}
       />
       {group_id ? (
-        <SelectField
+        <UncontrolledSelectField
           fieldKey="task_id"
           defaultValue={defaultValue.task_id}
           params={`group_id=${group_id}`}

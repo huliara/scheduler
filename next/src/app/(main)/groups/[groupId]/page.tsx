@@ -31,8 +31,8 @@ export default function MemberList({
   const handleUserActivate = (userId: string, activate: boolean) => {
     axios
       .post(
-        `/groups/${groupId}/members/${userId}/activate?activate=${
-          activate ? "True" : "False"
+        `/groups/${groupId}/members/${userId}/activate/?activate=${
+          activate ? "true" : "false"
         }`
       )
       .then((res) => {
@@ -77,7 +77,7 @@ export default function MemberList({
                     <Checkbox
                       checked={user.is_active}
                       onClick={() =>
-                        handleUserActivate(user.user_id, !user.is_active)
+                        handleUserActivate(user.user_id, user.is_active)
                       }
                     />
                   </TableCell>

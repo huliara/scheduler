@@ -14,9 +14,9 @@ def __aca_usecase_di(db:Session=Depends(get_db)):
 def __deac_usecase_di(db:Session=Depends(get_db)):
     return GroupDeactivateMemberUseCase(MemberRepository(db))
 
-@router.post("/{user_id}/activate", response_model=MemberDisplay)
+@router.post("/{user_id}/activate/", response_model=MemberDisplay)
 async def member_activate(group_id: str,user_id:str, 
-                          activate:bool,
+                          activate:bool=True,
                         ac_usecase:GroupActivateMemberUseCase=Depends(__aca_usecase_di),
                         deac_usecase:GroupDeactivateMemberUseCase=Depends(__deac_usecase_di)):
     if activate:

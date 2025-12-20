@@ -14,7 +14,6 @@ const TaskList = () => {
     `/tasks`,
     fetcher
   );
-  console.log(data);
   if (error) return <ErrorPage />;
   if (!data || isLoading) return <LoadingPage />;
 
@@ -54,10 +53,10 @@ const TaskList = () => {
           });
 
         return (
-          <>
-            <Typography variant="h4">{groupName}</Typography>
+          <div key={groupId}>
+            <Typography variant="h5">{groupName}</Typography>
             <SchedulerList data={values} onClicks={onClicks} />
-          </>
+          </div>
         );
       })}
       <Link href={`/tasks/create`}>新規作成</Link>

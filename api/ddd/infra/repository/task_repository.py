@@ -38,8 +38,14 @@ class TaskRepository(SQLAlchemyBaseRepository[TaskEntity],ITaskRepository):
         if model is None:
             raise DomainException('TaskDetail not found',404)
         model.name=entity.name
-        
-        model.subtask=[SubTask(order=index,description=subtask,taskdetail_id=model.id) for index, subtask in enumerate(entity.subtask)]
+        model.max_worker=entity.max_worker
+        model.min_worker=entity.min_worker
+        model.exp_worker=entity.exp_worker
+        model.duration=entity.duration
+        model.wage=entity.wage
+        model.permissions=entity.permissions
+        model.group_id=entity.group_id
+        model.subtask=[SubTask(order=index,description=subtask,task_id=model.id) for index, subtask in enumerate(entity.subtask)]
         
         self.db.commit()
         self.db.refresh(model)

@@ -6,7 +6,7 @@ import { Base } from "@/types/Base";
 import { fetcher } from "@/axios";
 import { TextField } from "@mui/material";
 
-export const SelectField = ({
+export const UncontrolledSelectField = ({
   fieldKey,
   defaultValue,
   params,

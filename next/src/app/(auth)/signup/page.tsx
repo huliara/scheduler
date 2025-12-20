@@ -6,11 +6,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "@/axios";
 import { Button, Grid } from "@mui/material";
-import { SchedulerForm } from "@/components/form/Form";
+import { UncontrolledForm } from "@/components/form/UncontrolledForm";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
-  const router=useRouter();
+  const router = useRouter();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -21,7 +21,9 @@ export default function SignUp() {
         room_number: data.get("room_number"),
         exp_tasks: [],
       })
-      .then((response) => {router.push("/login");})
+      .then((response) => {
+        router.push("/login");
+      })
       .catch((err) => {});
   };
   const defaultData = {
@@ -46,7 +48,7 @@ export default function SignUp() {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <SchedulerForm data={defaultData} />
+            <UncontrolledForm data={defaultData} />
           </Grid>
           <Button
             type="submit"

@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
 import { UserDetailResponse } from "@/types/UserType";
-import { SchedulerForm } from "@/components/form/Form";
+import { UncontrolledForm } from "@/components/form/UncontrolledForm";
 import { LoadingPage } from "@/components/pages/LoadingPage";
 
 export default function ProfileEdit() {
@@ -55,7 +55,7 @@ export default function ProfileEdit() {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <SchedulerForm data={defaultData} />
+            <UncontrolledForm data={defaultData} />
           </Grid>
           <Button
             type="submit"

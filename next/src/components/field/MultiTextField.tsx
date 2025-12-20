@@ -58,7 +58,7 @@ const AddTextField = ({ onAdd }: { onAdd: (newValue: string) => void }) => {
         </IconButton>
       </ListItemIcon>
       <ListItemText>
-        <TextField onChange={handleChange} fullWidth />
+        <TextField onChange={handleChange} value={text} fullWidth />
       </ListItemText>
     </ListItem>
   );

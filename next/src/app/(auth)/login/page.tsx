@@ -1,6 +1,6 @@
 "use client";
 import axios from "@/axios";
-import { SchedulerForm } from "@/components/form/Form";
+import { UncontrolledForm } from "@/components/form/UncontrolledForm";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { FormEvent } from "react";
@@ -50,7 +50,7 @@ export default function Login() {
           ログイン
         </Typography>
         <Grid container spacing={2}>
-          <SchedulerForm data={data} />
+          <UncontrolledForm data={data} />
           <Button
             type="submit"
             fullWidth

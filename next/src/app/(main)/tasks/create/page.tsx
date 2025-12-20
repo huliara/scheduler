@@ -1,12 +1,14 @@
 "use client";
 import axios from "@/axios";
-import { Container, Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import { TaskForm } from "@/components/form/TaskForm";
 import { useSnackbarContext } from "@/components/provider/SnackBar";
 import Link from "next/link";
 import { useState } from "react";
-export default function TaskCreateForm() {
+import { Grid } from "@mui/system";
+import { UncontrolledForm } from "@/components/form/UncontrolledForm";
+import { MultiTextField } from "@/components/field/MultiTextField";
+export default function TaskCreatePage() {
   const { showSnackbar } = useSnackbarContext();
   const [subtasks, setSubtasks] = useState<string[]>([]);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -45,17 +47,32 @@ export default function TaskCreateForm() {
     group_id: "",
   };
 
+  const onAdd = (text: string) => {
+    setSubtasks([...subtasks, text]);
+  };
+  const onDelete = (index: number) => {
+    setSubtasks(subtasks.filter((_, i) => i !== index));
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Typography component="h1" variant="h5">
           仕事を新規作成
         </Typography>
-        <TaskForm
-          data={defaultData}
-          subtasks={subtasks}
-          setSubtasks={setSubtasks}
-        />
+        <Grid container spacing={2}>
+          <UncontrolledForm data={defaultData} />
+          <Typography variant="h6">サブタスク</Typography>
+          <MultiTextField state={subtasks} onAdd={onAdd} onDelete={onDelete} />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            保存
+          </Button>
+        </Grid>
       </Box>
       <Link href={`/tasks`}>一覧へ戻る</Link>
     </Container>

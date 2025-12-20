@@ -11,7 +11,7 @@ class MemberEntity():
     user_id:UserId
     group_id:'group.GroupId'
     name:str|None=None
-    is_active:bool=False
+    is_active:bool=True
     point:float=0.0
     exp_tasks:list[TaskId]=field(default_factory=list)
     @classmethod

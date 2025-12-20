@@ -78,7 +78,7 @@ export const getFieldJA = (
     case "group_id":
       return "グループ";
     case "subtasks":
-      return "サブタスク";
+      return "手順";
     case "max_worker":
       return "最大人数";
     case "min_worker":

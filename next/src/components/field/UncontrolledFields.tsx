@@ -1,33 +1,17 @@
-"use client";
-import { RequestType } from "@/types/Base";
 import {
   Field,
   FieldType,
-  getFieldType,
   getFieldJA,
   isPositive,
   RequestFieldKeys,
 } from "@/utils/types";
-import FormLabel from "@mui/material/FormLabel";
-import Grid from "@mui/material/Grid";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { styled } from "@mui/material/styles";
-import { ReactElement } from "react";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import { SelectField } from "../field/SelectField";
-import { MultiSelectField } from "../field/MultiSelectField";
+import { UncontrolledSelectField } from "./UncontrolledSelectField";
+import { MultiSelectField } from "./UncontrolledMultiSelectField";
 import { MuiProvider } from "../provider/MUIProvider";
-const FormGrid = styled(Grid)(() => ({
-  display: "flex",
-  flexDirection: "column",
-}));
-
-type Props<T extends RequestType> = {
-  data: T;
-};
-
-export const FormField = ({
+export const UncontrolledFormField = ({
   fieldKey,
   fieldType,
   defaultValue,
@@ -110,7 +94,7 @@ export const FormField = ({
       );
     case Field.ID:
       return (
-        <SelectField
+        <UncontrolledSelectField
           fieldKey={fieldKey}
           defaultValue={typeof defaultValue === "string" ? defaultValue : ""}
         />
@@ -123,33 +107,4 @@ export const FormField = ({
         />
       );
   }
-};
-
-export const SchedulerForm = <T extends RequestType>(
-  props: React.PropsWithChildren<Props<T>>
-): ReactElement<any, any> => {
-  return (
-    <>
-      {(Object.keys(props.data) as RequestFieldKeys[]).map((key) => {
-        const value = (props.data as any)[key];
-        const fieldType = getFieldType(key);
-        const fieldJA = getFieldJA(key);
-        if (fieldType === Field.MULTI_TEXT) {
-          return null;
-        }
-        return (
-          <FormGrid size={fieldType === Field.NUMBER ? 4 : 12} key={key}>
-            <FormLabel htmlFor={key} required>
-              {fieldJA}
-            </FormLabel>
-            <FormField
-              fieldKey={key}
-              fieldType={fieldType}
-              defaultValue={value}
-            />
-          </FormGrid>
-        );
-      })}
-    </>
-  );
 };
