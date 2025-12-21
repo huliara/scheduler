@@ -1,22 +1,27 @@
 from abc import ABC, abstractmethod
-
-from sqlalchemy.orm import Session
-
 from ddd.core.i_entity import IEntity
-
 
 class IRepository[T:IEntity,ID](ABC):
     
     @abstractmethod
-    def __init__(self, db: Session) -> None:
-        self.db=db
+    def __init__(self, db) -> None:
+        pass
     
     @abstractmethod
     def find_by_id(self, id: ID) -> T:
         pass
     
+
     @abstractmethod
     def find_all(self,group_id) -> list[T]:
+        pass
+    
+    @abstractmethod
+    def find_by_group(self,group_id) -> list[T]:
+        pass
+    
+    @abstractmethod
+    def find_by_user(self,user_id) -> list[T]:
         pass
     
     @abstractmethod
@@ -29,6 +34,10 @@ class IRepository[T:IEntity,ID](ABC):
     
     @abstractmethod
     def remove(self, id: ID) -> T:
+        pass
+    
+    @abstractmethod
+    def _refresh_to_entity(self, model) -> T:
         pass
     
     

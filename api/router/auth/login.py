@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 60*24
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(

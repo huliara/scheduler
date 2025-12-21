@@ -16,14 +16,14 @@ from sqlalchemy.orm import Session
 # openssl rand -hex 32
 SECRET_KEY = "9343174155ee7db2d9ad9985aac201fec735c0a56a298e0ad4296e9ea91c2243"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
 
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -60,7 +60,7 @@ async def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ):
     credentials_exception = HTTPException(
-        status_code=status.HTTP_402_PAYMENT_REQUIRED,
+        status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
@@ -81,7 +81,7 @@ async def get_current_user(
 async def get_current_active_user(current_user: UserEntity = Depends(get_current_user)):
     if current_user.is_active:
         return current_user
-    raise HTTPException(status_code=400, detail="Inactive user")
+    raise HTTPException(status_code=401, detail="Inactive user")
 
 
 async def get_admin_user(current_user: UserEntity = Depends(get_current_user)):

@@ -37,11 +37,7 @@ class UserDisplay(UserBase):
     point: float
     is_active: bool
     exp_tasks: list[UUID]
-    tasks: list[UUID]
-
-class UsersDisplay(BaseModel):
-    users: list[UserDisplay]
-
+    shifts: list[UUID]
 
 
 class AdminUserDisplay(UserBase):
@@ -49,20 +45,11 @@ class AdminUserDisplay(UserBase):
     is_admin: bool
 
 
-class Role(BaseModel):
-    id: UUID
-    name: str
-
-
 class MemberDisplay(BaseModel):
-    id: UUID
     point: float
     user_id: UUID
     group_id: UUID
-
-
-class GroupUsers(BaseModel):
-    users: list[MemberDisplay]
+    is_active: bool
 
 
 class UserAddRequest(BaseModel):

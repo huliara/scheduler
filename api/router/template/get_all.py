@@ -2,8 +2,9 @@ from database import get_db
 from ddd.infra.repository import TemplateRepository
 from ddd.service.usecases.template import TemplateGetAllUseCase
 from fastapi import APIRouter, Depends
-from schemas.template import TemplateList
+from schemas.template import TemplateDisplay
 from sqlalchemy.orm import Session
+from ddd.infra.auth import get_current_active_user
 
 router = APIRouter()
 
@@ -11,9 +12,11 @@ def __usecase_di(db:Session=Depends(get_db)):
     return TemplateGetAllUseCase(TemplateRepository(db))
 
 
-@router.get("/", response_model=TemplateList)
-async def template_getall(group_id:str|None=None,usecase:TemplateGetAllUseCase=Depends(__usecase_di)):
-    template_entities=usecase.execute(group_id)
+@router.get("/", response_model=list[TemplateDisplay])
+async def template_getall(group_id:str|None=None,
+                          user=Depends(get_current_active_user),
+                          usecase:TemplateGetAllUseCase=Depends(__usecase_di)):
+    template_entities=usecase.execute(group_id,user_id=user.id)
     response=[template.to_dict() for template in template_entities]
-    return {"templates":response}
+    return response
     

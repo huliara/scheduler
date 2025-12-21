@@ -10,4 +10,5 @@ class ShiftFromTemplateParams:
     creater_id:UserId
     template_id:TemplateId
     start_date:datetime.date
+    add_default_worker:bool=False
     

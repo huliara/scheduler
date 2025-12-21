@@ -1,5 +1,4 @@
-import { useParams } from "next/navigation";
-import { UserShiftRespose, ShiftResponse } from "@/types/ResponseType";
+import { ShiftResponse, ShiftsResponse } from "@/types/ShiftType";
 import * as React from "react";
 import { SlotDisplayCardBase } from "./SlotDisplayCardBase";
 import { Button } from "@mui/material";
@@ -11,12 +10,11 @@ export const SlotDisplayCardAssign = ({
   mutate,
 }: {
   slot: ShiftResponse;
-  mutate: KeyedMutator<UserShiftRespose>;
+  mutate: KeyedMutator<ShiftsResponse>;
 }) => {
-  const groupId = useParams().groupId;
   const handleCancel = (slot_id: string) => {
     axios
-      .post(`/${groupId}/tasks/${slot_id}/cancel`)
+      .post(`/shifts/${slot_id}/cancel`)
       .then((res) => {
         mutate();
       })
@@ -29,18 +27,22 @@ export const SlotDisplayCardAssign = ({
   );
 };
 
-export const SlotDisplayCardUnassign = ({ task }: { task: ShiftResponse }) => {
+export const SlotDisplayCardUnassign = ({
+  shift,
+}: {
+  shift: ShiftResponse;
+}) => {
   const [isAssigned, setAssigned] = React.useState(false);
   const assignSlot = () => {
     axios
-      .post(`/${task.group_id}/tasks/${task.id}/assign`)
+      .post(`/shifts/${shift.id}/assign`)
       .then((res) => {
         setAssigned(true);
       })
       .catch((err) => {});
   };
   return (
-    <SlotDisplayCardBase slot={task} style={{ backgroundColor: "white" }}>
+    <SlotDisplayCardBase slot={shift} style={{ backgroundColor: "white" }}>
       {isAssigned ? (
         <CheckIcon />
       ) : (
@@ -53,11 +55,10 @@ export const SlotDisplayCardUnassign = ({ task }: { task: ShiftResponse }) => {
 };
 
 export const SlotDisplayCardEnd = ({ slot }: { slot: ShiftResponse }) => {
-  const groupId = slot.group_id;
   const [isCompleted, setCompleted] = React.useState(false);
   const completeSlot = (done: boolean) => {
     axios
-      .post(`/${groupId}/tasks/${slot.id}/complete`, { done: done })
+      .post(`/shifts/${slot.id}/complete`, { done: done })
       .then((res) => {
         setCompleted(true);
       })

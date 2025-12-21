@@ -13,15 +13,15 @@ from .group_value_object import GroupId
 class GroupEntity(IEntity):
     id:GroupId|None
     name:str
-    users:list[MemberEntity]=field(default_factory=list)
-    task:list[TaskId]=field(default_factory=list)
+    members:list[MemberEntity]=field(default_factory=list)
+    tasks:list[TaskId]=field(default_factory=list)
     template:list[TemplateId]=field(default_factory=list)
     @classmethod
     def from_model(cls, data: "models.Group") -> 'GroupEntity':
         return cls(
             id=data.id,
             name=data.name,
-            users=[MemberEntity.from_model(user) for user in data.users],
+            members=[MemberEntity.from_model(user) for user in data.users],
             tasks=[task.id for task in data.tasks],
             template=[template.id for template in data.templates]
         )
@@ -29,7 +29,7 @@ class GroupEntity(IEntity):
         return {
             'id': self.id,
             'name': self.name,
-            'users': [{'id':user.user_id,'point':user.point} for user in self.users],
-            'task': self.task,
+            'users': [user.to_dict() for user in self.members],
+            'task': self.tasks,
             'template': self.template
         }

@@ -7,14 +7,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
 import React from "react";
 import { useRouter } from "next/navigation";
 
-export const MyDrawer = ({ groupId }: { groupId: string }) => {
+export const MyDrawer = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
@@ -26,7 +25,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         <ListItem key={1} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/${groupId}/tasks`)}>
+          <ListItemButton onClick={() => router.replace(`/shifts`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -34,9 +33,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={2} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/${groupId}/task_details`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/tasks`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -44,7 +41,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={3} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/${groupId}/users`)}>
+          <ListItemButton onClick={() => router.replace(`/users`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -52,9 +49,7 @@ export const MyDrawer = ({ groupId }: { groupId: string }) => {
           </ListItemButton>
         </ListItem>
         <ListItem key={4} disablePadding>
-          <ListItemButton
-            onClick={() => router.replace(`/${groupId}/templates`)}
-          >
+          <ListItemButton onClick={() => router.replace(`/templates`)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>

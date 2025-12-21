@@ -1,5 +1,4 @@
 import datetime
-import uuid
 
 import pytest
 from ddd.domain.group import GroupEntity
@@ -35,8 +34,8 @@ def test_task_from_template(db):
     group_enitity=GroupEntity(
         id=None,
         name='test',
-        users=[],
-        task=[],
+        members=[],
+        tasks=[],
         template=[]
     )
     group=GroupRepository(db).add(group_enitity)
@@ -62,16 +61,14 @@ def test_task_from_template(db):
     task_detail_entity=task_detail_repository.add(task_detail_entity)
     slots=[
         {
-            'taskdetail_id':task_detail_entity.id,
+            'task_id':task_detail_entity.id,
+            'task_name':'test',
             'date_from_start':1,
             'start_time':datetime.time(22,22)
         }
     ]
     
     template_repository=TemplateRepository(db)
-    
-    
-    
     task_repository=ShiftRepository(db)
     task_detail_repository=TaskRepository(db)
     template_entity=TemplateEntity(
@@ -83,7 +80,6 @@ def test_task_from_template(db):
     target_entity=template_repository.add(template_entity)
     print(target_entity.id)
     usecase=ShiftFromTemplateUseCase(
-        db=db,
         template_repository=template_repository,
         shift_repository=task_repository,
         task_repository=task_detail_repository
@@ -96,6 +92,6 @@ def test_task_from_template(db):
     tasks:list[ShiftEntity]=usecase.execute(params)
     assert len(tasks)==1
     assert tasks[0].name=='22時22分からtest'
-    assert tasks[0].task.id==slots[0]['taskdetail_id']
+    assert tasks[0].task.id==slots[0]['task_id']
     assert tasks[0].start_time==datetime.datetime(2222,2,23,22,22)
     

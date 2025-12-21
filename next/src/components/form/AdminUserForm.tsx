@@ -9,7 +9,7 @@ export const AdminUserForm = () => {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+        <Grid>
           <TextField
             autoComplete="given-name"
             name="name"
@@ -20,7 +20,7 @@ export const AdminUserForm = () => {
             autoFocus
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid>
           <TextField
             required
             fullWidth
@@ -31,7 +31,7 @@ export const AdminUserForm = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid>
           <TextField
             required
             fullWidth
@@ -41,7 +41,7 @@ export const AdminUserForm = () => {
             autoComplete="new-password"
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid>
           <FormControlLabel
             control={
               <Checkbox

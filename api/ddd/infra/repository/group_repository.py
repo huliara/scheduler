@@ -2,26 +2,18 @@ from ddd.core.exception import DomainException
 from ddd.domain.group import (GroupEntity, GroupId, IGroupRepository,
                               MemberEntity)
 from models.models import Group, GroupUser
-from sqlalchemy.future import select
+
+from .base_repository import SQLAlchemyBaseRepository
 
 
-class GroupRepository(IGroupRepository):
+class GroupRepository(SQLAlchemyBaseRepository[GroupEntity],IGroupRepository):
     def __init__(self, db):
         super().__init__(db)
+        self.Model=Group
+        self.Entity=GroupEntity
     
-    def find_by_id(self, id):
-        model=self.db.get(Group,id)
-        return self._refresh_to_entity(model)
-    
-    def find_by_user_id(self, id):
-        models=self.db.scalars(select(Group).join(GroupUser).filter(GroupUser.user_id==id)).all()
-        return [{'id':model.id,'name':model.name} for model in models]
-    
-    
-    
-    def find_all(self):
-        return [self._refresh_to_entity(model) 
-                for model in self.db.scalars(select(Group)).all()]
+    def find_by_group(self, group_id):
+        return self.find_by_id(group_id)
     
     def add(self, entity):
         model=Group(
@@ -37,22 +29,11 @@ class GroupRepository(IGroupRepository):
         if model is None:
             raise DomainException('Group not found',404)
         model.name=entity.name
-        model.users=[ GroupUser(group_id=model.id,user_id=user.user.id,point=user.point) for user in entity.users]
+        model.users=[ GroupUser(group_id=model.id,user_id=user.user_id,point=user.point) for user in entity.members]
         self.db.commit()
         self.db.refresh(model)
         return self._refresh_to_entity(model)
     
-    def remove(self, id):
-        model=self.db.get(Group,id)
-        if model is None:
-            raise DomainException('Group not found',404)
-        self.db.delete(model)
-        self.db.commit()
-        return self._refresh_to_entity(model)
-    
-        
-    def _refresh_to_entity(self, model: Group) -> GroupEntity:
-        return GroupEntity.from_model(model)
     
     def get_all_members(self, id: GroupId) -> list[MemberEntity]:
         group=self.db.get(Group,id)

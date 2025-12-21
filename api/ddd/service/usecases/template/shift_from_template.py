@@ -1,7 +1,4 @@
 import datetime
-
-from sqlalchemy.orm import Session
-
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftState
 from ddd.domain.task import ITaskRepository
@@ -10,7 +7,7 @@ from ddd.domain.template import (ITemplateRepository, TemplateEntity,
 from ddd.domain.user import UserId
 
 from .schema import ShiftFromTemplateParams
-
+from ddd.service.usecases.shift.allocator.shifts_allocate_by_group import ShiftAllocationByGroup
 
 class ShiftFromTemplateUseCase(TransactionUseCaseBase):
     def __init__(self,
@@ -20,14 +17,26 @@ class ShiftFromTemplateUseCase(TransactionUseCaseBase):
         self.template_repository=template_repository
         self.shift_repository=shift_repository
         self.task_repository=task_repository
+        self.allocator=ShiftAllocationByGroup(shift_repository,template_repository)
         
-    def execute(self,data:ShiftFromTemplateParams)->list[ShiftEntity]:
-        return self._transaction(data.creater_id,data.template_id,data.start_date)
+    async def execute(self,data:ShiftFromTemplateParams)->list[ShiftEntity]:
+        shifts=await self._transaction(data.creater_id,
+                                 data.template_id,
+                                 data.start_date,
+                                 data.add_default_worker)
+        return shifts
     
-    def _transaction(self,creater_id,tempalte_id:TemplateId,start_date:datetime.date)->list[ShiftEntity]:
+    async def _transaction(self,creater_id,
+                     tempalte_id:TemplateId,
+                     start_date:datetime.date,
+                     add_default_worker)->list[ShiftEntity]:
         template:TemplateEntity=self.template_repository.find_by_id(tempalte_id)
         shifts=self.generate_shifts(creater_id,template,start_date)
         result=self.shift_repository.bulk_add(shifts)
+        if add_default_worker:
+            group_id=template.group_id
+            result=await self.allocator.execute([shift.id for shift in result],group_id)
+            
         return result
     
     def generate_shifts(self,

@@ -20,12 +20,14 @@ class TaskEntity(IEntity):
     duration: datetime.timedelta
     group_id:GroupId
     creater_id:UserId
+    group_name:str|None=None
     permissions: list[Permission]=field(default_factory=list)
     wage: int=0
     subtask:list[str]=field(default_factory=list)
     
     @classmethod
     def from_model(cls,data:"models.Task") -> 'TaskEntity':
+        group_name = data.group.name if data.group else None
         return cls(
             id=TaskId(data.id),
             name=data.name,
@@ -36,6 +38,7 @@ class TaskEntity(IEntity):
             wage=data.wage,
             duration=data.duration,
             group_id=data.group_id,
+            group_name=group_name,
             creater_id=data.creater_id,
             permissions=[permission for permission in data.permissions]
         )
@@ -66,5 +69,6 @@ class TaskEntity(IEntity):
             'duration': divmod(self.duration.seconds,60)[0],
             'permissions': [permission for permission in self.permissions],
             'creater_id': self.creater_id,
-            'group_id': self.group_id
+            'group_id': self.group_id,
+            'group_name': self.group_name,
         }

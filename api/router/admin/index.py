@@ -11,7 +11,6 @@ from .get_user import router as get_user
 from .get_users import router as get_users
 from .patch_group import router as patch_group
 from .patch_user import router as patch_user
-from .post_group import router as post_groups
 from .post_user import router as post_user
 
 router.include_router(activate_user)
@@ -23,5 +22,4 @@ router.include_router(get_user)
 router.include_router(get_users)
 router.include_router(patch_group)
 router.include_router(patch_user)
-router.include_router(post_groups)
 router.include_router(post_user)

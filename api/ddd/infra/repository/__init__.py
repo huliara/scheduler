@@ -1,3 +1,4 @@
+from .base_repository import SQLAlchemyBaseRepository
 from .group_repository import GroupRepository
 from .member_repository import MemberRepository
 from .shift_repository import ShiftRepository

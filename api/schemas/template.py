@@ -21,29 +21,17 @@ class TemplateSlotBase(BaseModel):
     class Config:
         from_attributes = True
         
-
-class TemplateSlot(TemplateSlotBase):
-    id:str
-
-class TemplateSlotDisplay(TemplateSlot):
+class TemplateSlotDisplay(TemplateSlotBase):
     name:str
 
 class TemplateDisplay(BaseModel):
     id: UUID
     name: str
     group_id: UUID
+    group_name: str|None=None
     slots: list[TemplateSlotDisplay]
 
 
-class TemplateList(BaseModel):
-    templates: list[TemplateDisplay]
-
-    class Config:
-        from_attributes = True
-
-
-
-    
 class TemplatePatchSlot(BaseModel):
     src:TemplateSlotBase
     dst:TemplateSlotBase
@@ -59,9 +47,8 @@ class TemplateCreate(TemplateCreateBase):
     class Config:
         from_attributes = True
 
-class TaskFromTemplate(BaseModel):
+class ShiftFromTemplateRequest(BaseModel):
     start_day: datetime.date
     add_default_worker:bool=False
-    group_id:UUID|None=None
     class Config:
         from_attributes = True

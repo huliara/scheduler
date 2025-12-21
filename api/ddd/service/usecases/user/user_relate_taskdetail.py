@@ -21,7 +21,7 @@ class UserRelateTaskUseCase(TransactionUseCaseBase):
         except:
             raise Exception(f'User:ID{user_id} not found')
         try:
-            groups = self.group_repository.find_by_user_id(user.id)
+            groups = self.group_repository.find_by_user(user.id)
         except:
             raise Exception(f'There are invalid groups')
         

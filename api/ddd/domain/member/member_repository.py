@@ -16,7 +16,7 @@ class IMemberRepository(ABC):
         pass
     
     @abstractmethod
-    def find_by_group_id(self,group_id:'group.GroupId'):
+    def find_by_group(self,group_id:'group.GroupId'):
         pass
     
     @abstractmethod

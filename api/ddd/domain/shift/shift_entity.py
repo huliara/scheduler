@@ -29,6 +29,9 @@ class ShiftEntity(IEntity):
     @property
     def group_id(self)->'group.GroupId':
         return self.task.group_id
+    @property
+    def group_name(self)->str|None:
+        return self.task.group_name
     @classmethod
     def from_model(cls, data: "models.Shift") -> 'ShiftEntity':
         return cls(
@@ -48,9 +51,10 @@ class ShiftEntity(IEntity):
             'end_time': self.end_time,
             'status': self.status,
             'task': self.task.to_dict(),
-            'workers': [user.to_dict() for user in self.workers],
+            'workers': [{'id':user.id,'name':user.name} for user in self.workers],
             'creater_id': self.creater_id,
             'group_id': self.group_id,
+            'group_name': self.group_name,
         }
         
     def add(self,user:'user.UserEntity'):

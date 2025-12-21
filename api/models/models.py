@@ -64,7 +64,7 @@ class Task(BaseModelMixin,Base):
     group_id:Mapped[uuid.UUID]=mapped_column(
         ForeignKey("group.id",ondelete="CASCADE")
     )
-    group:Mapped[Group]=relationship(back_populates="task")
+    group:Mapped[Group]=relationship(back_populates="tasks")
     subtask: Mapped[list[SubTask]] = relationship(
         back_populates="task", cascade="all,delete-orphan"
     )
@@ -156,9 +156,13 @@ class GroupUser(Base):
     )
     user: Mapped[User] = relationship(back_populates="groups")
     point: Mapped[float] = mapped_column(default=0)
+    is_active: Mapped[bool] = mapped_column(default=True)
     @hybrid_property
     def exp_tasks(self)->list[Task]:
         return self.user.exp_tasks
+    @hybrid_property
+    def name(self)->str:
+        return self.user.name
 
 class User(Base):
     __tablename__ = "user"

@@ -2,33 +2,27 @@ from ddd.core.exception import DomainException
 from ddd.domain.group import GroupId
 from ddd.domain.member import IMemberRepository, MemberEntity
 from ddd.domain.user import UserId
+from ddd.infra.repository import SQLAlchemyBaseRepository
 from models.models import Group, GroupUser, User
-from sqlalchemy import insert
 from sqlalchemy.future import select
-from sqlalchemy.orm import Session
 
 
-class MemberRepository(IMemberRepository):
-    def __init__(self, db:Session) -> None:
-        self.db = db
-
+class MemberRepository(SQLAlchemyBaseRepository[MemberEntity],IMemberRepository):
+    
     def find_by_id(self, group_id:GroupId, user_id:UserId):
         member=self.db.scalars(select(GroupUser).filter_by(group_id=group_id, user_id=user_id)).first()
         if member is None:
             return None
         return self._refresh_to_entity(member)
     
-    def find_by_group_id(self, group_id:GroupId):
+    def find_by_group(self, group_id:GroupId):
         members=self.db.scalars(select(GroupUser).filter_by(group_id=group_id)).all()
-        return [{
-            'id':member.user_id,
-            'name':member.user.name,
-            'room_number':member.user.room_number,
-            'point':member.point,
-            'is_active':member.user.is_active,
-        }
-            for member in members]
+        return [self._refresh_to_entity(member) for member in members]
 
+    def find_by_user(self, user_id:UserId):
+        members=self.db.scalars(select(GroupUser).filter_by(user_id=user_id)).all()
+        return [self._refresh_to_entity(member) for member in members]
+    
     def find_all(self, group_id:GroupId, room_number):
         if room_number is None:
             members=self.db.scalars(select(GroupUser).filter_by(group_id=group_id)).all()
@@ -58,12 +52,12 @@ class MemberRepository(IMemberRepository):
                                                          GroupUser.user_id.in_([entity.user_id for entity in entities]))).all()
         if len(target)>0:
             raise DomainException(f'member_id is already in group_id')
-        data=[entity.to_dict() for entity in entities]
-        result=self.db.scalars(insert(GroupUser).returning(GroupUser),data).all()
+        data=[GroupUser(user_id=entity.user_id,group_id=entity.group_id) for entity in entities]
+        self.db.add_all(data)
         self.db.commit()
-        for model in result:
+        for model in data:
             self.db.refresh(model)
-        return [self._refresh_to_entity(model) for model in result]
+        return [self._refresh_to_entity(model) for model in data]
 
     def save(self, entity):
         model=self.db.get(GroupUser,(entity.group_id,entity.user_id))
