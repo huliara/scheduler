@@ -1,7 +1,7 @@
 "use client";
 import useSWR from "swr";
 import { TaskResponse } from "@/types/TaskType";
-import axios, { fetcher } from "@/axios";
+import { fetcher } from "@/axios";
 import { LoadingPage } from "@/components/pages/LoadingPage";
 import { ErrorPage } from "@/components/pages/ErrorPage";
 import { SchedulerList } from "@/components/list/List";

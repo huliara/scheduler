@@ -63,6 +63,11 @@ class ShiftRepository(SQLAlchemyBaseRepository[ShiftEntity],IShiftRepository):
         self.db.commit()
         return 
     
+    def bulk_update(self, shifts):
+        for shift in shifts:
+            self.save(shift)
+        return shifts
+    
     def find_by_ids(self, ids):
         tasks=self.db.scalars(select(Shift).filter(Shift.id.in_(ids))).all()
         return [self._refresh_to_entity(task) for task in tasks]

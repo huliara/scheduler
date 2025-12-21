@@ -3,6 +3,7 @@ import axios, { fetcher } from "@/axios";
 import useSWR from "swr";
 import { TemplateResponse, TemplateSlot } from "@/types/TemplateType";
 import {
+  Box,
   Button,
   Grid,
   Paper,
@@ -13,18 +14,19 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
 import { TemplateSlotForm } from "@/components/form/TemplateAddSlotForm";
 import { TemplateNameForm } from "@/components/form/TemplateNameForm";
 import Link from "next/link";
+import { use } from "react";
 
 export default function TemplateEdit({
   params,
 }: {
-  params: { templateId: string };
+  params: Promise<{ templateId: string }>;
 }) {
+  const templateId = use(params).templateId;
   const { data, error, isLoading, mutate } = useSWR<TemplateResponse>(
-    `/templates/${params.templateId}`,
+    `/templates/${templateId}`,
     fetcher
   );
 
@@ -38,7 +40,7 @@ export default function TemplateEdit({
     start_time: string
   ) => {
     axios
-      .delete(`/templates/${params.templateId}/slots`, {
+      .delete(`/templates/${templateId}/slots`, {
         data: {
           task_id: task_id,
           date_from_start: date_from_start,
@@ -53,7 +55,7 @@ export default function TemplateEdit({
 
   const handleTaskAdd = (templateSlot: TemplateSlot) => {
     axios
-      .patch(`/templates/${params.templateId}/slots`, {
+      .patch(`/templates/${templateId}/slots`, {
         date_from_start: Number(templateSlot.date_from_start),
         start_time: templateSlot.start_time,
         task_id: templateSlot.task_id,
@@ -72,10 +74,9 @@ export default function TemplateEdit({
       <Link href={`/templates`}>一覧へ戻る</Link>
       <TemplateNameForm
         groupId={data.group_id}
-        templateId={params.templateId}
+        templateId={templateId}
         defaultName={data.name}
       />
-
       <TemplateSlotForm
         groupId={data.group_id}
         handleSubmit={handleTaskAdd}

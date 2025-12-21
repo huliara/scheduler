@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { UncontrolledSelectField } from "./UncontrolledSelectField";
 import { MultiSelectField } from "./UncontrolledMultiSelectField";
 import { MuiProvider } from "../provider/MUIProvider";
+import { Checkbox, FormControlLabel } from "@mui/material";
 export const UncontrolledFormField = ({
   fieldKey,
   fieldType,
@@ -18,7 +19,7 @@ export const UncontrolledFormField = ({
 }: {
   fieldKey: RequestFieldKeys;
   fieldType: FieldType;
-  defaultValue: number | string | string[];
+  defaultValue: number | string | string[] | boolean;
 }) => {
   switch (fieldType) {
     case Field.TEXT:
@@ -79,10 +80,12 @@ export const UncontrolledFormField = ({
         <MuiProvider>
           <DatePicker
             label={getFieldJA(fieldKey)}
+            name={fieldKey}
             defaultValue={
               typeof defaultValue == "string" ? dayjs(defaultValue) : dayjs()
             }
             views={["year", "month", "day"]}
+            format="YYYY-MM-DD"
           />
         </MuiProvider>
       );
@@ -109,6 +112,20 @@ export const UncontrolledFormField = ({
         <MultiSelectField
           fieldKey={fieldKey}
           defaultValue={Array.isArray(defaultValue) ? defaultValue : []}
+        />
+      );
+    case Field.CheckBox:
+      return (
+        <FormControlLabel
+          label={getFieldJA(fieldKey)}
+          name={fieldKey}
+          control={
+            <Checkbox
+              id={fieldKey}
+              name={fieldKey}
+              defaultChecked={Boolean(defaultValue)}
+            />
+          }
         />
       );
   }

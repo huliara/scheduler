@@ -17,5 +17,6 @@ export type ShiftResponse = Base & {
   workers: Base[];
   creater_id: string;
   group_id: string;
+  group_name: string;
 };
 export type ShiftsResponse = ShiftResponse[];

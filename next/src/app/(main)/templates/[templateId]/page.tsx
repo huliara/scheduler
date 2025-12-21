@@ -13,15 +13,16 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
+import { use } from "react";
 
 export default function TemplateDetail({
   params,
 }: {
-  params: { groupId: string; templateId: string };
+  params: Promise<{ templateId: string }>;
 }) {
+  const templateId = use(params).templateId;
   const { data, error, isLoading } = useSWR<TemplateResponse>(
-    `/${params.groupId}/templates/${params.templateId}`,
+    `/templates/${templateId}`,
     fetcher
   );
 
@@ -44,15 +45,13 @@ export default function TemplateDetail({
       </Typography>
       <Grid container spacing={2}>
         <Grid>
-          <Link href={`/templates/${params.templateId}/generate`}>
-            シフトを募集
-          </Link>
+          <Link href={`/templates/${templateId}/generate`}>シフトを募集</Link>
         </Grid>
         <Grid>
-          <Link href={`/templates/${params.templateId}/edit`}>編集</Link>
+          <Link href={`/templates/${templateId}/edit`}>編集</Link>
         </Grid>
         <Grid>
-          <Link href={`/templates/${params.templateId}/delete`}>削除</Link>
+          <Link href={`/templates/${templateId}/delete`}>削除</Link>
         </Grid>{" "}
         {new Array(last_date).fill(0).map((_, i) => (
           <Grid key={i}>

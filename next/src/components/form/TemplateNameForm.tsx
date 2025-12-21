@@ -18,7 +18,7 @@ export const TemplateNameForm = ({
   const handleNameSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axios
-      .patch(`/${groupId}/templates/${templateId}`, {
+      .patch(`/templates/${templateId}`, {
         name: name,
       })
       .then((response) => {})

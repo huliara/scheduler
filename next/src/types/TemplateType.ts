@@ -21,3 +21,9 @@ export type TemplateRequest = {
   slots: TemplateSlot[];
   group_id: ID;
 };
+
+export type GenerateShiftFromTemplateRequest = {
+  start_day: Text;
+  add_default_worker: boolean;
+  group_id: ID;
+};

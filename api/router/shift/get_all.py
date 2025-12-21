@@ -18,7 +18,7 @@ def __usecase_di(db:Session=Depends(get_db)):
 async def shift_getall(group_id:str|None=None,end:bool|None=None,
                       user:UserEntity=Depends(get_current_active_user),
                       usecase:ShiftGetAllUseCase=Depends(__usecase_di)):
-    shifts=usecase.execute(user,group_id,end)
+    shifts=usecase.execute(group_id,user.id)
     response=[task.to_dict() for task in shifts]
     return response
     

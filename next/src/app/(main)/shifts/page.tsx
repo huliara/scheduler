@@ -14,20 +14,31 @@ import Link from "next/link";
 import axios from "@/axios";
 import { LoadingPage } from "@/components/pages/LoadingPage";
 import { ErrorPage } from "@/components/pages/ErrorPage";
+import { getGroupIds, handleOnClickDelete } from "@/utils/utils";
+import { useRouter } from "next/navigation";
 export default function ShiftList() {
-  const { data, error, mutate, isLoading } = useSWR<{
-    shifts: ShiftResponse[];
-  }>(`/shifts`, fetcher);
+  const router = useRouter();
+  const { data, error, mutate, isLoading } = useSWR<ShiftResponse[]>(
+    `/shifts`,
+    fetcher
+  );
   if (error) return <ErrorPage />;
   if (!data || isLoading) return <LoadingPage />;
-  const handleOnClick = (shift_id: string) => {
-    axios
-      .delete(`/shifts/${shift_id}`)
-      .then((res) => {
-        mutate();
-      })
-      .catch((err) => {});
-  };
+
+  const groupIds = getGroupIds(data);
+
+  const onClicks = [
+    { action: (id: string) => router.push(`/shifts/${id}`), label: "詳細" },
+    {
+      action: (id: string) => router.push(`/shifts/${id}/edit`),
+      label: "編集",
+    },
+    {
+      action: (id: string) => handleOnClickDelete("shifts", id, mutate),
+      label: "削除",
+    },
+  ];
+
   const handleOnDeletePrune = () => {
     axios
       .delete(`/shifts`, {
@@ -60,7 +71,7 @@ export default function ShiftList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.shifts.map((shift) => {
+          {data.map((shift) => {
             const start_time = new Date(shift.start_time);
             return (
               <TableRow key={shift.id}>

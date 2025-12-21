@@ -8,7 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { JSX, PropsWithChildren, ReactElement } from "react";
+import { PropsWithChildren, ReactElement } from "react";
 import { getFieldJA, ResponseFieldKeys } from "@/utils/types";
 
 type Props<T> = {

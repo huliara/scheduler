@@ -1,12 +1,11 @@
 from database import get_db
 from ddd.infra.auth import get_current_active_user
-from ddd.infra.repository import (GroupRepository, ShiftRepository,
+from ddd.infra.repository import (ShiftRepository,
                                   TaskRepository, TemplateRepository)
-from ddd.service.usecases.shift import ShiftAllocationByGroup
 from ddd.service.usecases.template import (ShiftFromTemplateParams,
                                            ShiftFromTemplateUseCase)
 from fastapi import APIRouter, Depends
-from schemas.template import TaskFromTemplate
+from schemas.template import ShiftFromTemplateRequest
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -14,21 +13,14 @@ router = APIRouter()
 def __usecase_di(db:Session=Depends(get_db)):
     return ShiftFromTemplateUseCase(TemplateRepository(db),ShiftRepository(db),TaskRepository(db))
 
-def __usecase_di_2(db:Session=Depends(get_db)):
-    return ShiftAllocationByGroup(ShiftRepository(db),GroupRepository(db))
-
 @router.post("/{template_id}/generate")
-async def template_generate_shifts(template_id:str,request:TaskFromTemplate, 
+async def template_generate_shifts(template_id:str,request:ShiftFromTemplateRequest, 
                                   user=Depends(get_current_active_user),
-                              usecase:ShiftFromTemplateUseCase=Depends(__usecase_di),
-                              usecase2:ShiftAllocationByGroup=Depends(__usecase_di_2)):
-    generated_shifts=usecase.execute(ShiftFromTemplateParams(creater_id=user.id,
+                              usecase:ShiftFromTemplateUseCase=Depends(__usecase_di)):
+    generated_shifts=await usecase.execute(ShiftFromTemplateParams(creater_id=user.id,
                                                     template_id=template_id,
                                                     start_date=request.start_day))
-    if request.add_default_worker:
-        if not request.group_id:
-            raise ValueError("group_id is required when add_default_worker is True")
-        generated_shifts=await usecase2.execute([task.id for task in generated_shifts],request.group_id)
-    response=[task.to_dict() for task in generated_shifts]
+    
+    response=[shift.to_dict() for shift in generated_shifts]
     return response
     

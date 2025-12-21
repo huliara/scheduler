@@ -4,28 +4,18 @@ import {
   SlotDisplayCardEnd,
   SlotDisplayCardUnassign,
 } from "@/components/card/SlotDisplayCardAssign";
-import {
-  Accordion,
-  AccordionSummary,
-  AppBar,
-  Box,
-  Button,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Accordion, AccordionSummary } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import SlotListOneDay from "@/components/list/SlotListOneDay";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 import useSWR from "swr";
 import { fetcher } from "@/axios";
-import { LogoutButton } from "@/components/button/logoutButton";
 import { useRouter } from "next/navigation";
 import { ShiftsResponse } from "@/types/ShiftType";
 import { useEffect, useState } from "react";
 import { ErrorPage } from "@/components/pages/ErrorPage";
 import { LoadingPage } from "@/components/pages/LoadingPage";
-import { MyDrawer } from "@/components/list/Drawer";
 
 export default function Home() {
   const { data, error, mutate, isLoading } = useSWR<ShiftsResponse>(
@@ -49,6 +39,7 @@ export default function Home() {
     new Set(
       futureShifts.map((shift) =>
         new Date(shift.start_time).toLocaleDateString("ja-JP", {
+          year: "numeric",
           month: "2-digit",
           day: "numeric",
         })
@@ -79,6 +70,7 @@ export default function Home() {
             .filter(
               (slot) =>
                 new Date(slot.start_time).toLocaleDateString("ja-JP", {
+                  year: "numeric",
                   month: "2-digit",
                   day: "numeric",
                 }) === day
@@ -98,7 +90,7 @@ export default function Home() {
                     mutate={mutate}
                   />
                 ) : (
-                  <SlotDisplayCardUnassign task={slot} key={index} />
+                  <SlotDisplayCardUnassign shift={slot} key={index} />
                 )
               )}
             </SlotListOneDay>

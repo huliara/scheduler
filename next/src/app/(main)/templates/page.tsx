@@ -29,6 +29,10 @@ export default function TemplateList() {
       action: (id: string) => handleOnClickDelete("templates", id, mutate()),
       label: "削除",
     },
+    {
+      action: (id: string) => router.push(`/templates/${id}/edit`),
+      label: "編集",
+    },
   ];
 
   return (

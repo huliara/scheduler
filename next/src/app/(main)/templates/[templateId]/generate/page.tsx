@@ -1,28 +1,30 @@
 "use client";
 import axios from "@/axios";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React from "react";
+import { UncontrolledFormField } from "@/components/field/UncontrolledFields";
+import { Field } from "@/utils/types";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
+import React, { use } from "react";
 
 export default function GenerateFromTemplateForm({
   params,
 }: {
-  params: { groupId: string; templateId: string };
+  params: Promise<{ templateId: string }>;
 }) {
+  const router = useRouter();
+  const templateId = use(params).templateId;
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .post(`/templates/${params.templateId}/generate`, {
+      .post(`/templates/${templateId}/generate`, {
         start_day: data.get("start_day"),
+        add_default_worker: data.get("add_default_worker"),
       })
-      .then((res) => {})
+      .then((res) => {
+        router.push("/");
+      })
       .catch((err) => {});
   };
 
@@ -42,20 +44,17 @@ export default function GenerateFromTemplateForm({
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid>
-              <TextField
-                fullWidth
-                required
-                id="start_day"
-                label="開始日"
-                name="start_day"
-                type="date"
-                defaultValue={new Date()
-                  .toLocaleDateString("ja-JP", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })
-                  .replaceAll("/", "-")}
+              <UncontrolledFormField
+                fieldKey="start_day"
+                fieldType={Field.DATE}
+                defaultValue={dayjs().format("YYYY-MM-DD")}
+              />
+            </Grid>
+            <Grid>
+              <UncontrolledFormField
+                fieldKey="add_default_worker"
+                fieldType={Field.CheckBox}
+                defaultValue={true}
               />
             </Grid>
           </Grid>
@@ -65,7 +64,7 @@ export default function GenerateFromTemplateForm({
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            登録完了
+            募集
           </Button>
         </Box>
       </Box>

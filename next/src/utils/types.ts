@@ -1,6 +1,10 @@
 import { ShiftRequest } from "@/types/ShiftType";
 import { TaskRequest } from "@/types/TaskType";
-import { TemplateResponse, TemplateSlot } from "@/types/TemplateType";
+import {
+  GenerateShiftFromTemplateRequest,
+  TemplateResponse,
+  TemplateSlot,
+} from "@/types/TemplateType";
 import { UserRequest } from "@/types/UserType";
 export type Text = string;
 export type Password = string;
@@ -21,6 +25,7 @@ export const Field = {
   ID: "id",
   IDs: "ids",
   MULTI_TEXT: "multi_text",
+  CheckBox: "checkbox",
 } as const;
 
 export type FieldType = (typeof Field)[keyof typeof Field];
@@ -28,7 +33,8 @@ export type FieldType = (typeof Field)[keyof typeof Field];
 type RequestAllFieldType = UserRequest &
   ShiftRequest &
   TaskRequest &
-  TemplateSlot;
+  TemplateSlot &
+  GenerateShiftFromTemplateRequest;
 export type RequestFieldKeys = keyof RequestAllFieldType;
 export type ResponseFieldKeys = keyof (UserRequest &
   ShiftRequest &
@@ -60,6 +66,10 @@ export const getFieldType = (key: RequestFieldKeys): FieldType => {
       return Field.IDs;
     case "password":
       return Field.PASSWORD;
+    case "start_day":
+      return Field.DATE;
+    case "add_default_worker":
+      return Field.CheckBox;
   }
 };
 
@@ -97,6 +107,10 @@ export const getFieldJA = (
       return "パスワード";
     case "date_from_start":
       return "何日目";
+    case "add_default_worker":
+      return "募集時にシフト自動割当";
+    case "start_day":
+      return "開始日";
     default:
       return key;
   }

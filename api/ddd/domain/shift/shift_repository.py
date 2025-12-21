@@ -15,19 +15,11 @@ class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
     @abstractmethod
     def add(self,name:str,start_time:datetime.datetime,creater_id:UserId,task_id:TaskId)->ShiftEntity:
         pass
-    
-    @abstractmethod
-    def save(self,shift:ShiftEntity)->ShiftEntity:
-        pass
-    
+
     @abstractmethod
     def find_all(self,group_id:GroupId,end:bool|None)->list[ShiftEntity]:
         pass
 
-    @abstractmethod
-    def _refresh_to_entity(self, model:"models.Shift") -> ShiftEntity:
-        pass
-    
     @abstractmethod
     def bulk_add(self,shifts:list[ShiftEntity])->list[ShiftEntity]:
         pass
@@ -40,6 +32,3 @@ class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
     def find_by_ids(self,ids:list[ShiftId])->list[ShiftEntity]:
         pass
     
-    @abstractmethod
-    def find_by_user(self,user_id:UserId)->list[ShiftEntity]:
-        pass
