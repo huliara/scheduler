@@ -13,6 +13,7 @@ import { GroupDataType } from "@/types/Base";
 type Props<T extends GroupDataType> = {
   dataName: "tasks" | "templates" | "shifts";
   targetField: (keyof T)[];
+  addtionalActions?: { action: (id: string) => void; label: string }[];
 };
 
 const DataLists = <T extends GroupDataType>(
@@ -41,7 +42,7 @@ const DataLists = <T extends GroupDataType>(
       action: (id: string) => handleOnClickDelete(props.dataName, id, mutate),
       label: "削除",
     },
-  ];
+  ].concat(props.addtionalActions || []);
 
   return (
     <>
@@ -73,7 +74,6 @@ const DataLists = <T extends GroupDataType>(
           </div>
         );
       })}
-      <Link href={`/tasks/create`}>新規作成</Link>
     </>
   );
 };
