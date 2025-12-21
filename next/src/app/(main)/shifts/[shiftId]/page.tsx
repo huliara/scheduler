@@ -6,14 +6,16 @@ import { Typography } from "@mui/material";
 import Link from "next/link";
 import { LoadingPage } from "@/components/pages/LoadingPage";
 import { ErrorPage } from "@/components/pages/ErrorPage";
+import { use } from "react";
 
 export default function SlotDetail({
   params,
 }: {
-  params: { shiftId: string };
+  params: Promise<{ shiftId: string }>;
 }) {
+  const shiftId = use(params).shiftId;
   const { data, error, isLoading } = useSWR<ShiftResponse>(
-    `/shifts/${params.shiftId}`,
+    `/shifts/${shiftId}`,
     fetcher
   );
 

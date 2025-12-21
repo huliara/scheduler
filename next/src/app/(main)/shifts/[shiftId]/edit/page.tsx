@@ -8,10 +8,15 @@ import axios, { fetcher } from "@/axios";
 import { ShiftResponse } from "@/types/ShiftType";
 import useSWR from "swr";
 import { ShiftForm } from "@/components/form/ShiftForm";
-
-export default function ShiftEdit({ params }: { params: { shiftId: string } }) {
+import { use } from "react";
+export default function ShiftEdit({
+  params,
+}: {
+  params: Promise<{ shiftId: string }>;
+}) {
+  const shiftId = use(params).shiftId;
   const { data, error, isLoading } = useSWR<ShiftResponse>(
-    `/shifts/${params.shiftId}`,
+    `/shifts/${shiftId}`,
     fetcher
   );
 
@@ -28,7 +33,7 @@ export default function ShiftEdit({ params }: { params: { shiftId: string } }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .patch(`/shifts/${params.shiftId}`, {
+      .patch(`/shifts/${shiftId}`, {
         name: data.get("name"),
         start_time: new Date(data.get("start_time") as string).toISOString(),
         task_id: data.get("task_id"),

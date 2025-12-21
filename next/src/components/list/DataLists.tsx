@@ -6,7 +6,6 @@ import { ErrorPage } from "@/components/pages/ErrorPage";
 import { SchedulerList } from "@/components/list/List";
 import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
-import Link from "next/link";
 import { getGroupIds, handleOnClickDelete, pick } from "@/utils/utils";
 import { GroupDataType } from "@/types/Base";
 

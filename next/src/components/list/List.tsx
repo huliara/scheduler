@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { PropsWithChildren, ReactElement } from "react";
 import { getFieldJA, ResponseFieldKeys } from "@/utils/types";
+import dayjs from "dayjs";
 
 type Props<T> = {
   data: T[];
@@ -47,7 +48,11 @@ export const SchedulerList = <T extends ResponseListType>(
                 {(Object.keys(row) as ResponseFieldKeys[])
                   .filter((key) => key !== "id")
                   .map((key) => {
-                    const value = (row as any)[key];
+                    const value =
+                      key === "start_time"
+                        ? dayjs(row[key]).format("YYYY/MM/DD HH:mm")
+                        : (row as any)[key];
+
                     return value ? (
                       <TableCell key={row.id + key}>{value}</TableCell>
                     ) : (
