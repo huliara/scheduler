@@ -5,12 +5,10 @@ import uuid
 from uuid import uuid4
 
 from ddd.domain.permission.permission import Permission
-from ddd.domain.shift.shift_state import ShiftState
 from sqlalchemy import ARRAY, Column, Enum, ForeignKey, String, Table
 from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
 
 class Base(DeclarativeBase):
     pass
@@ -38,7 +36,6 @@ class BaseModelMixin:
 class Shift(BaseModelMixin,Base):
     __tablename__ = "shift"
     start_time: Mapped[datetime.datetime]
-    status:Mapped[ShiftState]=mapped_column(Enum(ShiftState),default=ShiftState.before_hiring)
     workers: Mapped[list[User]] = relationship(
         secondary=shifts_table, back_populates="shifts"
     )

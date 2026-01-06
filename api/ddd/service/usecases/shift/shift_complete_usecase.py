@@ -2,7 +2,7 @@ from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.group import IGroupRepository
 from ddd.domain.member import IMemberRepository
-from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId, ShiftState
+from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId
 from ddd.domain.user import IUserRepository, UserId
 from env import KUMANO_LOCATION, ACCEPTABLE_LOCATION_ERROR
 import datetime

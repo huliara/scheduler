@@ -5,7 +5,6 @@ import models.models as models
 from ddd.core.i_entity import IEntity
 from ddd.domain.shift.shift_value_object import ShiftId
 from ddd.domain.task.task_value_object import TaskId
-
 from .user_value_object import UserId
 
 

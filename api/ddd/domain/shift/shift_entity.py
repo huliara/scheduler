@@ -1,18 +1,14 @@
 import datetime
 from dataclasses import dataclass, field
 from http import HTTPStatus as status
-
 import ddd.domain.group as group
-import ddd.domain.user.user_entity as user
 import models.models as models
 from ddd.core.exception import DomainException
 from ddd.core.i_entity import IEntity
-from ddd.domain.task.task_entity import TaskEntity
-from ddd.domain.user import UserEntity, UserId
-
-from .shift_state import ShiftState
 from .shift_value_object import ShiftId
-
+from ddd.domain.user.user_value_object import UserId
+from ddd.domain.task.task_entity import TaskEntity
+from ddd.domain.user.user_entity import UserEntity
 
 @dataclass
 class ShiftEntity(IEntity):
@@ -20,7 +16,7 @@ class ShiftEntity(IEntity):
     name:str
     start_time:datetime.datetime
     task:TaskEntity
-    workers:list['user.UserEntity']=field(default_factory=list)
+    workers:list[UserEntity]=field(default_factory=list)
     creater_id:UserId|None=None
     @property
     def end_time(self) -> datetime.datetime:
@@ -57,7 +53,7 @@ class ShiftEntity(IEntity):
             'group_name': self.group_name,
         }
         
-    def add(self,user:'user.UserEntity'):
+    def add(self,user:UserEntity):
         if self.end_time < datetime.datetime.now():
             raise DomainException(status_code=status.CONFLICT,description='この仕事は既に終了しています')
 
@@ -71,13 +67,13 @@ class ShiftEntity(IEntity):
         self.workers.append(user)
         return self
     
-    def remove(self,user:'user.UserEntity'):
+    def remove(self,user:UserEntity):
         if user not in self.workers:
             raise DomainException(status_code=status.CONFLICT,description='このユーザーは参加していません')
         self.workers.remove(user)
         return self
     
-    def replace_worker(self,src_worker:'user.UserEntity',dst_worker:'user.UserEntity'):
+    def replace_worker(self,src_worker:UserEntity,dst_worker:UserEntity):
         if src_worker not in self.workers:
             raise DomainException(status_code=status.CONFLICT,description='このユーザーは参加していません')
         if dst_worker in self.workers:
@@ -86,7 +82,7 @@ class ShiftEntity(IEntity):
         self.workers.append(dst_worker)
         return self
     
-    def complete(self,user:'user.UserEntity'):
+    def complete(self,user:UserEntity):
         if user not in self.workers:
             raise DomainException(status_code=status.CONFLICT,description='無効なシフト枠です')
         self.workers.remove(user)

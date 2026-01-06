@@ -1,6 +1,6 @@
 import datetime
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftState
+from ddd.domain.shift import IShiftRepository, ShiftEntity
 from ddd.domain.task import ITaskRepository
 from ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateId)
@@ -60,7 +60,6 @@ class ShiftFromTemplateUseCase(TransactionUseCaseBase):
                 id=None,
                 name=name,
                 start_time=start,
-                status=ShiftState.hiring,
                 task=task,
                 creater_id=creater_id,
             )

@@ -9,7 +9,6 @@ from ddd.domain.user.user_entity import UserEntity
 from deepdiff import DeepDiff
 
 from .shift_entity import ShiftEntity
-from .shift_state import ShiftState
 
 
 def test_task_add_user():
@@ -35,7 +34,6 @@ def test_task_add_user():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=ShiftState.hiring,
         task=task_detail,
         
     )
@@ -65,7 +63,6 @@ def test_task_add_exp_user():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=ShiftState.hiring,
         task=task_detail,
     )
     task.add(user)
@@ -102,7 +99,6 @@ def test_task_add_beginner_with_expert():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=ShiftState.hiring,
         task=task_detail,
         workers=[expert]
     )
@@ -132,7 +128,6 @@ def test_task_add_nonexpert():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=ShiftState.hiring,
         task=task_detail,
         
     )
@@ -173,7 +168,6 @@ def test_task_add_user_over_max():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=ShiftState.hiring,
         task=task_detail,
         workers=[dummy_user]
     )
@@ -204,7 +198,6 @@ def test_task_add_only_beginner():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=ShiftState.hiring,
         task=task_detail,
         workers=[user]
     )
@@ -236,7 +229,6 @@ def test_task_add_user_after_end():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()-datetime.timedelta(hours=2),
-        status=ShiftState.decide_assignees,
         task=task_detail,
         workers=[]
     )
@@ -267,7 +259,6 @@ def test_task_add_double_booking():
         id=uuid.uuid4(),
         name='test',
         start_time=datetime.datetime.now()+datetime.timedelta(hours=1),
-        status=ShiftState.hiring,
         task=task_detail,
         workers=[user]
     )

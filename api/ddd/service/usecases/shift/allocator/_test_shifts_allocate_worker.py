@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import uuid
 
 from ddd.service.usecases.shift.allocator.shifts_allocate_worker import ShiftAllocationWorkerUseCase, AllocWorkerDTO
-from ddd.domain.shift import ShiftEntity, ShiftState
 from ddd.domain.shift.shift_value_object import ShiftId
 from ddd.domain.task import TaskEntity, TaskId
 from ddd.domain.user import UserEntity, UserId
@@ -47,7 +46,6 @@ def create_shift(id_str, task):
         id=ShiftId(uuid.UUID(id_str)),
         name="Test Shift",
         start_time=start_time,
-        status=ShiftState.WAITING,
         task=task,
         workers=[]
     )
