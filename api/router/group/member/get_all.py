@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from fastapi import APIRouter, Depends
 from schemas.groups import Member
 from sqlalchemy.orm import Session

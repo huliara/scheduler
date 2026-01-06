@@ -1,4 +1,6 @@
-from ddd.domain.task import ITaskRepository, TaskEntity, TaskId
+from ddd.domain.task.task_value_object import TaskId
+from ddd.domain.task.task_entity import TaskEntity
+from ddd.domain.task.task_repository import ITaskRepository 
 
 from ..remove_usecase import RemoveUseCase
 

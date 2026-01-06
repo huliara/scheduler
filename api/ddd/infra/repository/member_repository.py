@@ -1,7 +1,7 @@
 from ddd.core.exception import DomainException
 from ddd.domain.group import GroupId
 from ddd.domain.member import IMemberRepository, MemberEntity
-from ddd.domain.user import UserId
+from ddd.domain.user.user_value_object import UserId
 from ddd.infra.repository import SQLAlchemyBaseRepository
 from models.models import Group, GroupUser, User
 from sqlalchemy.future import select

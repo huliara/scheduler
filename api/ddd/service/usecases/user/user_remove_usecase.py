@@ -1,4 +1,6 @@
-from ddd.domain.user import IUserRepository, UserEntity, UserId
+from ddd.domain.user.user_entity import UserEntity
+from ddd.domain.user.user_value_object import UserId
+from ddd.domain.user.user_repository import IUserRepository
 
 from ..remove_usecase import RemoveUseCase
 

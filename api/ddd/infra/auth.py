@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Union
 
 from database import get_db
-from ddd.domain.user import UserEntity
+from ddd.domain.user.user_entity import UserEntity
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt

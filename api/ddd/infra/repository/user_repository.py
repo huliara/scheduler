@@ -1,5 +1,6 @@
 from ddd.core.exception import DomainException
-from ddd.domain.user import IUserRepository, UserEntity
+from ddd.domain.user.user_entity import  UserEntity
+from ddd.domain.user.user_repository import IUserRepository
 from ddd.infra.auth import get_password_hash
 from ddd.infra.repository import SQLAlchemyBaseRepository
 from models.models import GroupUser, Task, User

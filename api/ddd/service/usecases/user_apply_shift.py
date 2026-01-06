@@ -1,6 +1,7 @@
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.shift import IShiftRepository, ShiftId
-from ddd.domain.user import IUserRepository, UserId
+from ddd.domain.user.user_repository import IUserRepository
+from ddd.domain.user.user_value_object import UserId
 from sqlalchemy.orm import Session
 
 

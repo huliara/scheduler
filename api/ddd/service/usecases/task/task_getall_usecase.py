@@ -1,4 +1,5 @@
-from ddd.domain.task import ITaskRepository, TaskEntity
+from ddd.domain.task.task_entity import TaskEntity
+from ddd.domain.task.task_repository import ITaskRepository 
 from ddd.service.usecases.getall_usecase import GetAllUseCase
 
 

@@ -1,7 +1,7 @@
 from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.group import IGroupRepository
-from ddd.domain.task import ITaskRepository
+from ddd.domain.task.task_repository import ITaskRepository
 from ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateSlot)
 from schemas.template import TemplateCreate

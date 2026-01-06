@@ -1,10 +1,10 @@
 import datetime
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.shift import IShiftRepository, ShiftEntity
-from ddd.domain.task import ITaskRepository
+from ddd.domain.task.task_repository import ITaskRepository
 from ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateId)
-from ddd.domain.user import UserId
+from ddd.domain.user.user_value_object import UserId
 
 from .schema import ShiftFromTemplateParams
 from ddd.service.usecases.shift.allocator.shifts_allocate_by_group import ShiftAllocationByGroup

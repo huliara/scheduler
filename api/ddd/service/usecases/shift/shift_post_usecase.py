@@ -4,9 +4,10 @@ from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.group import IGroupRepository
 from ddd.domain.shift import IShiftRepository, ShiftEntity
-from ddd.domain.task import ITaskRepository, TaskId
-from ddd.domain.user import IUserRepository, UserId
-
+from ddd.domain.task.task_repository import  TaskId
+from ddd.domain.task.task_repository import ITaskRepository
+from ddd.domain.user.user_value_object import  UserId
+from ddd.domain.user.user_repository import IUserRepository
 
 class ShiftPostUseCase(TransactionUseCaseBase):
     def __init__(self,

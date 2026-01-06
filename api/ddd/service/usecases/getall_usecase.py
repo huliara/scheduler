@@ -2,7 +2,7 @@ from ddd.core.i_entity import IEntity
 from ddd.core.i_repository import IRepository
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.group import GroupId
-from ddd.domain.user import UserId
+from ddd.domain.user.user_value_object import UserId
 
 class GetAllUseCase[T:IEntity,U:IRepository](TransactionUseCaseBase):
     def __init__(self,repository:U):

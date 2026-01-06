@@ -4,8 +4,8 @@ from abc import abstractmethod
 import models.models as models
 from ddd.core.i_repository import IRepository
 from ddd.domain.group.group_value_object import GroupId
-from ddd.domain.task import TaskId
-from ddd.domain.user import UserId
+from ddd.domain.task.task_value_object import TaskId
+from ddd.domain.user.user_value_object import UserId
 
 from .shift_entity import ShiftEntity
 from .shift_value_object import ShiftId

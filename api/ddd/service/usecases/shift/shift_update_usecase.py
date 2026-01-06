@@ -2,7 +2,7 @@
 from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId
-from ddd.domain.task import ITaskRepository
+from ddd.domain.task.task_repository import ITaskRepository
 from schemas.shift import ShiftCreate
 
 

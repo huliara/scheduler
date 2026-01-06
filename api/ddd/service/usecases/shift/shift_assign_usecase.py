@@ -1,8 +1,8 @@
 from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId
-from ddd.domain.user import IUserRepository, UserId
-
+from ddd.domain.user.user_value_object import  UserId
+from ddd.domain.user.user_repository import IUserRepository
 
 class ShiftAssignUseCase(TransactionUseCaseBase):
     def __init__(self, shift_repository:IShiftRepository,user_repository:IUserRepository):

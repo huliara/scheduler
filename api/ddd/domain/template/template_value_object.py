@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import NewType
 from uuid import UUID
 
-from ddd.domain.task import TaskId
+from ddd.domain.task.task_value_object import TaskId
 
 TemplateId = NewType('TemplateId', UUID)
 

@@ -1,5 +1,5 @@
 from database import get_db
-from ddd.domain.user import UserEntity
+from ddd.domain.user.user_entity import UserEntity
 from ddd.infra.repository import UserRepository
 from ddd.service.usecases.user import AdminUserUpdateUseCase
 from fastapi import APIRouter, Depends

@@ -1,8 +1,8 @@
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.group import GroupId
-from ddd.domain.member import IMemberRepository, MemberEntity
-from ddd.domain.user import IUserRepository, UserEntity
-
+from ddd.domain.member import IMemberRepository
+from ddd.domain.user.user_entity import UserEntity
+from ddd.domain.user.user_repository import IUserRepository
 
 class GroupGetAllMemberUseCase(TransactionUseCaseBase):
     def __init__(self,  member_repository:IMemberRepository,user_repository:IUserRepository):

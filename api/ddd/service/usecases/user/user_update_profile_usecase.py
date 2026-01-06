@@ -2,8 +2,10 @@ from dataclasses import dataclass
 
 from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from ddd.domain.task import ITaskRepository, TaskId
-from ddd.domain.user import IUserRepository, UserEntity
+from ddd.domain.task.task_value_object import  TaskId
+from ddd.domain.task.task_repository import ITaskRepository
+from ddd.domain.user.user_entity import UserEntity
+from ddd.domain.user.user_repository import IUserRepository
 
 
 @dataclass

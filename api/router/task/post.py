@@ -1,5 +1,5 @@
 from database import get_db
-from ddd.domain.task import TaskEntity
+from ddd.domain.task.task_entity import TaskEntity
 from ddd.infra.auth import get_current_active_user
 from ddd.infra.repository import GroupRepository, TaskRepository
 from ddd.service.usecases.task import TaskPostUseCase

@@ -1,8 +1,8 @@
-from dataclasses import dataclass
 
 from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from ddd.domain.user import IUserRepository, UserEntity, UserId
+from ddd.domain.user.user_value_object import UserId
+from ddd.domain.user.user_repository import IUserRepository
 
 
 class UserUpdatePasswordUseCase(TransactionUseCaseBase):

@@ -2,7 +2,7 @@ import datetime
 from dataclasses import dataclass
 
 from ddd.domain.template import TemplateId
-from ddd.domain.user import UserId
+from ddd.domain.user.user_value_object import UserId
 
 
 @dataclass

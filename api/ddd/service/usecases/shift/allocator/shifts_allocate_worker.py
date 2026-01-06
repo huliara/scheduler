@@ -4,9 +4,9 @@ from mip import BINARY, Model, minimize, xsum
 
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.shift import IShiftRepository, ShiftEntity
-from ddd.domain.task import TaskId
-from ddd.domain.user import IUserRepository, UserId
-
+from ddd.domain.task.task_value_object import TaskId
+from ddd.domain.user.user_value_object import  UserId
+from ddd.domain.user.user_repository import IUserRepository
 
 @dataclass
 class AllocWorkerDTO:

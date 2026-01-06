@@ -1,5 +1,5 @@
 from database import get_db
-from ddd.domain.user import UserEntity
+from ddd.domain.user.user_entity import UserEntity
 from ddd.infra.auth import get_current_active_user
 from ddd.infra.repository import ShiftRepository
 from ddd.service.usecases.shift import ShiftGetAllUseCase

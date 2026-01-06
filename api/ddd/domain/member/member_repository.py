@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import ddd.domain.group as group
 from ddd.domain.member import MemberEntity
-from ddd.domain.user import UserId
+from ddd.domain.user.user_value_object import UserId
 from sqlalchemy.orm import Session
 
 

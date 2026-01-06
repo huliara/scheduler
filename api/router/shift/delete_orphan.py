@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from database import get_db
 from ddd.infra.repository import ShiftRepository
 from ddd.service.usecases.shift import ShiftRemoveOrphanUseCase

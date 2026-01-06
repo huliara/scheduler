@@ -2,7 +2,7 @@ from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.group import GroupId
 from ddd.domain.member import IMemberRepository, MemberEntity
-from ddd.domain.user import UserId
+from ddd.domain.user.user_value_object import UserId
 
 
 class GroupActivateMemberUseCase(TransactionUseCaseBase):

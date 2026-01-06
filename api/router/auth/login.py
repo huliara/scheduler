@@ -1,11 +1,8 @@
 from datetime import timedelta
-from uuid import UUID
-
 from database import get_db
 from ddd.infra.auth import authenticate_user, create_access_token
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
 from schemas.auth import Token
 from sqlalchemy.orm import Session
 

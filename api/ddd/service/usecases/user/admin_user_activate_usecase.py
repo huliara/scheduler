@@ -1,7 +1,7 @@
 from ddd.core.exception import UseCaseException
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from ddd.domain.user import IUserRepository, UserEntity
-
+from ddd.domain.user.user_entity import  UserEntity
+from ddd.domain.user.user_repository import IUserRepository
 
 class AdminUserActivateUseCase(TransactionUseCaseBase):
     def __init__(self,user_repository:IUserRepository):

@@ -5,7 +5,7 @@ from ddd.domain.group import GroupEntity
 from ddd.domain.shift.shift_entity import ShiftEntity
 from ddd.domain.task.task_entity import TaskEntity
 from ddd.domain.template import TemplateEntity, TemplateSlot
-from ddd.domain.user import UserEntity
+from ddd.domain.user.user_entity import UserEntity
 from ddd.infra.repository import (GroupRepository, ShiftRepository,
                                   TaskRepository, TemplateRepository,
                                   UserRepository)

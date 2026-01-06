@@ -3,7 +3,8 @@ from ddd.core.transaction_usecase_base import TransactionUseCaseBase
 from ddd.domain.group import IGroupRepository
 from ddd.domain.member import IMemberRepository
 from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId
-from ddd.domain.user import IUserRepository, UserId
+from ddd.domain.user.user_repository import IUserRepository
+from ddd.domain.user.user_value_object import UserId
 from env import KUMANO_LOCATION, ACCEPTABLE_LOCATION_ERROR
 import datetime
 
