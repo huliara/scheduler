@@ -58,8 +58,8 @@ class ShiftRepository(SQLAlchemyBaseRepository[ShiftEntity],IShiftRepository):
             self.db.refresh(model)
         return [self._refresh_to_entity(model) for model in result]
     
-    def bulk_remove(self, tasks):
-        self.db.execute(delete(Shift).where(Shift.id.in_([task.id for task in tasks])))
+    def bulk_remove(self, shifts):
+        self.db.execute(delete(Shift).where(Shift.id.in_([task.id for task in shifts])))
         self.db.commit()
         return 
     

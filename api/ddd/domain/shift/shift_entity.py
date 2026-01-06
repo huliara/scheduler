@@ -31,6 +31,9 @@ class ShiftEntity(IEntity):
     @property
     def group_name(self)->str|None:
         return self.task.group_name
+    @property
+    def is_orphan(self)->bool:
+        return len(self.workers)==0 and self.end_time < datetime.datetime.now()
     @classmethod
     def from_model(cls, data: "models.Shift") -> 'ShiftEntity':
         return cls(

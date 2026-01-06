@@ -5,7 +5,7 @@ import { LoadingPage } from "@/components/pages/LoadingPage";
 import { ErrorPage } from "@/components/pages/ErrorPage";
 import { SchedulerList } from "@/components/list/List";
 import { useRouter } from "next/navigation";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { getGroupIds, handleOnClickDelete, pick } from "@/utils/utils";
 import { GroupDataType } from "@/types/Base";
 
@@ -13,6 +13,7 @@ type Props<T extends GroupDataType> = {
   dataName: "tasks" | "templates" | "shifts";
   targetField: (keyof T)[];
   addtionalActions?: { action: (id: string) => void; label: string }[];
+  groupActions?: { action: (group_id: string) => void; label: string }[];
 };
 
 const DataLists = <T extends GroupDataType>(
@@ -70,6 +71,19 @@ const DataLists = <T extends GroupDataType>(
           <div key={groupId}>
             <Typography variant="h5">{groupName}</Typography>
             <SchedulerList data={values} onClicks={onClicks} />
+            {props.groupActions &&
+              props.groupActions.map((action) => {
+                return (
+                  <Button
+                    key={action.label}
+                    onClick={() => {
+                      action.action(groupId);
+                    }}
+                  >
+                    {action.label}
+                  </Button>
+                );
+              })}
           </div>
         );
       })}

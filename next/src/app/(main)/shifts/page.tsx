@@ -1,7 +1,6 @@
 "use client";
 import useSWR from "swr";
 import { ShiftResponse } from "@/types/ShiftType";
-import { Button } from "@mui/material";
 import { fetcher } from "@/axios";
 import Link from "next/link";
 import axios from "@/axios";
@@ -16,13 +15,9 @@ export default function ShiftList() {
   if (error) return <ErrorPage />;
   if (!data || isLoading) return <LoadingPage />;
 
-  const handleOnDeletePrune = () => {
+  const handleOnDeletePrune = (group_id: string) => {
     axios
-      .delete(`/shifts`, {
-        params: {
-          expired: true,
-        },
-      })
+      .delete(`/shifts/orphan/${group_id}`)
       .then((res) => {
         mutate();
       })
@@ -30,16 +25,15 @@ export default function ShiftList() {
   };
   return (
     <>
-      <Button
-        onClick={() => {
-          handleOnDeletePrune();
-        }}
-      >
-        不要なシフトを削除
-      </Button>
       <DataLists<ShiftResponse>
         dataName="shifts"
         targetField={["name", "start_time"]}
+        groupActions={[
+          {
+            action: handleOnDeletePrune,
+            label: "不要なシフトを削除",
+          },
+        ]}
       />
       <Link href={`/shifts/create`}>新規作成</Link>
     </>
