@@ -17,9 +17,9 @@ class TaskDeleteResponse(BaseModel):
     name: str
 
 
-@router.delete("/{task_id}", response_model=TaskDeleteResponse)
-async def template_get(task_id:str, usecase:ShiftRemoveUseCase=Depends(__usecase_di)):
-    response=usecase.execute(task_id)
+@router.delete("/{shift_id}", response_model=TaskDeleteResponse)
+async def template_get(shift_id:str, usecase:ShiftRemoveUseCase=Depends(__usecase_di)):
+    response=usecase.execute(shift_id)
     return {
         "id": response.id,
         "name": response.name

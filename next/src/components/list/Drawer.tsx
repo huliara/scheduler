@@ -40,14 +40,6 @@ export const MyDrawer = () => {
             <ListItemText primary={"マニュアル"} />
           </ListItemButton>
         </ListItem>
-        <ListItem key={3} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/users`)}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary={"ユーザー一覧"} />
-          </ListItemButton>
-        </ListItem>
         <ListItem key={4} disablePadding>
           <ListItemButton onClick={() => router.replace(`/templates`)}>
             <ListItemIcon>

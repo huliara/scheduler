@@ -4,6 +4,8 @@ from ddd.domain.group import IGroupRepository
 from ddd.domain.member import IMemberRepository
 from ddd.domain.shift import IShiftRepository, ShiftEntity, ShiftId, ShiftState
 from ddd.domain.user import IUserRepository, UserId
+from env import KUMANO_LOCATION, ACCEPTABLE_LOCATION_ERROR
+import datetime
 
 
 class ShiftCompleteUseCase(TransactionUseCaseBase):
@@ -17,10 +19,10 @@ class ShiftCompleteUseCase(TransactionUseCaseBase):
         self.group_repository=group_repository 
         self.member_repository=member_repository
         
-    def execute(self,shift_id:ShiftId,user_id:UserId)->ShiftEntity:
-        return self._transaction(shift_id,user_id)
+    def execute(self,shift_id:ShiftId,user_id:UserId,location:tuple[float,float])->ShiftEntity:
+        return self._transaction(shift_id,user_id,location)
     
-    def _transaction(self, shift_id,user_id)->ShiftEntity:
+    def _transaction(self, shift_id,user_id,location)->ShiftEntity:
         try:
             target_shift=self.shift_repository.find_by_id(shift_id)
         except:
@@ -30,26 +32,26 @@ class ShiftCompleteUseCase(TransactionUseCaseBase):
         except:
             raise UseCaseException(f'user_id:{user_id} not found')
         
-        shift=target_shift.complete(user)
-        member_list=[]
-        user_list=[]
-        group_id=shift.task.group_id
-        for worker in shift.workers:
-            try:
-                member=self.member_repository.find_by_id(group_id,worker.id)
-            except:
-                raise UseCaseException(f'user_id:{worker.id} not found in group_id:{group_id}')
-            member.point+=shift.task.wage
-            user.add_exp(shift.task.id)
-            member_list.append(member)
-            user_list.append(worker)
-       
-        for member in member_list:
-            _=self.member_repository.save(member)
-            
-        for user in user_list:
-            _=self.user_repository.save(user)
+        if(abs(location[0]-KUMANO_LOCATION[0])>ACCEPTABLE_LOCATION_ERROR[0] or
+           abs(location[1]-KUMANO_LOCATION[1])>ACCEPTABLE_LOCATION_ERROR[1]):
+            raise UseCaseException('Complete is only available at Kumano Dormitory')
         
-        shift.status=ShiftState.archive
+        if(target_shift.end_time<datetime.datetime.now() or target_shift.start_time>datetime.datetime.now()):
+            raise UseCaseException('This shift is not active now')
+        
+        shift=target_shift.complete(user)
+
+        group_id=shift.task.group_id
+        try:
+            member=self.member_repository.find_by_id(group_id,user.id)
+        except:
+            raise UseCaseException(f'user_id:{user.id} not found in group_id:{group_id}')
+        member.point+=shift.task.wage
+        user.add_exp(shift.task.id)
+       
+        _=self.member_repository.save(member)
+            
+        _=self.user_repository.save(user)
+        
         new_shift=self.shift_repository.save(shift)
         return new_shift

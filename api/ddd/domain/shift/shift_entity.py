@@ -19,7 +19,6 @@ class ShiftEntity(IEntity):
     id:ShiftId|None
     name:str
     start_time:datetime.datetime
-    status:ShiftState
     task:TaskEntity
     workers:list['user.UserEntity']=field(default_factory=list)
     creater_id:UserId|None=None
@@ -38,7 +37,6 @@ class ShiftEntity(IEntity):
             id=data.id,
             name=data.name,
             start_time=data.start_time,
-            status=data.status,
             workers=[UserEntity.from_model(user) for user in data.workers],
             task=TaskEntity.from_model(data.task),
             creater_id=data.creater_id,
@@ -49,7 +47,6 @@ class ShiftEntity(IEntity):
             'name': self.name,
             'start_time': self.start_time,
             'end_time': self.end_time,
-            'status': self.status,
             'task': self.task.to_dict(),
             'workers': [{'id':user.id,'name':user.name} for user in self.workers],
             'creater_id': self.creater_id,
@@ -77,9 +74,19 @@ class ShiftEntity(IEntity):
         self.workers.remove(user)
         return self
     
+    def replace_worker(self,src_worker:'user.UserEntity',dst_worker:'user.UserEntity'):
+        if src_worker not in self.workers:
+            raise DomainException(status_code=status.CONFLICT,description='このユーザーは参加していません')
+        if dst_worker in self.workers:
+            raise DomainException(status_code=status.CONFLICT,description='このユーザーは既に参加しています')
+        self.workers.remove(src_worker)
+        self.workers.append(dst_worker)
+        return self
+    
     def complete(self,user:'user.UserEntity'):
         if user not in self.workers:
             raise DomainException(status_code=status.CONFLICT,description='無効なシフト枠です')
-        self.status=ShiftState.archive
+        self.workers.remove(user)
         return self
+    
     

@@ -26,6 +26,9 @@ type ResponseListType = { id: string } & {
 export const SchedulerList = <T extends ResponseListType>(
   props: PropsWithChildren<Props<T>>
 ): ReactElement<any, any> => {
+  if (!props.data[0]) {
+    return <></>;
+  }
   return (
     <>
       <TableContainer>

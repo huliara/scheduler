@@ -51,14 +51,13 @@ class ShiftDisplay(BaseModel):
         from_attributes = True
 
 
-class ShiftDelete(BaseModel):
+class ShiftsDelete(BaseModel):
     shifts: list[UUID]
-    group_id:UUID|None=None
-
     class Config:
         from_attributes = True
 
 class ShiftComplete(BaseModel):
-    done: bool
+    latitude: float
+    longitude: float
     class Config:
         from_attributes = True

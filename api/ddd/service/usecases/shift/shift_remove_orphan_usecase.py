@@ -1,5 +1,4 @@
 from ddd.core.transaction_usecase_base import TransactionUseCaseBase
-from ddd.domain.group import GroupId
 from ddd.domain.shift import IShiftRepository, ShiftId
 
 
