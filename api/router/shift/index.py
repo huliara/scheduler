@@ -10,9 +10,11 @@ from .get import router as get
 from .get_all import router as get_all
 from .patch import router as patch
 from .post import router as post
+from .delete_orphan import router as delete_orphan
 
 router.include_router(assign)
 router.include_router(bulk_delete)
+router.include_router(delete_orphan)
 router.include_router(cancel)
 router.include_router(complete)
 router.include_router(delete)

@@ -11,14 +11,9 @@ export default function ShiftCreate() {
   const { showSnackbar } = useSnackbarContext();
 
   const defaultData = {
-    id: "",
     name: "",
     start_time: new Date().toISOString(),
-    creater_id: "",
-    creater_name: "",
-    assignees: [],
     task_id: "",
-    task_name: "",
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

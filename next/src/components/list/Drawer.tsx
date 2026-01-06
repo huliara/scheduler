@@ -12,7 +12,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
 import React from "react";
 import { useRouter } from "next/navigation";
-
+import HomeIcon from "@mui/icons-material/Home";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import GroupsIcon from "@mui/icons-material/Groups";
 export const MyDrawer = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
@@ -24,10 +28,19 @@ export const MyDrawer = () => {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
+        <ListItem key={0} disablePadding>
+          <ListItemButton onClick={() => router.replace(`/`)}>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary={"ホーム"} />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
         <ListItem key={1} disablePadding>
           <ListItemButton onClick={() => router.replace(`/shifts`)}>
             <ListItemIcon>
-              <InboxIcon />
+              <EngineeringIcon />
             </ListItemIcon>
             <ListItemText primary={"仕事"} />
           </ListItemButton>
@@ -35,7 +48,7 @@ export const MyDrawer = () => {
         <ListItem key={2} disablePadding>
           <ListItemButton onClick={() => router.replace(`/tasks`)}>
             <ListItemIcon>
-              <InboxIcon />
+              <ImportContactsIcon />
             </ListItemIcon>
             <ListItemText primary={"マニュアル"} />
           </ListItemButton>
@@ -43,7 +56,7 @@ export const MyDrawer = () => {
         <ListItem key={4} disablePadding>
           <ListItemButton onClick={() => router.replace(`/templates`)}>
             <ListItemIcon>
-              <InboxIcon />
+              <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary={"テンプレート"} />
           </ListItemButton>
@@ -52,20 +65,9 @@ export const MyDrawer = () => {
         <ListItem key={7} disablePadding>
           <ListItemButton onClick={() => router.replace(`/groups`)}>
             <ListItemIcon>
-              <InboxIcon />
+              <GroupsIcon />
             </ListItemIcon>
             <ListItemText primary={"グループ選択画面へ"} />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem key={6} disablePadding>
-          <ListItemButton onClick={() => router.replace(`/`)}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary={"ホーム"} />
           </ListItemButton>
         </ListItem>
       </List>

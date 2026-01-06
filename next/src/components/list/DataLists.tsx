@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Button, Typography } from "@mui/material";
 import { getGroupIds, handleOnClickDelete, pick } from "@/utils/utils";
 import { GroupDataType } from "@/types/Base";
+import { Box } from "@mui/system";
 
 type Props<T extends GroupDataType> = {
   dataName: "tasks" | "templates" | "shifts";
@@ -45,7 +46,7 @@ const DataLists = <T extends GroupDataType>(
   ].concat(props.addtionalActions || []);
 
   return (
-    <>
+    <Box sx={{ padding: 2 }}>
       {groupIds.map((groupId) => {
         const groupName = data.find(
           (task) => task.group_id === groupId
@@ -68,7 +69,16 @@ const DataLists = <T extends GroupDataType>(
           });
 
         return (
-          <div key={groupId}>
+          <Box
+            key={groupId}
+            sx={{
+              border: 1,
+              borderRadius: 1,
+              borderColor: "#ADE0EE",
+              padding: 2,
+              marginBottom: 4,
+            }}
+          >
             <Typography variant="h5">{groupName}</Typography>
             <SchedulerList data={values} onClicks={onClicks} />
             {props.groupActions &&
@@ -84,10 +94,10 @@ const DataLists = <T extends GroupDataType>(
                   </Button>
                 );
               })}
-          </div>
+          </Box>
         );
       })}
-    </>
+    </Box>
   );
 };
 
