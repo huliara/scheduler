@@ -48,7 +48,6 @@ class ShiftRepository(SQLAlchemyBaseRepository[ShiftEntity],IShiftRepository):
     def bulk_add(self, shifts):
         data=[{'name':entity.name,
                'start_time':entity.start_time,
-               'status':entity.status,
                'creater_id':entity.creater_id,
                'task_id':entity.task.id,
                'group_id':entity.group_id} for entity in shifts]
@@ -80,7 +79,6 @@ class ShiftRepository(SQLAlchemyBaseRepository[ShiftEntity],IShiftRepository):
         model.start_time=entity.start_time
         model.creater_id=entity.creater_id
         model.task_id=entity.task.id
-        model.status=entity.status
         worker_ids=[user.id for user in entity.workers]
         model.workers=[user for user in self.db.scalars(select(User).filter(User.id.in_(worker_ids))).all()]
         self.db.commit()
@@ -97,7 +95,6 @@ class ShiftRepository(SQLAlchemyBaseRepository[ShiftEntity],IShiftRepository):
             id=model.id,
             name=model.name,
             start_time=model.start_time,
-            status=model.status,
             task=None,
             workers=[],
             creater_id=model.creater_id,

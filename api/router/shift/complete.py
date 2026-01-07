@@ -22,6 +22,6 @@ async def task_complete(shift_id:str,
                         request:ShiftComplete,
                       user=Depends(get_current_active_user), 
                       usecase:ShiftCompleteUseCase=Depends(__usecase_di)):
-    response=usecase.execute(shift_id,user.id,(request.latitude,request.longitude)).to_dict()
+    response=usecase.execute(shift_id,user.id,request.done,(request.latitude,request.longitude)).to_dict()
     return response
     

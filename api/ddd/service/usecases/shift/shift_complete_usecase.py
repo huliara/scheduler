@@ -20,10 +20,10 @@ class ShiftCompleteUseCase(TransactionUseCaseBase):
         self.group_repository=group_repository 
         self.member_repository=member_repository
         
-    def execute(self,shift_id:ShiftId,user_id:UserId,location:tuple[float,float])->ShiftEntity:
-        return self._transaction(shift_id,user_id,location)
+    def execute(self,shift_id:ShiftId,user_id:UserId,done:bool,location:tuple[float,float])->ShiftEntity:
+        return self._transaction(shift_id,user_id,done,location)
     
-    def _transaction(self, shift_id,user_id,location)->ShiftEntity:
+    def _transaction(self, shift_id,user_id,done:bool,location)->ShiftEntity:
         try:
             target_shift=self.shift_repository.find_by_id(shift_id)
         except:
@@ -32,6 +32,11 @@ class ShiftCompleteUseCase(TransactionUseCaseBase):
             user=self.user_repository.find_by_id(user_id)
         except:
             raise UseCaseException(f'user_id:{user_id} not found')
+        
+        if not done:
+            shift=target_shift.complete(user)
+            new_shift=self.shift_repository.save(shift)
+            return new_shift
         
         if(abs(location[0]-KUMANO_LOCATION[0])>ACCEPTABLE_LOCATION_ERROR[0] or
            abs(location[1]-KUMANO_LOCATION[1])>ACCEPTABLE_LOCATION_ERROR[1]):

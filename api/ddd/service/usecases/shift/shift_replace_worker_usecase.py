@@ -35,6 +35,8 @@ class ShiftReplaceWorkerUseCase(TransactionUseCaseBase):
         except:
             raise UseCaseException(f'user_id:{new_user_id} not found')
         
+        
+        
         shift=target_shift.replace_worker(old_user,new_user)
         
         if shift.end_time<datetime.datetime.now():

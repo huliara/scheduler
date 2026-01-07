@@ -11,6 +11,7 @@ from .get_all import router as get_all
 from .patch import router as patch
 from .post import router as post
 from .delete_orphan import router as delete_orphan
+from .replace_worker import router as replace_worker
 
 router.include_router(assign)
 router.include_router(bulk_delete)
@@ -20,5 +21,6 @@ router.include_router(complete)
 router.include_router(delete)
 router.include_router(get)
 router.include_router(get_all)
+router.include_router(replace_worker)
 router.include_router(patch)
 router.include_router(post)

@@ -1,4 +1,4 @@
-import { ShiftRequest } from "@/types/ShiftType";
+import { ShiftReplaceWorkerRequest, ShiftRequest } from "@/types/ShiftType";
 import { TaskRequest } from "@/types/TaskType";
 import {
   GenerateShiftFromTemplateRequest,
@@ -34,7 +34,8 @@ type RequestAllFieldType = UserRequest &
   ShiftRequest &
   TaskRequest &
   TemplateSlot &
-  GenerateShiftFromTemplateRequest;
+  GenerateShiftFromTemplateRequest &
+  ShiftReplaceWorkerRequest;
 export type RequestFieldKeys = keyof RequestAllFieldType;
 export type ResponseFieldKeys = keyof (UserRequest &
   ShiftRequest &
@@ -50,6 +51,7 @@ export const getFieldType = (key: RequestFieldKeys): FieldType => {
       return Field.DATETIME;
     case "task_id":
     case "group_id":
+    case "member_id":
       return Field.ID;
     case "subtasks":
       return Field.MULTI_TEXT;
@@ -111,6 +113,8 @@ export const getFieldJA = (
       return "募集時にシフト自動割当";
     case "start_day":
       return "開始日";
+    case "member_id":
+      return "メンバー";
     default:
       return key;
   }
@@ -133,6 +137,8 @@ export const _fieldURL = (key: RequestFieldKeys): string => {
       return "/groups";
     case "exp_tasks":
       return "/tasks";
+    case "member_id":
+      return "/groups";
     default:
       return "";
   }

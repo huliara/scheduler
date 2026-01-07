@@ -15,7 +15,7 @@ def __usecase_di(db:Session=Depends(get_db)):
                           GroupRepository(db))
 
 
-@router.get("/taskdetails",status_code=200,response_model=list[TaskDisplay])
+@router.get("/tasks",status_code=200,response_model=list[TaskDisplay])
 async def get_user_relate_task(user:User=Depends(get_current_active_user),
                                usecase:UserRelateTaskUseCase=Depends(__usecase_di)):
     data=usecase.execute(user.id)

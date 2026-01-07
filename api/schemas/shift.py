@@ -55,7 +55,13 @@ class ShiftsDelete(BaseModel):
         from_attributes = True
 
 class ShiftComplete(BaseModel):
+    done: bool
     latitude: float
     longitude: float
+    class Config:
+        from_attributes = True
+        
+class ShiftWorkerReplace(BaseModel):
+    new_worker_id: UUID
     class Config:
         from_attributes = True

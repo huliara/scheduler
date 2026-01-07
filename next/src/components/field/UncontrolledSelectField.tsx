@@ -9,16 +9,16 @@ import { TextField } from "@mui/material";
 export const UncontrolledSelectField = ({
   fieldKey,
   defaultValue,
+  url,
   params,
 }: {
   fieldKey: RequestFieldKeys;
   defaultValue: string;
+  url?: string;
   params?: string | null;
 }) => {
-  const { data, error, isLoading } = useSWR<Base[]>(
-    getFieldURL(fieldKey, params),
-    fetcher
-  );
+  const fetchURL = url ?? getFieldURL(fieldKey, params);
+  const { data, error, isLoading } = useSWR<Base[]>(fetchURL, fetcher);
 
   if (error) return <div>error</div>;
   if (!data) return <div>no data</div>;

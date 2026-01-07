@@ -20,3 +20,7 @@ export type ShiftResponse = Base & {
   group_name: string;
 };
 export type ShiftsResponse = ShiftResponse[];
+
+export type ShiftReplaceWorkerRequest = {
+  member_id: string;
+};

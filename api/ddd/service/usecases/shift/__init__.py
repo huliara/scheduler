@@ -11,3 +11,4 @@ from .shift_post_usecase import ShiftPostUseCase
 from .shift_remove_usecase import ShiftRemoveUseCase
 from .shift_update_usecase import ShiftUpdateUseCase
 from .shift_remove_orphan_usecase import ShiftRemoveOrphanUseCase
+from .shift_replace_worker_usecase import ShiftReplaceWorkerUseCase
