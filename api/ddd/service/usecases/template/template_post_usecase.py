@@ -20,31 +20,30 @@ class TemplatePostUseCase(TransactionUseCaseBase):
         
         return self._transaction(template.group_id,template)
     
-    def _transaction(self,group_id, template:TemplateCreate):
+    def _transaction(self,group_id, request:TemplateCreate):
         try:
             group=self.group_repository.find_by_id(group_id)
         except:
             raise UseCaseException(f'group:ID{group_id} not found')
         
-        task_ids=[slot.task_id for slot in template.slots]
+        task_ids=[slot.task_id for slot in request.slots]
         try:
             tasks=self.task_repository.find_by_ids(task_ids)
         except:
             raise UseCaseException(f'There are invalid task_id')
         
         template_entity=TemplateEntity.from_params(
-            name=template.name,group_id=group.id,
+            name=request.name,group_id=group.id,
             slots=[TemplateSlot(
-                task_id=task.id,
-                task_name=task.name,
-                date_from_start=request_slot.date_from_start,
-                start_time=request_slot.start_time
-            ) for task,request_slot in zip(tasks,template.slots)]
+                task_id=slot.task_id,
+                date_from_start=slot.date_from_start,
+                start_time=slot.start_time
+            ) for slot in request.slots]
         )
         
         try:
-            template=self.template_repository.add(template_entity)
+            request=self.template_repository.add(template_entity)
         except:
             raise UseCaseException('Invalid Template Entity')
         
-        return template
+        return request

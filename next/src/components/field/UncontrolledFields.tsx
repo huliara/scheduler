@@ -117,6 +117,7 @@ export const UncontrolledFormField = ({
     case Field.CheckBox:
       return (
         <FormControlLabel
+          id={fieldKey}
           label={getFieldJA(fieldKey)}
           name={fieldKey}
           control={

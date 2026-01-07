@@ -36,8 +36,8 @@ export default function TemplateDetail({
         data.slots
           .map((slot) => slot.date_from_start)
           .reduce((a, b) => Math.max(a, b))
-      : 1; // => 10
-
+      : 1;
+  console.log(data.slots);
   return (
     <>
       <Typography variant="h4" component="h1" gutterBottom>
@@ -62,9 +62,9 @@ export default function TemplateDetail({
                 color="primary"
                 gutterBottom
               >
-                {i + 1}日目
+                {i}日目
               </Typography>
-              <Table size="small">
+              <Table size="small" key={i}>
                 <TableHead>
                   <TableRow>
                     <TableCell>名前</TableCell>
@@ -76,7 +76,11 @@ export default function TemplateDetail({
                     .filter((slot) => slot.date_from_start === i)
                     .sort((a, b) => a.start_time.localeCompare(b.start_time))
                     .map((slot) => (
-                      <TableRow key={slot.id}>
+                      <TableRow
+                        key={
+                          slot.task_id + slot.start_time + slot.date_from_start
+                        }
+                      >
                         <TableCell>{slot.name}</TableCell>
                         <TableCell>{slot.start_time}</TableCell>
                       </TableRow>

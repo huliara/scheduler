@@ -105,14 +105,13 @@ export default function TemplateEdit({
                   color="primary"
                   gutterBottom
                 >
-                  {i + 1}日目
+                  {i}日目
                 </Typography>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
                       <TableCell>名前</TableCell>
                       <TableCell>開始時刻</TableCell>
-                      <TableCell>終了時刻</TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                     </TableRow>

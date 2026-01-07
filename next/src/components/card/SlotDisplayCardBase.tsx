@@ -48,7 +48,7 @@ export const SlotDisplayCardBase = ({
   return (
     <Card sx={{ minWidth: 120 }} variant="outlined" style={style}>
       <CardContent>
-        <Typography variant="h6" component="div">
+        <Typography variant="body2" component="div">
           <Link href={path + "/tasks/" + slot.id}>{slot.name}</Link>
         </Typography>
         <Typography variant="body1">
@@ -56,7 +56,7 @@ export const SlotDisplayCardBase = ({
         </Typography>
         <Typography variant="body2">参加者:{assignees}</Typography>
       </CardContent>
-      <CardActions>{children}</CardActions>
+      {children}
     </Card>
   );
 };

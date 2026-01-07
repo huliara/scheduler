@@ -17,7 +17,6 @@ export default function SlotListOneDay({
         bgcolor: "background.paper",
         position: "relative",
         overflow: "scroll",
-        maxHeight: 500,
         "& ::-webkit-scrollbar": {
           display: "none",
         },

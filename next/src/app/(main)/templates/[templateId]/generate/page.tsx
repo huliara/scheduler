@@ -20,7 +20,7 @@ export default function GenerateFromTemplateForm({
     axios
       .post(`/templates/${templateId}/generate`, {
         start_day: data.get("start_day"),
-        add_default_worker: data.get("add_default_worker"),
+        add_default_worker: data.get("add_default_worker") === "on",
       })
       .then((res) => {
         router.push("/");

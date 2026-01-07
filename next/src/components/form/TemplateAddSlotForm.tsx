@@ -13,11 +13,7 @@ export const TemplateSlotForm = ({
   const handleOnClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    console.log({
-      task_id: formData.get("task_id"),
-      date_from_start: Number(formData.get("date_from_start")),
-      start_time: formData.get("start_time"),
-    });
+
     handleSubmit({
       task_id: formData.get("task_id") as string,
       date_from_start: Number(formData.get("date_from_start")),

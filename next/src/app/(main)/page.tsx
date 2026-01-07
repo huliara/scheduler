@@ -44,6 +44,10 @@ export default function Home() {
       shift.end_time >= new Date().toISOString()
   );
 
+  const pastShifts = data
+    .filter((shift) => shift.start_time < new Date().toISOString())
+    .filter((shift) => shift.workers.map((user) => user.id).includes(userId));
+
   const days = Array.from(
     new Set(
       futureShifts.map((shift) =>
@@ -61,7 +65,7 @@ export default function Home() {
       {workingShifts.length > 0 && (
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <h2>入る予定のシフト</h2>
+            <h2>仕事中</h2>
           </AccordionSummary>
           <ScrollMenu>
             {workingShifts.map((slot, index) => (
@@ -82,7 +86,24 @@ export default function Home() {
           </ScrollMenu>
         </Accordion>
       )}
-
+      {pastShifts.length > 0 && (
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <h2>過去に入ったシフト</h2>
+          </AccordionSummary>
+          <ScrollMenu>
+            {pastShifts
+              .sort(
+                (a, b) =>
+                  new Date(a.start_time).getTime() -
+                  new Date(b.start_time).getTime()
+              )
+              .map((slot, id) => (
+                <SlotDisplayCardEnd shift={slot} mutate={mutate} key={id} />
+              ))}
+          </ScrollMenu>
+        </Accordion>
+      )}
       <h2>募集中のシフト</h2>
       <ScrollMenu>
         {days.map((day, index) => {
@@ -121,26 +142,6 @@ export default function Home() {
           );
         })}
       </ScrollMenu>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <h2>過去に入ったシフト</h2>
-        </AccordionSummary>
-        <ScrollMenu>
-          {data
-            .filter((shift) => shift.start_time < new Date().toISOString())
-            .filter((shift) =>
-              shift.workers.map((user) => user.id).includes(userId)
-            )
-            .sort(
-              (a, b) =>
-                new Date(a.start_time).getTime() -
-                new Date(b.start_time).getTime()
-            )
-            .map((slot, id) => (
-              <SlotDisplayCardEnd shift={slot} mutate={mutate} key={id} />
-            ))}
-        </ScrollMenu>
-      </Accordion>
     </>
   );
 }

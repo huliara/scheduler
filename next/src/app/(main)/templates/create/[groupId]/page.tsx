@@ -66,6 +66,7 @@ export default function TemplateCreate({
   };
 
   const handleSubmit = () => {
+    console.log(slots);
     axios
       .post(`/templates`, {
         name: name,
@@ -128,7 +129,7 @@ export default function TemplateCreate({
                   color="primary"
                   gutterBottom
                 >
-                  {i + 1}日目
+                  {i}日目
                 </Typography>
                 <Table size="small">
                   <TableHead>
