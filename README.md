@@ -1,75 +1,74 @@
-# シフト管理アプリケーション
+# Scheduler Project
 
-## 📋 概要
+寮のスケジュール管理システム (Domitory Scheduler)
 
-「シフト管理アプリ」は寮生活における仕事の割り当てと管理を効率化するためのウェブアプリケーションです。このシステムでは以下のような機能を提供します：
+## 技術スタック
 
-- ユーザー・グループの管理
-- 仕事（タスク）の作成と管理
-- シフトスケジュールの作成
-- テンプレートを使用した定期的なタスクの生成
-- 仕事への参加申し込み
-- 仕事完了報告とポイント付与
-- 経験管理システム
+### Frontend
 
-## 🚀 主要機能
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **UI Library**: Material UI (v7)
+- **Data Fetching**: SWR, Axios
+- **State/Utils**: Dayjs
 
-- **ユーザー管理**: アカウント作成・編集、権限管理、経験タスク管理
-- **グループ管理**: グループ作成・編集、メンバー管理
-- **タスク管理**: タスク詳細の作成・編集・削除、必要人数設定
-- **シフト管理**: タスク予定作成、テンプレートからの一括生成
-- **参加システム**: 経験者優先参加、上限・下限の管理
-- **報酬システム**: 完了時のポイント付与、グループ内ポイント管理
+### Backend
 
-## 💻 技術スタック
+- **Framework**: FastAPI (Python)
+- **ORM**: SQLAlchemy
+- **Database**: PostgreSQL
+- **Migration**: Alembic
 
-- **バックエンド**: FastAPI+SQLAlchemy (Python)
-- **フロントエンド**: Next.js (React)
-- **データベース**: Postgresql
-- **認証**: JWT ベースの認証システム
-- **コンテナ化**: Docker/Docker Compose
+### Infrastructure
 
-## 🏗️ アーキテクチャ
+- **Containerization**: Docker, Docker Compose
 
-このアプリケーションはオニオンアーキテクチャに基づこうとして作成されました。
+## 開発環境のセットアップ
 
-## 📊 主要なドメインモデル
+### 前提条件
 
-### ユーザー (User)
+- Docker
+- Docker Compose
 
-- ID、名前、部屋番号、経験タスク、ポイント、管理者権限など
+### 起動方法
 
-### グループ (Group)
-
-- ID、名前、所属ユーザー、タスク詳細、テンプレートなど
-
-### タスク詳細 (TaskDetail)
-
-- ID、名前、サブタスク、必要人数（最大/最小/経験者）、所要時間、ポイント報酬など
-
-### タスク (Task)
-
-- ID、名前、開始時間、終了時間、状態、作業者、作成者など
-
-### テンプレート (Template)
-
-- ID、名前、グループ ID、スロット（予定されたタスク）など
-
-### メンバー (Member)
-
-- グループとユーザーの関連、ポイント情報など
-
-## 🛠️ 開発環境のセットアップ
-
-このプロジェクトは Docker を使用して開発環境を構築します。
+コンテナをビルドして起動します。
 
 ```bash
-# リポジトリのクローン
-git clone <repository-url>
+docker compose up --build
+```
 
-# プロジェクトディレクトリに移動
-cd scheduler
+### アクセス
 
-# Dockerコンテナを起動
-docker-compose up -d
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8888
+- **API Documentation (Swagger UI)**: http://localhost:8888/docs
+
+## ディレクトリ構成
+
+- `next/`: フロントエンド (Next.js) ソースコード
+- `api/`: バックエンド (FastAPI) ソースコード
+  - `ddd/`: エンティティなど
+  - `migrations/`: Alembic マイグレーションファイル
+- `docker/`: Docker ビルド用の設定ファイル
+- `scripts/`: コンテナ起動用スクリプト
+- `manage/`: 管理用スクリプト (DB 初期化等)
+
+## 管理コマンド
+
+### データベース初期化
+
+(詳細な手順は `manage/` ディレクトリ配下のスクリプトを参照)
+
+```bash
+# 例: apiコンテナ内で実行
+uv run python manage/initdb.py
+```
+
+### マイグレーション
+
+Database の変更を反映する場合 (api コンテナ内で実行):
+
+```bash
+uv run alembic upgrade head
 ```
