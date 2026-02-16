@@ -1,21 +1,35 @@
+import os
+import sys
+
+# プロジェクトルートディレクトリ(apiディレクトリ)をパスに追加
+current_dir = os.path.dirname(os.path.abspath(__file__))
+api_dir = os.path.dirname(current_dir)
+sys.path.append(api_dir)
+
 from database import SessionLocal
-from ddd.infra.auth import get_password_hash
-from models.models import User
+from ddd.infra.repository.user_repository import UserRepository
+from ddd.domain.user.user_entity import UserEntity
 
 
 def create_admin(name: str, password: str, room_number: str):
     db = SessionLocal()
-    new_user = User(
-        name=name,
-        room_number=room_number,
-        password=get_password_hash(password),
-        is_admin=True,
-        is_active=True,
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+    user_repo = UserRepository(db)
+    
+    try:
+        new_user_entity = UserEntity(
+            id=None,
+            name=name,
+            room_number=room_number,
+            exp_tasks=[],
+            is_admin=True,
+            is_active=True,
+        )
+        # Repository handles hashing
+        created_user = user_repo.add(new_user_entity, password)
+        return created_user
+    finally:
+        db.close()
+
 
 def createadminuser():
     name=input("Enter name: ")

@@ -19,7 +19,8 @@ async def template_generate_shifts(template_id:str,request:ShiftFromTemplateRequ
                               usecase:ShiftFromTemplateUseCase=Depends(__usecase_di)):
     generated_shifts=await usecase.execute(ShiftFromTemplateParams(creater_id=user.id,
                                                     template_id=template_id,
-                                                    start_date=request.start_day))
+                                                    start_date=request.start_day,
+                                                    add_default_worker=request.add_default_worker))
     
     response=[shift.to_dict() for shift in generated_shifts]
     return response
