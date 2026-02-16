@@ -4,8 +4,9 @@ from ddd.domain.shift import IShiftRepository, ShiftEntity
 from ddd.domain.task.task_repository import ITaskRepository
 from ddd.domain.template import (ITemplateRepository, TemplateEntity,
                                      TemplateId)
+from ddd.domain.group import IGroupRepository
 from ddd.domain.user.user_value_object import UserId
-
+from ddd.domain.user.user_repository import IUserRepository
 from .schema import ShiftFromTemplateParams
 from ddd.service.usecases.shift.allocator.shifts_allocate_by_group import ShiftAllocationByGroup
 
@@ -13,11 +14,14 @@ class ShiftFromTemplateUseCase(TransactionUseCaseBase):
     def __init__(self,
                  template_repository:ITemplateRepository,
                  shift_repository:IShiftRepository,
-                 task_repository:ITaskRepository):
+                 task_repository:ITaskRepository,
+                 group_repository:IGroupRepository,
+                 user_repository:IUserRepository):
         self.template_repository=template_repository
         self.shift_repository=shift_repository
         self.task_repository=task_repository
-        self.allocator=ShiftAllocationByGroup(shift_repository,template_repository)
+        self.group_repository=group_repository
+        self.allocator=ShiftAllocationByGroup(shift_repository,user_repository,group_repository)
         
     async def execute(self,data:ShiftFromTemplateParams)->list[ShiftEntity]:
         shifts=await self._transaction(data.creater_id,

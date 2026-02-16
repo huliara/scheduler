@@ -1,7 +1,7 @@
 from database import get_db
 from ddd.infra.auth import get_current_active_user
 from ddd.infra.repository import (ShiftRepository,
-                                  TaskRepository, TemplateRepository)
+                                  TaskRepository, TemplateRepository,GroupRepository,UserRepository)
 from ddd.service.usecases.template import (ShiftFromTemplateParams,
                                            ShiftFromTemplateUseCase)
 from fastapi import APIRouter, Depends
@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 def __usecase_di(db:Session=Depends(get_db)):
-    return ShiftFromTemplateUseCase(TemplateRepository(db),ShiftRepository(db),TaskRepository(db))
+    return ShiftFromTemplateUseCase(TemplateRepository(db),ShiftRepository(db),TaskRepository(db),GroupRepository(db),UserRepository(db))
 
 @router.post("/{template_id}/generate")
 async def template_generate_shifts(template_id:str,request:ShiftFromTemplateRequest, 

@@ -29,6 +29,10 @@ class IShiftRepository(IRepository[ShiftEntity,ShiftId]):
         pass
     
     @abstractmethod
+    def bulk_update(self,shifts:list[ShiftEntity])->list[ShiftEntity]:
+        pass
+    
+    @abstractmethod
     def find_by_ids(self,ids:list[ShiftId])->list[ShiftEntity]:
         pass
     

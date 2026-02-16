@@ -21,31 +21,25 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         self.shift_repository=shift_repository
     async def execute(self, shifts:list[ShiftEntity],users:list[AllocWorkerDTO])->list[ShiftEntity]:
         if len(shifts)==0:
-            return []
+            raise ValueError("shifts must be more than 0")
         if len(users)==0:
-            return []
-        if len(shifts)>40:
-            raise ValueError("shift_ids must be less than 40")
+            raise ValueError("users must be more than 0")
+        if len(shifts)>70:
+            raise ValueError("shift_ids must be less than 70")
         if len(users)>500:
             raise ValueError("user_ids must be less than 500")
         
-        result=await self.shift_calculate(users,shifts,self.user_repository)
-        response=[]
-        for shift in result:
-            shift=self.shift_repository.save(shift)
-            response.append(shift)
-            
+        result=await self._shift_calculate(users,shifts)
+        response=self.shift_repository.bulk_update(result)
         return response
     def _transaction(self)->list[ShiftEntity]:
         pass
     
     #experimental
-    async def shift_calculate(users:list[AllocWorkerDTO],shifts:list[ShiftEntity],
-                              user_repository:IUserRepository)->list[ShiftEntity]:
+    async def _shift_calculate(self,users:list[AllocWorkerDTO],shifts:list[ShiftEntity])->list[ShiftEntity]:
         m=Model()
-        Var=m.add_var_tensor((len(shifts),len(users)),var_type=BINARY)
-        shifts=[shift for shift in shifts if len(shift.workers)>0]
-        shifts=shifts.sort(key=lambda x:x.start_time)
+        Var=m.add_var_tensor((len(shifts),len(users)),"Var",var_type=BINARY)
+        shifts=[shift for shift in shifts if len(shift.workers)==0]
         
         C_more_than_min_worker=10
         C_less_than_max_woker=10
@@ -53,11 +47,11 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         C_add_new_worker=10
         C_point_equality=10
         
-        x_min=m.add_var_tensor((len(shifts),))
-        x_max=m.add_var_tensor((len(shifts),))
-        x_exp=m.add_var_tensor((len(shifts),))
-        x_new=m.add_var_tensor((len(shifts),))
-        x_maxpoint=m.add_var()
+        x_min=m.add_var_tensor((len(shifts),),"x_min")
+        x_max=m.add_var_tensor((len(shifts),),"x_max")
+        x_exp=m.add_var_tensor((len(shifts),),"x_exp")
+        x_new=m.add_var_tensor((len(shifts),),"x_new")
+        x_maxpoint=m.add_var("x_maxpoint")
         
         m.objective=minimize(xsum(C_more_than_min_worker*x_min[i]
                                   +C_less_than_max_woker*x_max[i]
@@ -93,7 +87,7 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
             for j in range(len(users)):
                 if result[i][j]==1:
                     try:
-                        user_entity=user_repository.find_by_id(users[j].id)
+                        user_entity=self.user_repository.find_by_id(users[j].id)
                         shifts[i].add(user_entity)
                     except:
                         pass
