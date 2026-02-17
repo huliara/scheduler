@@ -20,10 +20,11 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         self.user_repository=user_repository
         self.shift_repository=shift_repository
     async def execute(self, shifts:list[ShiftEntity],users:list[AllocWorkerDTO])->list[ShiftEntity]:
+        max_worker_need=max([shift.task.max_worker for shift in shifts])
         if len(shifts)==0:
             raise ValueError("shifts must be more than 0")
-        if len(users)==0:
-            raise ValueError("users must be more than 0")
+        if len(users)<max_worker_need:
+            raise ValueError(f"users must be more than the max of the shift max_worker:{max_worker_need}")
         if len(shifts)>70:
             raise ValueError("shift_ids must be less than 70")
         if len(users)>500:
@@ -41,11 +42,13 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         Var=m.add_var_tensor((len(shifts),len(users)),"Var",var_type=BINARY)
         shifts=[shift for shift in shifts if len(shift.workers)==0]
         
-        C_more_than_min_worker=10
-        C_less_than_max_woker=10
-        C_more_expert_than_need=10
-        C_add_new_worker=10
-        C_point_equality=10
+        if len(shifts)==0:
+            raise ValueError("all shifts have workers")
+        
+        C_less_than_max_woker=100
+        C_more_expert_than_need=100
+        C_add_new_worker=100
+        C_point_equality=1
         
         x_min=m.add_var_tensor((len(shifts),),"x_min")
         x_max=m.add_var_tensor((len(shifts),),"x_max")
@@ -53,8 +56,7 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         x_new=m.add_var_tensor((len(shifts),),"x_new")
         x_maxpoint=m.add_var("x_maxpoint")
         
-        m.objective=minimize(xsum(C_more_than_min_worker*x_min[i]
-                                  +C_less_than_max_woker*x_max[i]
+        m.objective=minimize(xsum(C_less_than_max_woker*x_max[i]
                                   +C_more_expert_than_need*x_exp[i]
                                   +C_add_new_worker*x_new[i] for i in range(len(shifts)))
                                   +C_point_equality*x_maxpoint)
@@ -72,7 +74,7 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
                             shift.task.wage] for shift in shifts]
 
         for i in range(len(shifts)):
-            m+=xsum(Var[i,j] for j in range(len(users)))+x_min[i]>=slot_info_metrics[i][0]
+            m+=xsum(Var[i,j] for j in range(len(users)))>=slot_info_metrics[i][0]
             m+=xsum(Var[i,j] for j in range(len(users)))-x_max[i]<=slot_info_metrics[i][1]
             m+=xsum(Var[i,j]*expert_metrics[i][j] for j in range(len(users)))+x_exp[i]>=slot_info_metrics[i][2]
             m+=xsum(Var[i,j]*(1-expert_metrics[i][j]) for j in range(len(users)))+x_new[i]>=slot_info_metrics[i][1]-slot_info_metrics[i][2]
@@ -80,8 +82,7 @@ class ShiftAllocationWorkerUseCase(TransactionUseCaseBase):
         for j in range(len(users)):
             m+=xsum(Var[i,j]*slot_info_metrics[i][3] for i in range(len(shifts)))+users[j].point<=x_maxpoint
 
-        m.optimize()
-        
+        m.optimize(max_seconds=10)
         result=[[Var[i,j].x for j in range(len(users))] for i in range(len(shifts))]
         for i in range(len(shifts)):
             for j in range(len(users)):

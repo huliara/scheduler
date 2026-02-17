@@ -10,7 +10,7 @@ DATABASE = "postgresql+psycopg2://%s:%s@%s:5432/%s" % (
     DB_NAME,
 )
 
-engine = create_engine(DATABASE, echo=True)
+engine = create_engine(DATABASE, echo=False)
 
 # 実際の DB セッション
 SessionLocal = scoped_session(
