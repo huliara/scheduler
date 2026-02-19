@@ -72,3 +72,9 @@ Database の変更を反映する場合 (api コンテナ内で実行):
 ```bash
 uv run alembic upgrade head
 ```
+
+### 参考資料
+
+[PythonでDDDやってみた](https://techtekt.persol-career.co.jp/entry/tech/231220_02)  
+[ドメイン駆動設計を始めよう](https://www.oreilly.co.jp//books/9784814400737/)
+
