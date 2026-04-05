@@ -56,9 +56,14 @@ docker compose up --build
 
 ## 管理コマンド
 
-### データベース初期化
+### 初期データ挿入
 
-(詳細な手順は `manage/` ディレクトリ配下のスクリプトを参照)
+```bash
+# 例: apiコンテナ内で実行
+uv run python manage/seed.py
+```
+
+### データベース初期化
 
 ```bash
 # 例: apiコンテナ内で実行
